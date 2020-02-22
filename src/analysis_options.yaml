@@ -1,0 +1,14 @@
+include: package:lint/analysis_options.yaml
+
+analyzer:
+  exclude:
+    - lib/**.g.dart
+    - lib/**.chopper.dart
+  errors:
+      todo: warning
+      dead_code: info
+      
+linter:
+  rules:
+    - one_member_abstracts
+    - sort_constructors_first
