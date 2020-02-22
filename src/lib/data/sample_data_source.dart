@@ -62,5 +62,6 @@ final Set<DataGroup> _data = <DataGroup>{
         rate: 60,
         created: DateTime.now().toUtc(),
         target: DateTime.now().toUtc().add(const Duration(days: 1))),
-  })
+  }),
+  DataGroup(name: 'Phrasal Verbs vol. 2', phrases: <DataPhrase>{})
 };
