@@ -1,9 +1,7 @@
 import 'package:vocabulary_advancer/shell/definitions.dart';
 
 class PhraseGroup {
-  PhraseGroup(this.name) {
-    print(this.hashCode);
-  }
+  PhraseGroup(this.name);
 
   final String name;
 }

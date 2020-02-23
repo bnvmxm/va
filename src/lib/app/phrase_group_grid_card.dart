@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:vocabulary_advancer/core/extensions.dart';
 
-class PhraseGroupCard extends StatelessWidget {
-  PhraseGroupCard(
+class PhraseGroupGridCard extends StatelessWidget {
+  PhraseGroupGridCard(
       {bool isSelected, String name, int phraseCount, int minRate, DateTime closeTarget})
       : isSelected = isSelected ?? false,
         name = name ?? '',

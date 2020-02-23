@@ -1,8 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vocabulary_advancer/app/phrase_group_card.dart';
-import 'package:vocabulary_advancer/app/phrase_group_vm.dart';
+import 'package:vocabulary_advancer/app/phrase_group_grid_card.dart';
+import 'package:vocabulary_advancer/app/phrase_group_grid_page_model.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 
 class PhraseGroupGridView extends StatefulWidget {
@@ -20,7 +20,7 @@ class _PhraseGroupGridViewState extends State<PhraseGroupGridView> {
     });
   }
 
-  Widget _buildGridView({bool isPortrait}) => Consumer<PhraseGroupViewModel>(
+  Widget _buildGridView({bool isPortrait}) => Consumer<PhraseGroupGridPageModel>(
       builder: (context, vm, child) => GridView.count(
           crossAxisCount: isPortrait ? 2 : 3,
           padding: const EdgeInsets.all(8.0),
@@ -30,13 +30,13 @@ class _PhraseGroupGridViewState extends State<PhraseGroupGridView> {
               .map((x) => _buildGridViewTile(vm, x, isSelected: x == vm.phraseGroupSelected))
               .toList()));
 
-  Widget _buildGridViewTile(PhraseGroupViewModel vm, PhraseGroup item, {bool isSelected}) =>
+  Widget _buildGridViewTile(PhraseGroupGridPageModel vm, PhraseGroup item, {bool isSelected}) =>
       isSelected
-          ? PhraseGroupCard(name: item.name, isSelected: true)
+          ? PhraseGroupGridCard(name: item.name, isSelected: true)
           : InkWell(
               onTap: () {
                 vm.select(item);
               },
               radius: 2,
-              child: PhraseGroupCard(name: item.name));
+              child: PhraseGroupGridCard(name: item.name));
 }
