@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:vocabulary_advancer/app/phrase_group_grid_view.dart';
+import 'package:vocabulary_advancer/app/phrase_group_grid_page.dart';
 
 class VAApp extends StatelessWidget {
   @override
@@ -9,7 +9,8 @@ class VAApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Scaffold(appBar: AppBar(title: const Text('Collections')), body: PhraseGroupGridView()),
+      initialRoute: '/',
+      routes: {'/': (context) => PhraseGroupGridPage()},
     );
   }
 }
