@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/shell/root.dart';
+import 'package:vocabulary_advancer/shared/root.dart';
 
 enum ModelState { unknown, busy, ready }
 
-class PhraseGroupGridPageModel with ChangeNotifier {
-  final _repository = groupRepository;
-
+class PhraseGroupGridPageVM with ChangeNotifier {
   PhraseGroup phraseGroupSelected;
   List<PhraseGroup> phraseGroups = [];
   ModelState _state = ModelState.unknown;
@@ -23,7 +21,7 @@ class PhraseGroupGridPageModel with ChangeNotifier {
     try {
       phraseGroups = await Future.microtask(() async {
         await Future.delayed(const Duration(milliseconds: 2000)); //TODO: remove
-        return _repository.findMany().toList();
+        return svc.repPhraseGroup.findMany().toList();
       });
     } finally {
       _state = ModelState.ready;

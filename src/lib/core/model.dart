@@ -1,4 +1,4 @@
-import 'package:vocabulary_advancer/shell/definitions.dart';
+import 'package:vocabulary_advancer/shared/definitions.dart';
 
 class PhraseGroup {
   PhraseGroup(this.name);
@@ -11,7 +11,7 @@ class Phrase {
       this.created,
       {int rate, DateTime target})
       : rate = rate ?? 0,
-        target = target ?? minimumDateTime;
+        target = target ?? def.minimumDateTime;
 
   final String groupName;
   final String id;

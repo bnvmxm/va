@@ -1,24 +1,26 @@
 import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/data/sample_data_source.dart';
-import 'package:vocabulary_advancer/shell/root.dart';
+import 'package:vocabulary_advancer/data/sample_data_provider.dart';
+import 'package:vocabulary_advancer/shared/root.dart';
 
-class GroupRepository {
+class PhraseGroupRepository {
   Iterable<PhraseGroup> findMany() {
-    return store.data.map((x) => PhraseGroup(x.name));
+    return svc.dataProvider.data.map((x) => PhraseGroup(x.name));
   }
 
   PhraseGroup findSingle(String name) {
-    final found = store.data.firstWhere((x) => _areEqual(x.name, name), orElse: () => null);
+    final found =
+        svc.dataProvider.data.firstWhere((x) => _areEqual(x.name, name), orElse: () => null);
     return found != null ? PhraseGroup(found.name) : null;
   }
 
   PhraseGroup create(String name) {
-    store.data.add(DataGroup(name: name));
+    svc.dataProvider.data.add(DataGroup(name: name));
     return PhraseGroup(name);
   }
 
   PhraseGroup rename(String fromName, String toName) {
-    final found = store.data.firstWhere((x) => _areEqual(x.name, fromName), orElse: () => null);
+    final found =
+        svc.dataProvider.data.firstWhere((x) => _areEqual(x.name, fromName), orElse: () => null);
     if (found != null) {
       found.name = toName;
       return PhraseGroup(toName);
