@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:vocabulary_advancer/app/phrase_group_editor_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrase_group_grid_page_vm.dart';
+import 'package:vocabulary_advancer/app/phrase_list_page_vm.dart';
 import 'package:vocabulary_advancer/core/services/navigation.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_group_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_repository.dart';
@@ -18,6 +20,7 @@ void setupApp({@required Profile profile, Map<Feature, bool> features}) {
   registry.registerLazySingleton(() => PhraseRepository());
   registry.registerLazySingleton(() => NavigationService());
   registry.registerFactory(() => PhraseGroupGridPageVM());
-
+  registry.registerFactory(() => PhraseGroupEditorPageVM());
+  registry.registerFactory(() => PhraseListPageVM());
   setRegistry(registry);
 }

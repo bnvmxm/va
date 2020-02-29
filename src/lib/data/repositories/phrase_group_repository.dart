@@ -8,8 +8,7 @@ class PhraseGroupRepository {
   }
 
   PhraseGroup findSingle(String name) {
-    final found =
-        svc.dataProvider.data.firstWhere((x) => _areEqual(x.name, name), orElse: () => null);
+    final found = svc.dataProvider.data.firstWhere((x) => x.name == name, orElse: () => null);
     return found != null ? PhraseGroup(found.name) : null;
   }
 
@@ -19,8 +18,7 @@ class PhraseGroupRepository {
   }
 
   PhraseGroup rename(String fromName, String toName) {
-    final found =
-        svc.dataProvider.data.firstWhere((x) => _areEqual(x.name, fromName), orElse: () => null);
+    final found = svc.dataProvider.data.firstWhere((x) => x.name == fromName, orElse: () => null);
     if (found != null) {
       found.name = toName;
       return PhraseGroup(toName);
@@ -28,12 +26,4 @@ class PhraseGroupRepository {
 
     return null;
   }
-}
-
-bool _areEqual(String t1, String t2) {
-  if (t1 == null || t2 == null) {
-    return false;
-  }
-
-  return t1.trim().toLowerCase() == t2.trim().toLowerCase();
 }

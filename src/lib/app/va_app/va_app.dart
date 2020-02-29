@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:vocabulary_advancer/app/about_page.dart';
 import 'package:vocabulary_advancer/app/phrase_group_editor_page.dart';
 import 'package:vocabulary_advancer/app/phrase_group_grid_page.dart';
+import 'package:vocabulary_advancer/app/phrase_list_page.dart';
+import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/definitions.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
@@ -27,12 +29,17 @@ Route<dynamic> _generateRoute(RouteSettings settings) {
     return MaterialPageRoute(builder: (context) => AboutPage());
   }
   if (settings?.name == def.routeAddPhraseGroup) {
-    return MaterialPageRoute(builder: (context) => PhraseGroupEditorPage(), fullscreenDialog: true);
+    return MaterialPageRoute<PhraseGroup>(
+        builder: (context) => PhraseGroupEditorPage(), fullscreenDialog: true);
   }
   if (settings?.name == def.routeEditPhraseGroup) {
-    return MaterialPageRoute(
+    return MaterialPageRoute<PhraseGroup>(
         builder: (context) => PhraseGroupEditorPage(initialGroupName: settings.arguments as String),
         fullscreenDialog: true);
+  }
+  if (settings?.name == def.routePhraseGroup) {
+    return MaterialPageRoute(
+        builder: (context) => PhraseListPage(groupName: settings.arguments as String));
   }
   assert(false);
   return MaterialPageRoute(builder: (context) => AboutPage());

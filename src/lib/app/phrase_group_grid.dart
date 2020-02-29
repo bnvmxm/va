@@ -5,12 +5,7 @@ import 'package:vocabulary_advancer/app/phrase_group_grid_card.dart';
 import 'package:vocabulary_advancer/app/phrase_group_grid_page_vm.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 
-class PhraseGroupGridView extends StatefulWidget {
-  @override
-  State<StatefulWidget> createState() => _PhraseGroupGridViewState();
-}
-
-class _PhraseGroupGridViewState extends State<PhraseGroupGridView> {
+class PhraseGroupGridView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return OrientationBuilder(builder: (context, orientation) {
@@ -26,17 +21,12 @@ class _PhraseGroupGridViewState extends State<PhraseGroupGridView> {
           padding: const EdgeInsets.all(8.0),
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
-          children: vm.phraseGroups
-              .map((x) => _buildGridViewTile(vm, x, isSelected: x == vm.phraseGroupSelected))
-              .toList()));
+          children: vm.phraseGroups.map((x) => _buildGridViewTile(vm, x)).toList()));
 
-  Widget _buildGridViewTile(PhraseGroupGridPageVM vm, PhraseGroup item, {bool isSelected}) =>
-      isSelected
-          ? PhraseGroupGridCard(name: item.name, isSelected: true)
-          : InkWell(
-              onTap: () {
-                vm.select(item);
-              },
-              radius: 2,
-              child: PhraseGroupGridCard(name: item.name));
+  Widget _buildGridViewTile(PhraseGroupGridPageVM vm, PhraseGroup item) => InkWell(
+      onTap: () {
+        vm.isSelected(item) ? vm.unselect() : vm.select(item);
+      },
+      radius: 2,
+      child: PhraseGroupGridCard(name: item.name, isSelected: vm.isSelected(item)));
 }

@@ -9,4 +9,7 @@ class Definitions {
   final String routeAbout = '/about';
   final String routeAddPhraseGroup = '/add_group';
   final String routeEditPhraseGroup = '/edit_group';
+  final String routePhraseGroup = '/group';
+  final String routeAddPhrase = '/add_phrase';
+  final String routeEditPhrase = '/edit_phrase';
 }
