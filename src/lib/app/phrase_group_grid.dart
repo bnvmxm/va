@@ -17,7 +17,8 @@ class PhraseGroupGridView extends StatelessWidget {
 
   Widget _buildGridView({bool isPortrait}) => Consumer<PhraseGroupGridPageVM>(
       builder: (context, vm, child) => GridView.count(
-          crossAxisCount: isPortrait ? 2 : 3,
+          crossAxisCount: isPortrait ? 1 : 3,
+          childAspectRatio: isPortrait ? 2.25 : 1.25,
           padding: const EdgeInsets.all(8.0),
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
@@ -28,5 +29,10 @@ class PhraseGroupGridView extends StatelessWidget {
         vm.isSelected(item) ? vm.unselect() : vm.select(item);
       },
       radius: 2,
-      child: PhraseGroupGridCard(name: item.name, isSelected: vm.isSelected(item)));
+      child: PhraseGroupGridCard(
+          name: item.name,
+          phraseCount: item.phraseCount,
+          minRate: item.minRate,
+          closeTargetUtc: item.closeTargetUtc,
+          isSelected: vm.isSelected(item)));
 }

@@ -1,29 +1,30 @@
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/data/sample_data_provider.dart';
+import 'package:vocabulary_advancer/shared/definitions.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
+
+part 'phrase_group_repository.m.dart';
 
 class PhraseGroupRepository {
   Iterable<PhraseGroup> findMany() {
-    return svc.dataProvider.data.map((x) => PhraseGroup(x.name));
+    return svc.dataProvider.data.map((x) => x.toModel());
   }
 
   PhraseGroup findSingle(String name) {
-    final found = svc.dataProvider.data.firstWhere((x) => x.name == name, orElse: () => null);
-    return found != null ? PhraseGroup(found.name) : null;
+    final dto = svc.dataProvider.data.firstWhere((x) => x.name == name, orElse: () => null);
+    return dto?.toModel();
   }
 
   PhraseGroup create(String name) {
-    svc.dataProvider.data.add(DataGroup(name: name));
-    return PhraseGroup(name);
+    final dto = DataGroup(name: name);
+    svc.dataProvider.data.add(dto);
+    return dto.toModel();
   }
 
   PhraseGroup rename(String fromName, String toName) {
-    final found = svc.dataProvider.data.firstWhere((x) => x.name == fromName, orElse: () => null);
-    if (found != null) {
-      found.name = toName;
-      return PhraseGroup(toName);
-    }
-
-    return null;
+    final dto = svc.dataProvider.data.firstWhere((x) => x.name == fromName, orElse: () => null);
+    if (dto == null) return null;
+    dto.name = toName;
+    return dto.toModel();
   }
 }

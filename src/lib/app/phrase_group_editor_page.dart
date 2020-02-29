@@ -6,7 +6,7 @@ import 'package:vocabulary_advancer/shared/root.dart';
 class PhraseGroupEditorPage extends VAPageWithArgument<String, PhraseGroupEditorPageVM> {
   PhraseGroupEditorPage({String initialGroupName}) : super(initialGroupName);
 
-  final _focusNode = FocusNode(debugLabel: 'Group Name');
+  final _focusNode = FocusNode(debugLabel: 'Group Name')..requestFocus();
   final _formKey = GlobalKey<FormState>();
   bool _doInlineValidation = false;
 

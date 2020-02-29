@@ -8,8 +8,8 @@ class DataPhrase {
       this.definition,
       this.examples,
       this.rate,
-      this.target,
-      this.created});
+      this.targetUtc,
+      this.createdUtc});
 
   String id;
   String phrase;
@@ -18,8 +18,8 @@ class DataPhrase {
   List<String> examples;
 
   int rate;
-  DateTime target;
-  DateTime created;
+  DateTime targetUtc;
+  DateTime createdUtc;
 }
 
 class DataGroup {
@@ -42,8 +42,8 @@ final Set<DataGroup> _data = <DataGroup>{
         definition: 'To rise / To take smn on / To take something up by hand / To improve',
         examples: ["My luck's _ed _", "The bus _s _ commuters at five stops", "To _ _ a book"],
         rate: 10,
-        created: DateTime.now().toUtc(),
-        target: DateTime.now().toUtc().add(const Duration(minutes: 3))),
+        createdUtc: DateTime.now().toUtc(),
+        targetUtc: DateTime.now().toUtc().add(const Duration(minutes: 3))),
     DataPhrase(
         id: '2',
         phrase: 'put up',
@@ -51,8 +51,8 @@ final Set<DataGroup> _data = <DataGroup>{
         definition: 'To lift to a higher position / To provide lodgings for / To nominate',
         examples: ["To _ _ with a cure for the disease", "Can you _ me _ for tonight?"],
         rate: 100,
-        created: DateTime.now().toUtc(),
-        target: DateTime.now().toUtc().add(const Duration(days: 3))),
+        createdUtc: DateTime.now().toUtc(),
+        targetUtc: DateTime.now().toUtc().add(const Duration(days: 3))),
     DataPhrase(
         id: '3',
         phrase: 'take up',
@@ -60,8 +60,8 @@ final Set<DataGroup> _data = <DataGroup>{
         definition: 'Become involved in / Occupy time, space, or attention',
         examples: ["She _ _ tennis at the age of 11", "I don't want to _ _  any more of your time"],
         rate: 60,
-        created: DateTime.now().toUtc(),
-        target: DateTime.now().toUtc().add(const Duration(days: 1))),
+        createdUtc: DateTime.now().toUtc(),
+        targetUtc: DateTime.now().toUtc().add(const Duration(days: 1))),
   }),
   DataGroup(name: 'Phrasal Verbs vol. 2', phrases: <DataPhrase>{})
 };

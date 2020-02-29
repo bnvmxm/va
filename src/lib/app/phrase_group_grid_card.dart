@@ -3,18 +3,18 @@ import 'package:vocabulary_advancer/core/extensions.dart';
 
 class PhraseGroupGridCard extends StatelessWidget {
   PhraseGroupGridCard(
-      {bool isSelected, String name, int phraseCount, int minRate, DateTime closeTarget})
+      {bool isSelected, String name, int phraseCount, int minRate, DateTime closeTargetUtc})
       : isSelected = isSelected ?? false,
         name = name ?? '',
         phraseCount = phraseCount ?? 0,
         minRate = minRate ?? 0,
-        closeTarget = closeTarget ?? DateTime.now().toUtc();
+        closeTargetUtc = closeTargetUtc ?? DateTime.now().toUtc();
 
   final bool isSelected;
   final String name;
   final int phraseCount;
   final int minRate;
-  final DateTime closeTarget;
+  final DateTime closeTargetUtc;
 
   @override
   Widget build(BuildContext context) =>
@@ -45,7 +45,10 @@ class PhraseGroupGridCard extends StatelessWidget {
                 child: Container(
                     padding: const EdgeInsets.all(16.0),
                     alignment: Alignment.topLeft,
-                    child: Text(name, style: Theme.of(context).textTheme.title))),
+                    child: Text(name,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: Theme.of(context).textTheme.subtitle1))),
             Container(
                 padding: const EdgeInsets.all(16.0),
                 alignment: Alignment.topLeft,
@@ -67,7 +70,7 @@ class PhraseGroupGridCard extends StatelessWidget {
                     Expanded(
                         flex: 2,
                         child: _buildCaption(
-                            context, closeTarget.toLocal().toStringAsTarget(), TextAlign.end))
+                            context, closeTargetUtc.toLocal().toStringAsTarget(), TextAlign.end))
                   ])
                 ])),
           ])));

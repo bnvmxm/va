@@ -3,7 +3,7 @@ final Definitions def = Definitions._internal();
 class Definitions {
   Definitions._internal();
 
-  final DateTime minimumDateTime = DateTime.fromMicrosecondsSinceEpoch(0);
+  final DateTime minDateTimeUtc = DateTime.fromMicrosecondsSinceEpoch(0, isUtc: true);
 
   final String routeRoot = '/';
   final String routeAbout = '/about';
