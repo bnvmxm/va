@@ -9,6 +9,7 @@ abstract class VAPage<T extends BaseViewModel> extends StatelessWidget {
   AppBar buildAppBar(BuildContext context, T vm);
   Widget buildBody(BuildContext context, T vm);
   Widget buildFAB(BuildContext context, T vm) => null;
+  Widget buildEmptyBody(BuildContext context) => const Center(child: Text('No data...'));
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider<T>(

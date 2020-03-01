@@ -1,28 +1,37 @@
-extension DateTimeExtensions on DateTime {
-  String toStringAsTarget() {
-    var ts = difference(DateTime.now().toUtc());
+extension DurationExt on Duration {
+  bool isTargetClose() => isNegative || inMinutes < 60;
+  bool isTargetFar() => !isNegative && inHours > 48;
 
-    if (ts.abs().inSeconds < 60) {
+  String toStringAsTarget() {
+    if (isNegative) return 'Now';
+
+    if (inSeconds < 60) {
       return 'Now';
     }
 
-    var sb = StringBuffer();
+    final sb = StringBuffer();
 
-    if (ts.isNegative) {
-      sb.write('Overdue ');
-      ts = ts.abs();
+    if (inDays > 1) {
+      sb.write('${inDays}d');
+    } else if (inHours > 1) {
+      sb.write('${inHours}h');
     } else {
-      sb.write('In ');
-    }
-
-    if (ts.inDays >= 3) {
-      sb.write('${ts.inDays} days');
-    } else if (ts.inHours >= 2) {
-      sb.write('${ts.inHours} hours');
-    } else {
-      sb.write('${ts.inMinutes} min');
+      sb.write('${inMinutes}m');
     }
 
     return sb.toString();
+  }
+}
+
+extension DateTimeExt on DateTime {
+  Duration differenceNowUtc() => difference(DateTime.now().toUtc());
+}
+
+extension IntExt on int {
+  bool isRateHigh() => this > 75;
+  bool isRateLow() => this <= 25;
+
+  String toStringAsRate() {
+    return isRateLow() ? 'Learning' : isRateHigh() ? 'Learned' : 'Reviewing';
   }
 }

@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
 import 'package:flutter/material.dart';
+import 'package:vocabulary_advancer/app/phrase_editor_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrase_group_editor_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrase_group_grid_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrase_list_page_vm.dart';

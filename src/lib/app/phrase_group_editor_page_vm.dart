@@ -6,6 +6,7 @@ class PhraseGroupEditorPageVM extends BaseViewModel<String> {
   String initialGroupName = '';
   String currentGroupName = '';
 
+  bool needInlineValidation = false;
   bool get isNewGroup => initialGroupName.isEmpty;
 
   String validationMessage(

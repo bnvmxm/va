@@ -8,7 +8,6 @@ class PhraseGroupEditorPage extends VAPageWithArgument<String, PhraseGroupEditor
 
   final _focusNode = FocusNode(debugLabel: 'Group Name')..requestFocus();
   final _formKey = GlobalKey<FormState>();
-  bool _doInlineValidation = false;
 
   @override
   PhraseGroupEditorPageVM createVM() => svc.vmPhraseGroupEditorPage;
@@ -34,10 +33,8 @@ class PhraseGroupEditorPage extends VAPageWithArgument<String, PhraseGroupEditor
                     onAlreadyExists: () => 'Such group already exists'),
                 onChanged: (v) {
                   vm.currentGroupName = v;
-                  if (_doInlineValidation) {
-                    if (_formKey.currentState.validate()) {
-                      _doInlineValidation = false;
-                    }
+                  if (vm.needInlineValidation && _formKey.currentState.validate()) {
+                    vm.needInlineValidation = false;
                   }
                 },
                 focusNode: _focusNode,
@@ -54,7 +51,7 @@ class PhraseGroupEditorPage extends VAPageWithArgument<String, PhraseGroupEditor
         if (_formKey.currentState.validate()) {
           vm.applyAndClose();
         } else {
-          _doInlineValidation = true;
+          vm.needInlineValidation = true;
         }
       },
       child: Icon(Icons.save));

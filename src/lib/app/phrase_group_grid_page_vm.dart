@@ -11,10 +11,11 @@ class PhraseGroupGridPageVM extends BaseViewModel {
   bool get isNotEmpty => isReady && phraseGroups.isNotEmpty;
 
   @override
-  Future Function(dynamic _) get initializer => (_) async {
-        await Future.delayed(const Duration(milliseconds: 2000)); //TODO: remove
-        phraseGroups = svc.repPhraseGroup.findMany().toList();
-      };
+  Future Function(dynamic _) get initializer => (_) async => _reset();
+
+  Future _reset() async {
+    phraseGroups = svc.repPhraseGroup.findMany().toList();
+  }
 
   void select(PhraseGroup item) {
     notify(() => _phraseGroupSelected = item);
@@ -50,12 +51,13 @@ class PhraseGroupGridPageVM extends BaseViewModel {
     });
   }
 
-  Future navigateToGroup() {
-    assert(anySelected);
-    return svc.nav.forwardToPhraseGroup(_phraseGroupSelected.name);
+  Future navigateToGroup(PhraseGroup item) async {
+    await svc.nav.forwardToPhraseGroup(item.name);
+    _phraseGroupSelected = null;
+    notify(() async => _reset(), asBusy: true);
   }
 
   Future navigateToAbout() {
-    return svc.nav.forwardToAddPhraseGroup();
+    return svc.nav.forwardToAbout();
   }
 }

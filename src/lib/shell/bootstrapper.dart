@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:vocabulary_advancer/app/phrase_editor_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrase_group_editor_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrase_group_grid_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrase_list_page_vm.dart';
@@ -22,5 +23,6 @@ void setupApp({@required Profile profile, Map<Feature, bool> features}) {
   registry.registerFactory(() => PhraseGroupGridPageVM());
   registry.registerFactory(() => PhraseGroupEditorPageVM());
   registry.registerFactory(() => PhraseListPageVM());
+  registry.registerFactory(() => PhraseEditorPageVM());
   setRegistry(registry);
 }

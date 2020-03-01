@@ -6,6 +6,10 @@ import 'package:vocabulary_advancer/shared/root.dart';
 part 'phrase_group_repository.m.dart';
 
 class PhraseGroupRepository {
+  Iterable<String> findKnownNames() {
+    return svc.dataProvider.data.map((x) => x.name);
+  }
+
   Iterable<PhraseGroup> findMany() {
     return svc.dataProvider.data.map((x) => x.toModel());
   }
