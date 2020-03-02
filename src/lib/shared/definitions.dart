@@ -12,4 +12,5 @@ class Definitions {
   final String routePhraseGroup = '/group';
   final String routeAddPhrase = '/add_phrase';
   final String routeEditPhrase = '/edit_phrase';
+  final String routeExercise = '/exercise';
 }

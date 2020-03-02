@@ -1,22 +1,32 @@
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
+import 'package:vocabulary_advancer/core/extensions.dart';
 import 'package:vocabulary_advancer/data/sample_data_provider.dart';
 
 part 'phrase_repository.m.dart';
 
 class PhraseRepository {
   Iterable<Phrase> findMany(String groupName) {
-    final groupFound =
-        svc.dataProvider.data.firstWhere((x) => x.name == groupName, orElse: () => null);
-
+    final groupFound = _findGroup(groupName);
     return groupFound == null ? [] : groupFound.phrases.map((x) => x.toModel(groupName));
+  }
+
+  Phrase getForExercise(String groupName) {
+    final groupFound = _findGroup(groupName);
+    if (groupFound == null) return null;
+
+    final targeted =
+        groupFound.phrases.where((p) => p.targetUtc.differenceNowUtc().isTargetClose()).toList();
+    if (targeted.isEmpty) return null;
+
+    return targeted.length == 1
+        ? targeted[0].toModel(groupName)
+        : targeted[DateTime.now().millisecondsSinceEpoch % targeted.length].toModel(groupName);
   }
 
   Phrase create(String groupName, String phrase, String pronunciation, String definition,
       List<String> examples) {
-    final groupFound =
-        svc.dataProvider.data.firstWhere((x) => x.name == groupName, orElse: () => null);
-
+    final groupFound = _findGroup(groupName);
     if (groupFound == null) return null;
 
     final now = DateTime.now().toUtc();
@@ -38,7 +48,7 @@ class PhraseRepository {
       String pronunciation, String definition, List<String> examples) {
     final groupFound = oldGroupName != newGroupName
         ? _movePhrase(phraseId, oldGroupName, newGroupName)
-        : svc.dataProvider.data.firstWhere((x) => x.name == newGroupName, orElse: () => null);
+        : _findGroup(newGroupName);
     if (groupFound == null) return null;
 
     final dto = groupFound.phrases.firstWhere((p) => p.id == phraseId, orElse: () => null);
@@ -53,8 +63,7 @@ class PhraseRepository {
   }
 
   Phrase updateStat(String groupName, String phraseId, int newRate, DateTime newTargetUtc) {
-    final groupFound =
-        svc.dataProvider.data.firstWhere((x) => x.name == groupName, orElse: () => null);
+    final groupFound = _findGroup(groupName);
     if (groupFound == null) return null;
 
     final dto = groupFound.phrases.firstWhere((p) => p.id == phraseId, orElse: () => null);
@@ -66,15 +75,13 @@ class PhraseRepository {
   }
 
   DataGroup _movePhrase(String phraseId, String oldGroupName, String newGroupName) {
-    final oldGroupFound =
-        svc.dataProvider.data.firstWhere((x) => x.name == oldGroupName, orElse: () => null);
+    final oldGroupFound = _findGroup(oldGroupName);
     if (oldGroupFound == null) return null;
 
     final phrase = oldGroupFound.phrases.firstWhere((p) => p.id == phraseId, orElse: () => null);
     if (phrase == null) return null;
 
-    final newGroupFound =
-        svc.dataProvider.data.firstWhere((x) => x.name == oldGroupName, orElse: () => null);
+    final newGroupFound = _findGroup(newGroupName);
     if (newGroupFound == null) return null;
 
     newGroupFound.phrases.add(phrase);
@@ -82,4 +89,7 @@ class PhraseRepository {
 
     return newGroupFound;
   }
+
+  DataGroup _findGroup(String groupName) =>
+      svc.dataProvider.data.firstWhere((x) => x.name == groupName, orElse: () => null);
 }

@@ -35,6 +35,11 @@ class NavigationService {
     return keys.navigation.currentState.pushNamed<Phrase>(def.routeEditPhrase, arguments: arg);
   }
 
+  Future forwardToExercise(String groupName, {bool exampleFirst = true}) {
+    assert(groupName.isNotEmpty);
+    return keys.navigation.currentState.pushNamed(def.routeExercise, arguments: groupName);
+  }
+
   void back() {
     keys.navigation.currentState.pop();
   }

@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vocabulary_advancer/app/common/phrase_group_grid_card.dart';
-import 'package:vocabulary_advancer/app/phrase_group_grid_page_vm.dart';
+import 'package:vocabulary_advancer/app/phrases_group_grid_page_vm.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 
 class PhraseGroupGridView extends StatelessWidget {
