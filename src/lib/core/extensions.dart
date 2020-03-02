@@ -1,6 +1,11 @@
+import 'package:vocabulary_advancer/core/services/rate_calculator.dart';
+import 'package:vocabulary_advancer/core/model.dart';
+import 'package:vocabulary_advancer/shared/definitions.dart';
+
 extension DurationExt on Duration {
-  bool isTargetClose() => isNegative || inMinutes < 60;
-  bool isTargetFar() => !isNegative && inHours > 48;
+  bool isTargetClose() =>
+      isNegative || inMinutes < def.targetMinutesLowThreshold;
+  bool isTargetFar() => !isNegative && inHours > def.targetHoursHighThreshold;
 
   String toStringAsTarget() {
     if (isNegative) return 'Now';
@@ -28,8 +33,12 @@ extension DateTimeExt on DateTime {
 }
 
 extension IntExt on int {
-  bool isRateHigh() => this > 75;
-  bool isRateLow() => this <= 25;
+  bool isRateLow() => this <= def.rateLowThreshold;
+  bool isRateHigh() => this > def.rateHighThreshold;
+
+  int asRate(RateFeedback feedback) => calculateNextRate(this, feedback);
+  Duration asCooldown(RateFeedback feedback) =>
+      calculateCooldown(this, feedback);
 
   String toStringAsRate() {
     return isRateLow() ? 'Learning' : isRateHigh() ? 'Learned' : 'Reviewing';

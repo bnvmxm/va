@@ -3,7 +3,8 @@ final Definitions def = Definitions._internal();
 class Definitions {
   Definitions._internal();
 
-  final DateTime minDateTimeUtc = DateTime.fromMicrosecondsSinceEpoch(0, isUtc: true);
+  final DateTime minDateTimeUtc =
+      DateTime.fromMicrosecondsSinceEpoch(0, isUtc: true);
 
   final String routeRoot = '/';
   final String routeAbout = '/about';
@@ -13,4 +14,10 @@ class Definitions {
   final String routeAddPhrase = '/add_phrase';
   final String routeEditPhrase = '/edit_phrase';
   final String routeExercise = '/exercise';
+
+  final int targetMinutesLowThreshold = 60;
+  final int targetHoursHighThreshold = 48;
+
+  final int rateLowThreshold = 35;
+  final int rateHighThreshold = 75;
 }
