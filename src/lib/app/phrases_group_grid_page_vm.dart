@@ -51,13 +51,21 @@ class PhraseGroupGridPageVM extends BaseViewModel {
     });
   }
 
-  Future navigateToGroup(PhraseGroup item) async {
-    await svc.nav.forwardToPhraseGroup(item.name);
+  Future navigateToGroup() async {
+    assert(_phraseGroupSelected != null);
+    await svc.nav.forwardToPhraseGroup(_phraseGroupSelected.name);
     _phraseGroupSelected = null;
     notify(() async => _reset(), asBusy: true);
   }
 
   Future navigateToAbout() {
     return svc.nav.forwardToAbout();
+  }
+
+  Future navigateToExercise() async {
+    assert(_phraseGroupSelected != null);
+    await svc.nav.forwardToExercise(_phraseGroupSelected.name);
+    _phraseGroupSelected = null;
+    notify(() async => _reset(), asBusy: true);
   }
 }

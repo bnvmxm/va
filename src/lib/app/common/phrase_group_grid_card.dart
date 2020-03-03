@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vocabulary_advancer/app/common/stat_rate.dart';
 import 'package:vocabulary_advancer/app/common/stat_target.dart';
 import 'package:vocabulary_advancer/core/extensions.dart';
 

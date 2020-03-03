@@ -1,12 +1,10 @@
-import 'package:flutter/foundation.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/core/extensions.dart';
 import 'package:vocabulary_advancer/core/view_model.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
 class PhraseExercisePageArgument {
-  PhraseExercisePageArgument(
-      {@required this.groupName, this.isExerciseFirst = true});
+  PhraseExercisePageArgument(this.groupName, {this.isExerciseFirst = true});
   final String groupName;
   final bool isExerciseFirst;
 }
@@ -32,6 +30,7 @@ class PhraseExercisePageVM extends BaseViewModel<PhraseExercisePageArgument> {
 
   void next(RateFeedback feedback) {
     assert(isAny);
-    svc.repPhrase.updateStat(groupName, current.id, current.rate.asRate(feedback), current.rate.asCooldown(feedback) );
+    svc.repPhrase.updateStat(groupName, current.id,
+        current.rate.asRate(feedback), current.rate.asCooldown(feedback));
   }
 }

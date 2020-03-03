@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:vocabulary_advancer/app/about_page.dart';
 import 'package:vocabulary_advancer/app/phrase_editor_page.dart';
 import 'package:vocabulary_advancer/app/phrase_editor_page_vm.dart';
+import 'package:vocabulary_advancer/app/phrase_exercise_page.dart';
+import 'package:vocabulary_advancer/app/phrase_exercise_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrases_group_editor_page.dart';
 import 'package:vocabulary_advancer/app/phrases_group_grid_page.dart';
 import 'package:vocabulary_advancer/app/phrase_list_page.dart';
@@ -36,22 +38,31 @@ Route<dynamic> _generateRoute(RouteSettings settings) {
   }
   if (settings?.name == def.routeEditPhraseGroup) {
     return MaterialPageRoute<PhraseGroup>(
-        builder: (context) => PhraseGroupEditorPage(initialGroupName: settings.arguments as String),
+        builder: (context) => PhraseGroupEditorPage(
+            initialGroupName: settings.arguments as String),
         fullscreenDialog: true);
   }
   if (settings?.name == def.routePhraseGroup) {
     return MaterialPageRoute(
-        builder: (context) => PhraseListPage(groupName: settings.arguments as String));
+        builder: (context) =>
+            PhraseListPage(groupName: settings.arguments as String));
   }
   if (settings?.name == def.routeAddPhrase) {
     return MaterialPageRoute<Phrase>(
-        builder: (context) => PhraseEditorPage(settings.arguments as PhraseEditorPageArgument),
+        builder: (context) =>
+            PhraseEditorPage(settings.arguments as PhraseEditorPageArgument),
         fullscreenDialog: true);
   }
   if (settings?.name == def.routeEditPhrase) {
     return MaterialPageRoute<Phrase>(
-        builder: (context) => PhraseEditorPage(settings.arguments as PhraseEditorPageArgument),
+        builder: (context) =>
+            PhraseEditorPage(settings.arguments as PhraseEditorPageArgument),
         fullscreenDialog: true);
+  }
+  if (settings?.name == def.routeExercise) {
+    return MaterialPageRoute(
+        builder: (context) => PhraseExercisePage(
+            settings.arguments as PhraseExercisePageArgument));
   }
   assert(false);
   return MaterialPageRoute(builder: (context) => AboutPage());

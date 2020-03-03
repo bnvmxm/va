@@ -6,7 +6,7 @@ import 'package:vocabulary_advancer/shared/root.dart';
 
 class PhraseExercisePage extends VAPageWithArgument<PhraseExercisePageArgument,
     PhraseExercisePageVM> {
-  PhraseExercisePage({PhraseExercisePageArgument argument}) : super(argument);
+  PhraseExercisePage(PhraseExercisePageArgument argument) : super(argument);
 
   @override
   PhraseExercisePageVM createVM() => svc.vmPhraseExercisePage;

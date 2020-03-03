@@ -22,13 +22,20 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
   Widget buildFAB(BuildContext context, PhraseGroupGridPageVM vm) => vm.anySelected
       ? FloatingActionButton(
           tooltip: 'Exercise',
-          onPressed: () {
-            //TODO
+          onPressed: () async {
+            await vm.navigateToExercise();
           },
           child: Icon(Icons.view_carousel))
       : null;
 
   List<Widget> _buildAppBarActions(BuildContext context, PhraseGroupGridPageVM vm) => [
+        if (vm.anySelected)
+          IconButton(
+              icon: Icon(Icons.view_list),
+              tooltip: 'View',
+              onPressed: () async {
+                await vm.navigateToGroup();
+              }),    
         if (vm.anySelected)
           IconButton(
               icon: Icon(Icons.edit),
