@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:vocabulary_advancer/app/common/stat_rate.dart';
 import 'package:vocabulary_advancer/app/common/stat_target.dart';
 import 'package:vocabulary_advancer/app/phrase_list_page_vm.dart';
 import 'package:vocabulary_advancer/app/va_page.dart';
@@ -68,13 +67,13 @@ class PhraseListPage extends VAPageWithArgument<String, PhraseListPageVM> {
         if (vm.anySelected)
           IconButton(
               icon: Icon(Icons.edit),
-              tooltip: 'Edit',
+              tooltip: svc.i18n.labelsEdit,
               onPressed: () async {
                 await vm.navigateToEditPhrase();
               }),
         IconButton(
             icon: Icon(Icons.plus_one),
-            tooltip: 'Add',
+            tooltip: svc.i18n.labelsAdd,
             onPressed: () async {
               await vm.navigateToAddPhrase();
             })

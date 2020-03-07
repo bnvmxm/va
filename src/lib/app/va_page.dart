@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:vocabulary_advancer/core/view_model.dart';
+import 'package:vocabulary_advancer/shared/root.dart';
 
 abstract class VAPage<T extends BaseViewModel> extends StatelessWidget {
   T createVM();
@@ -9,7 +10,7 @@ abstract class VAPage<T extends BaseViewModel> extends StatelessWidget {
   AppBar buildAppBar(BuildContext context, T vm);
   Widget buildBody(BuildContext context, T vm);
   Widget buildFAB(BuildContext context, T vm) => null;
-  Widget buildEmptyBody(BuildContext context) => const Center(child: Text('No data...'));
+  Widget buildEmptyBody(BuildContext context) => Center(child: Text(svc.i18n.textNoData));
 
   @override
   Widget build(BuildContext context) => ChangeNotifierProvider<T>(

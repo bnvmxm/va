@@ -5,6 +5,8 @@ final ServiceProvider svc = ServiceProvider._internal();
 class ServiceProvider {
   ServiceProvider._internal();
 
+  I18n get i18n => _i18n;
+
   PhraseExercisePageVM get vmPhraseExercisePage => _registry.get<PhraseExercisePageVM>();
   PhraseEditorPageVM get vmPhraseEditorPage => _registry.get<PhraseEditorPageVM>();
   PhraseListPageVM get vmPhraseListPage => _registry.get<PhraseListPageVM>();

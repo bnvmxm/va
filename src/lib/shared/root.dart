@@ -9,6 +9,7 @@ import 'package:vocabulary_advancer/core/services/navigation.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_group_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_repository.dart';
 import 'package:vocabulary_advancer/data/sample_data_provider.dart';
+import 'package:vocabulary_advancer/shared/i18n.dart';
 import 'package:vocabulary_advancer/shell/environment.dart';
 import 'package:vocabulary_advancer/shell/feature.dart';
 
@@ -17,7 +18,12 @@ part 'root.keys.dart';
 part 'root.features.dart';
 
 GetIt _registry;
+I18n _i18n;
 
 void setRegistry(GetIt registry) {
   _registry = registry;
+}
+
+void setI18n(I18n i18n) {
+  _i18n = i18n;
 }

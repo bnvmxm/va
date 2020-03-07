@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:vocabulary_advancer/app/about_page.dart';
 import 'package:vocabulary_advancer/app/phrase_editor_page.dart';
 import 'package:vocabulary_advancer/app/phrase_editor_page_vm.dart';
@@ -9,16 +10,26 @@ import 'package:vocabulary_advancer/app/phrases_group_grid_page.dart';
 import 'package:vocabulary_advancer/app/phrase_list_page.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/definitions.dart';
+import 'package:vocabulary_advancer/shared/i18n.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
 class VAApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    const i18n = I18n.delegate;
+    setI18n(I18n.of(context));
     return MaterialApp(
-        title: 'Vocabulary Advancer',
+        title: svc.i18n.titlesAppName,
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
+        localizationsDelegates: [
+          i18n,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate
+        ],
+        supportedLocales: i18n.supportedLocales,
         navigatorKey: keys.navigation,
         initialRoute: def.routeRoot,
         onGenerateRoute: _generateRoute);

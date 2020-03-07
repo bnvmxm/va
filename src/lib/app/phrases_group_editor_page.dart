@@ -14,7 +14,7 @@ class PhraseGroupEditorPage extends VAPageWithArgument<String, PhraseGroupEditor
 
   @override
   AppBar buildAppBar(BuildContext context, PhraseGroupEditorPageVM vm) =>
-      AppBar(title: Text(vm.isNewGroup ? 'New Group' : 'Rename Group'));
+      AppBar(title: Text(vm.isNewGroup ? svc.i18n.titlesAddGroup : svc.i18n.titlesRenameGroup));
 
   @override
   Widget buildBody(BuildContext context, PhraseGroupEditorPageVM vm) => SingleChildScrollView(
@@ -26,11 +26,11 @@ class PhraseGroupEditorPage extends VAPageWithArgument<String, PhraseGroupEditor
           child: Column(
             children: [
               TextFormField(
-                decoration: const InputDecoration(labelText: 'Group Name'),
+                decoration: InputDecoration(labelText: svc.i18n.labelsGroupName),
                 initialValue: vm.initialGroupName,
                 validator: (v) => vm.validationMessage(
-                    onEmpty: () => 'Name is required',
-                    onAlreadyExists: () => 'Such group already exists'),
+                    onEmpty: () => svc.i18n.validationMessagesGroupNameRequired,
+                    onAlreadyExists: () => svc.i18n.validationMessagesGroupExists),
                 onChanged: (v) {
                   vm.currentGroupName = v;
                   if (vm.needInlineValidation && _formKey.currentState.validate()) {
@@ -46,7 +46,7 @@ class PhraseGroupEditorPage extends VAPageWithArgument<String, PhraseGroupEditor
 
   @override
   Widget buildFAB(BuildContext context, PhraseGroupEditorPageVM vm) => FloatingActionButton(
-      tooltip: 'Save and Close',
+      tooltip: svc.i18n.labelsSaveAndClose,
       onPressed: () {
         if (_formKey.currentState.validate()) {
           vm.applyAndClose();

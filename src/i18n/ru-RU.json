@@ -1,0 +1,43 @@
+{
+    "titles": {
+        "AppName": "Vocabulary Advancer",
+        "About": "Информация",
+        "Collections": "Коллекции",
+        "AddPhrase": "Новая Фраза",
+        "EditPhrase": "Корректирование",
+        "AddGroup": "Новая Коллекция",
+        "RenameGroup": "Переименование",
+        "Exercising": "Упражнение"
+    },
+    "labels": {
+        "StatPhrases": "Фраз",
+        "StatWhen": "Когда",
+        "StatNow": "Сейчас",
+        "StatRateLearning": "Запоминание",
+        "StatRateLearned": "Выучено",
+        "StatRateReviewing": "Закрепление",
+        "EditorChangeGroup": "Сменить Коллекцию",
+        "EditorPhrase": "Фраза",
+        "EditorPronunciation": "Произношение",
+        "EditorDefinition": "Определение",
+        "GroupName": "Коллекция",
+        "AddExample": "Еще пример",
+        "Exercise": "Упражнение",
+        "SaveAndClose": "Сохранить и закрыть",
+        "Edit": "Изменить",
+        "Add": "Добавить",
+        "View": "Просмотр",
+        "About": "Информация"
+    },
+    "validationMessages": {
+        "PhraseRequired": "Нужно указать Фразу",
+        "DefinitionRequired": "Нужно указать Определение",
+        "ExampleRequired": "Нужно указать хотя бы один пример",
+        "GroupNameRequired": "Имя обязательно",
+        "GroupExists": "Такая Коллекция уже есть"
+    },
+    "text": {
+        "About": "Пример применения Flutter",
+        "NoData": "Здесь пока нет данных..."
+    }
+}

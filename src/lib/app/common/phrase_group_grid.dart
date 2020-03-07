@@ -22,18 +22,15 @@ class PhraseGroupGridView extends StatelessWidget {
           padding: const EdgeInsets.all(8.0),
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
-          children:
-              vm.phraseGroups.map((x) => _buildGridViewTile(vm, x)).toList()));
+          children: vm.phraseGroups.map((x) => _buildGridViewTile(vm, x)).toList()));
 
-  Widget _buildGridViewTile(PhraseGroupGridPageVM vm, PhraseGroup item) =>
-      GestureDetector(
-          onTap: () async {
-            vm.isSelected(item) ? vm.unselect() : vm.select(item);
-          },
-          child: PhraseGroupGridCard(
-              name: item.name,
-              phraseCount: item.phraseCount,
-              minRate: item.minRate,
-              closeTargetUtc: item.closeTargetUtc,
-              isSelected: vm.isSelected(item)));
+  Widget _buildGridViewTile(PhraseGroupGridPageVM vm, PhraseGroup item) => GestureDetector(
+      onTap: () async {
+        vm.isSelected(item) ? vm.unselect() : vm.select(item);
+      },
+      child: PhraseGroupGridCard(
+          name: item.name,
+          phraseCount: item.phraseCount,
+          closeTargetUtc: item.closeTargetUtc,
+          isSelected: vm.isSelected(item)));
 }
