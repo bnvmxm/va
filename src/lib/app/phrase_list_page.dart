@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:vocabulary_advancer/app/common/empty.dart';
 import 'package:vocabulary_advancer/app/common/stat_target.dart';
 import 'package:vocabulary_advancer/app/phrase_list_page_vm.dart';
-import 'package:vocabulary_advancer/app/va_page.dart';
+import 'package:vocabulary_advancer/app/base/va_page.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 import 'package:vocabulary_advancer/core/extensions.dart';
@@ -25,7 +26,7 @@ class PhraseListPage extends VAPageWithArgument<String, PhraseListPageVM> {
             itemCount: vm.phrases.length,
             itemBuilder: (context, i) => _buildSelectedPhraseItem(context, vm, i, vm.phrases[i]),
             separatorBuilder: (context, i) => const Divider())
-        : buildEmptyBody(context);
+        : Empty();
   }
 
   Widget _buildSelectedPhraseItem(

@@ -1,6 +1,5 @@
 {
     "titles": {
-        "AppName": "Vocabulary Advancer",
         "About": "About",
         "Collections": "Collections",
         "AddPhrase": "New Phrase",
@@ -23,6 +22,13 @@
         "GroupName": "Group Name",
         "AddExample": "Add Example",
         "Exercise": "Exercise",
+        "ExerciseResult": {
+            "Low": "Don't remember",
+            "Negative": "Hardly remember",
+            "Uncertain": "Unsure",
+            "Positive": "Looks learned",
+            "High": "Definitely learned"
+        },
         "SaveAndClose": "Save and Close",
         "Edit": "Edit",
         "Add": "Add",
@@ -38,6 +44,7 @@
     },
     "text": {
         "About": "Flutter showcase app",
-        "NoData": "Nothing to show here..."
+        "NoData": "Nothing to show here...",
+        "NoPhrase": "Done! No Phrases to exercise now from this Collection."
     }
 }

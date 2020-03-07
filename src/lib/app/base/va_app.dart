@@ -13,26 +13,42 @@ import 'package:vocabulary_advancer/shared/definitions.dart';
 import 'package:vocabulary_advancer/shared/i18n.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
-class VAApp extends StatelessWidget {
+class VAApp extends StatefulWidget {
+  @override
+  _VAAppState createState() => _VAAppState();
+}
+
+class _VAAppState extends State<VAApp> {
+  @override
+  void initState() {
+    super.initState();
+    I18n.onLocaleChanged = _onLocaleChange;
+  }
+
   @override
   Widget build(BuildContext context) {
     const i18n = I18n.delegate;
-    setI18n(I18n.of(context));
     return MaterialApp(
-        title: svc.i18n.titlesAppName,
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
         localizationsDelegates: [
-          i18n,
+          I18n.delegate,
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate
         ],
         supportedLocales: i18n.supportedLocales,
+        localeResolutionCallback: i18n.resolution(fallback: const Locale("en", "US")),
         navigatorKey: keys.navigation,
         initialRoute: def.routeRoot,
         onGenerateRoute: _generateRoute);
+  }
+
+  void _onLocaleChange(Locale locale) {
+    setState(() {
+      I18n.locale = locale;
+    });
   }
 }
 
@@ -49,31 +65,26 @@ Route<dynamic> _generateRoute(RouteSettings settings) {
   }
   if (settings?.name == def.routeEditPhraseGroup) {
     return MaterialPageRoute<PhraseGroup>(
-        builder: (context) => PhraseGroupEditorPage(
-            initialGroupName: settings.arguments as String),
+        builder: (context) => PhraseGroupEditorPage(initialGroupName: settings.arguments as String),
         fullscreenDialog: true);
   }
   if (settings?.name == def.routePhraseGroup) {
     return MaterialPageRoute(
-        builder: (context) =>
-            PhraseListPage(groupName: settings.arguments as String));
+        builder: (context) => PhraseListPage(groupName: settings.arguments as String));
   }
   if (settings?.name == def.routeAddPhrase) {
     return MaterialPageRoute<Phrase>(
-        builder: (context) =>
-            PhraseEditorPage(settings.arguments as PhraseEditorPageArgument),
+        builder: (context) => PhraseEditorPage(settings.arguments as PhraseEditorPageArgument),
         fullscreenDialog: true);
   }
   if (settings?.name == def.routeEditPhrase) {
     return MaterialPageRoute<Phrase>(
-        builder: (context) =>
-            PhraseEditorPage(settings.arguments as PhraseEditorPageArgument),
+        builder: (context) => PhraseEditorPage(settings.arguments as PhraseEditorPageArgument),
         fullscreenDialog: true);
   }
   if (settings?.name == def.routeExercise) {
     return MaterialPageRoute(
-        builder: (context) => PhraseExercisePage(
-            settings.arguments as PhraseExercisePageArgument));
+        builder: (context) => PhraseExercisePage(settings.arguments as PhraseExercisePageArgument));
   }
   assert(false);
   return MaterialPageRoute(builder: (context) => AboutPage());

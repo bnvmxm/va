@@ -5,6 +5,7 @@ import 'package:vocabulary_advancer/app/phrase_exercise_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrases_group_editor_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrases_group_grid_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrase_list_page_vm.dart';
+import 'package:vocabulary_advancer/core/services/localization_service.dart';
 import 'package:vocabulary_advancer/core/services/navigation.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_group_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_repository.dart';
@@ -21,9 +22,11 @@ GetIt _registry;
 I18n _i18n;
 
 void setRegistry(GetIt registry) {
+  assert(registry != null);
   _registry = registry;
 }
 
 void setI18n(I18n i18n) {
+  assert(i18n != null);
   _i18n = i18n;
 }

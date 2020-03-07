@@ -20,6 +20,10 @@ abstract class BaseViewModel<TArgument> with ChangeNotifier {
     notifyWhen(() => initializer(argument), asBusy: true, asMicrotask: true);
   }
 
+  void invalidate() {
+    notifyListeners();
+  }
+
   void notify(Function action, {bool asBusy = false}) {
     if (asBusy) {
       _state = ViewModelState.busy;

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:vocabulary_advancer/app/common/empty.dart';
 import 'package:vocabulary_advancer/app/common/phrase_group_grid.dart';
 import 'package:vocabulary_advancer/app/phrases_group_grid_page_vm.dart';
-import 'package:vocabulary_advancer/app/va_page.dart';
+import 'package:vocabulary_advancer/app/base/va_page.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
 class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
@@ -16,12 +17,18 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
 
   @override
   Widget buildBody(BuildContext context, PhraseGroupGridPageVM vm) =>
-      vm.isNotEmpty ? PhraseGroupGridView() : buildEmptyBody(context);
+      vm.isNotEmpty ? PhraseGroupGridView() : Empty();
 
   @override
   Widget buildFAB(BuildContext context, PhraseGroupGridPageVM vm) => vm.anySelected
       ? FloatingActionButton(
           tooltip: svc.i18n.labelsExercise,
+          backgroundColor: vm.anySelectedAndNotEmpty
+              ? Theme.of(context).floatingActionButtonTheme.backgroundColor
+              : Theme.of(context).cardColor,
+          foregroundColor: vm.anySelectedAndNotEmpty
+              ? Theme.of(context).floatingActionButtonTheme.foregroundColor
+              : Theme.of(context).dividerColor,
           onPressed: () async {
             await vm.navigateToExercise();
           },
@@ -54,6 +61,17 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
             tooltip: svc.i18n.labelsAbout,
             onPressed: () async {
               await vm.navigateToAbout();
+            }),
+        IconButton(
+            icon: const Icon(Icons.language),
+            tooltip: 'Language',
+            onPressed: () async {
+              final l10n = await svc.svcLocalization;
+              if (l10n.currentLocale.languageCode == 'en') {
+                l10n.setLocale(l10n.getSupportedLocales().last);
+              } else {
+                l10n.setLocale(l10n.getSupportedLocales().first);
+              }
             })
       ];
 }

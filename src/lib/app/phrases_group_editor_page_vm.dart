@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:vocabulary_advancer/core/view_model.dart';
+import 'package:vocabulary_advancer/core/base_view_model.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
 class PhraseGroupEditorPageVM extends BaseViewModel<String> {

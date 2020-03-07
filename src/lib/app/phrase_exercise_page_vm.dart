@@ -1,6 +1,6 @@
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/core/extensions.dart';
-import 'package:vocabulary_advancer/core/view_model.dart';
+import 'package:vocabulary_advancer/core/base_view_model.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
 class PhraseExercisePageArgument {
@@ -17,8 +17,7 @@ class PhraseExercisePageVM extends BaseViewModel<PhraseExercisePageArgument> {
   bool get isAny => current != null;
 
   @override
-  Future Function(PhraseExercisePageArgument argument) get initializer =>
-      (argument) async {
+  Future Function(PhraseExercisePageArgument argument) get initializer => (argument) async {
         groupName = argument.groupName;
         isExerciseFirst = argument.isExerciseFirst;
         await _fetchNextPhrase();
@@ -28,9 +27,13 @@ class PhraseExercisePageVM extends BaseViewModel<PhraseExercisePageArgument> {
     current = svc.repPhrase.getForExercise(groupName);
   }
 
-  void next(RateFeedback feedback) {
+  Future next(RateFeedback feedback) async {
     assert(isAny);
-    svc.repPhrase.updateStat(groupName, current.id,
-        current.rate.asRate(feedback), current.rate.asCooldown(feedback));
+    final newRate = current.rate.asRate(feedback);
+    final newTarget = current.rate.asCooldown(feedback);
+
+    svc.repPhrase.updateStat(groupName, current.id, newRate, newTarget);
+    await _fetchNextPhrase();
+    invalidate();
   }
 }

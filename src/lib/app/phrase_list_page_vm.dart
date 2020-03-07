@@ -2,7 +2,7 @@ import 'dart:collection';
 
 import 'package:vocabulary_advancer/app/phrase_editor_page_vm.dart';
 import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/core/view_model.dart';
+import 'package:vocabulary_advancer/core/base_view_model.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
 class PhraseListPageVM extends BaseViewModel<String> {

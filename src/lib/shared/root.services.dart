@@ -6,6 +6,7 @@ class ServiceProvider {
   ServiceProvider._internal();
 
   I18n get i18n => _i18n;
+  Future<LocalizationService> get svcLocalization => _registry.getAsync<LocalizationService>();
 
   PhraseExercisePageVM get vmPhraseExercisePage => _registry.get<PhraseExercisePageVM>();
   PhraseEditorPageVM get vmPhraseEditorPage => _registry.get<PhraseEditorPageVM>();

@@ -3,7 +3,7 @@ import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:vocabulary_advancer/app/common/card_decoration.dart';
 import 'package:vocabulary_advancer/app/common/phrase_example_input.dart';
 import 'package:vocabulary_advancer/app/phrase_editor_page_vm.dart';
-import 'package:vocabulary_advancer/app/va_page.dart';
+import 'package:vocabulary_advancer/app/base/va_page.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
 class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, PhraseEditorPageVM> {

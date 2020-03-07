@@ -1,6 +1,5 @@
 {
     "titles": {
-        "AppName": "Vocabulary Advancer",
         "About": "Информация",
         "Collections": "Коллекции",
         "AddPhrase": "Новая Фраза",
@@ -23,6 +22,13 @@
         "GroupName": "Коллекция",
         "AddExample": "Еще пример",
         "Exercise": "Упражнение",
+        "ExerciseResult": {
+            "Low": "Не помню",
+            "Negative": "Плохо помню",
+            "Uncertain": "Не ясно",
+            "Positive": "Помню",
+            "High": "Хорошо помню"
+        },
         "SaveAndClose": "Сохранить и закрыть",
         "Edit": "Изменить",
         "Add": "Добавить",
@@ -38,6 +44,7 @@
     },
     "text": {
         "About": "Пример применения Flutter",
-        "NoData": "Здесь пока нет данных..."
+        "NoData": "Здесь пока нет данных...",
+        "NoPhrase": "Выполнено! Пока больше нет Фраз на повторение в этой Коллекции."
     }
 }

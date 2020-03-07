@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/core/view_model.dart';
+import 'package:vocabulary_advancer/core/base_view_model.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
 class PhraseGroupGridPageVM extends BaseViewModel {
@@ -8,6 +8,8 @@ class PhraseGroupGridPageVM extends BaseViewModel {
   List<PhraseGroup> phraseGroups = [];
 
   bool get anySelected => isReady && _phraseGroupSelected != null;
+  bool get anySelectedAndNotEmpty =>
+      isReady && _phraseGroupSelected != null && _phraseGroupSelected.phraseCount > 0;
   bool get isNotEmpty => isReady && phraseGroups.isNotEmpty;
 
   @override
@@ -53,9 +55,11 @@ class PhraseGroupGridPageVM extends BaseViewModel {
 
   Future navigateToGroup() async {
     assert(_phraseGroupSelected != null);
-    await svc.nav.forwardToPhraseGroup(_phraseGroupSelected.name);
-    _phraseGroupSelected = null;
-    notify(() async => _reset(), asBusy: true);
+    if (_phraseGroupSelected.phraseCount > 0) {
+      await svc.nav.forwardToPhraseGroup(_phraseGroupSelected.name);
+      _phraseGroupSelected = null;
+      notify(() async => _reset(), asBusy: true);
+    }
   }
 
   Future navigateToAbout() {
@@ -64,8 +68,10 @@ class PhraseGroupGridPageVM extends BaseViewModel {
 
   Future navigateToExercise() async {
     assert(_phraseGroupSelected != null);
-    await svc.nav.forwardToExercise(_phraseGroupSelected.name);
-    _phraseGroupSelected = null;
-    notify(() async => _reset(), asBusy: true);
+    if (_phraseGroupSelected.phraseCount > 0) {
+      await svc.nav.forwardToExercise(_phraseGroupSelected.name);
+      _phraseGroupSelected = null;
+      notify(() async => _reset(), asBusy: true);
+    }
   }
 }
