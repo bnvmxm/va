@@ -1,12 +1,14 @@
+import 'package:vocabulary_advancer/shared/root.dart';
+
 extension DurationExt on Duration {
   bool isTargetClose() => isNegative || inMinutes < 60;
   bool isTargetFar() => !isNegative && inHours > 48;
 
   String toStringAsTarget() {
-    if (isNegative) return 'Now';
+    if (isNegative) return svc.i18n.labelsStatNow;
 
     if (inSeconds < 60) {
-      return 'Now';
+      return svc.i18n.labelsStatNow;
     }
 
     final sb = StringBuffer();
@@ -32,6 +34,8 @@ extension IntExt on int {
   bool isRateLow() => this <= 25;
 
   String toStringAsRate() {
-    return isRateLow() ? 'Learning' : isRateHigh() ? 'Learned' : 'Reviewing';
+    return isRateLow()
+        ? svc.i18n.labelsStatRateLearning
+        : isRateHigh() ? svc.i18n.labelsStatRateLearned : svc.i18n.labelsStatRateReviewing;
   }
 }

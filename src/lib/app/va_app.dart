@@ -15,8 +15,9 @@ class VAApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     const i18n = I18n.delegate;
+    setI18n(I18n.of(context));
     return MaterialApp(
-        title: 'Vocabulary Advancer',
+        title: svc.i18n.titlesAppName,
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),

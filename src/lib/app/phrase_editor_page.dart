@@ -24,10 +24,14 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
   PhraseEditorPageVM createVM() => svc.vmPhraseEditorPage;
 
   @override
-  AppBar buildAppBar(BuildContext context, PhraseEditorPageVM vm) =>
-      AppBar(title: Text(vm.isNewPhrase ? 'New Phrase' : 'Edit Phrase'), actions: [
-        IconButton(icon: Icon(Icons.save), tooltip: 'Save and Close', onPressed: () => _onSave(vm))
-      ]);
+  AppBar buildAppBar(BuildContext context, PhraseEditorPageVM vm) => AppBar(
+          title: Text(vm.isNewPhrase ? svc.i18n.titlesAddPhrase : svc.i18n.titlesEditPhrase),
+          actions: [
+            IconButton(
+                icon: Icon(Icons.save),
+                tooltip: svc.i18n.labelsSaveAndClose,
+                onPressed: () => _onSave(vm))
+          ]);
 
   @override
   Widget buildBody(BuildContext context, PhraseEditorPageVM vm) => WillPopScope(
@@ -49,7 +53,8 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
                             textFieldConfiguration: TextFieldConfiguration(
                                 focusNode: _focusNodes[0],
                                 controller: _typeAheadController,
-                                decoration: const InputDecoration(labelText: 'Change the group'),
+                                decoration:
+                                    InputDecoration(labelText: svc.i18n.labelsEditorChangeGroup),
                                 onEditingComplete: () {
                                   _selectGroup(vm, _typeAheadController.text, andCleanInput: true);
                                 }),
@@ -71,30 +76,30 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
                         ])),
                 const SizedBox(height: 24.0),
                 TextFormField(
-                    decoration: const InputDecoration(labelText: 'Phrase'),
+                    decoration: InputDecoration(labelText: svc.i18n.labelsEditorPhrase),
                     initialValue: vm.phrase,
                     validator: (v) => vm.validationMessageWhenEmpty(
-                        value: v, onEmpty: () => 'Phrase is required'),
+                        value: v, onEmpty: () => svc.i18n.validationMessagesPhraseRequired),
                     onChanged: (v) => vm.updatePhrase(v, _formKey.currentState.validate),
                     focusNode: _focusNodes[1]),
                 TextFormField(
-                    decoration: const InputDecoration(labelText: 'Pronunciation'),
+                    decoration: InputDecoration(labelText: svc.i18n.labelsEditorPronunciation),
                     initialValue: vm.pronunciation,
                     onChanged: (v) => vm.updatePronunciation(v, _formKey.currentState.validate),
                     focusNode: _focusNodes[2]),
                 TextFormField(
-                    decoration: const InputDecoration(labelText: 'Definition'),
+                    decoration: InputDecoration(labelText: svc.i18n.labelsEditorDefinition),
                     minLines: 1,
                     maxLines: 5,
                     initialValue: vm.definition,
                     validator: (v) => vm.validationMessageWhenEmpty(
-                        value: v, onEmpty: () => 'Definition is required'),
+                        value: v, onEmpty: () => svc.i18n.validationMessagesDefinitionRequired),
                     onChanged: (v) => vm.updateDefinition(v, _formKey.currentState.validate),
                     focusNode: _focusNodes[3]),
                 PhraseExampleTextFormField(
                     focusNode: _focusNodes[4],
                     onValidate: (v) => vm.validationMessageForExamples(
-                        onEmpty: () => 'At least one example is required'),
+                        onEmpty: () => svc.i18n.validationMessagesExampleRequired),
                     onSaved: (v) => vm.addExample(v, _formKey.currentState.validate)),
                 SizedBox(
                     height: vm.examples.isNotEmpty ? 120 : 0,

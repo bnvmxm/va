@@ -12,7 +12,7 @@ class PhraseExercisePage
 
   @override
   AppBar buildAppBar(BuildContext context, PhraseExercisePageVM vm) =>
-      AppBar(title: const Text('Exercising'));
+      AppBar(title: Text(svc.i18n.titlesExercising));
 
   @override
   Widget buildBody(BuildContext context, PhraseExercisePageVM vm) => Column(children: [

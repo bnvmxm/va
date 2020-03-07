@@ -35,7 +35,6 @@ class PhraseGroupGridView extends StatelessWidget {
       child: PhraseGroupGridCard(
           name: item.name,
           phraseCount: item.phraseCount,
-          minRate: item.minRate,
           closeTargetUtc: item.closeTargetUtc,
           isSelected: vm.isSelected(item)));
 }

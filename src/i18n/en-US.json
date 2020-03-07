@@ -1,8 +1,42 @@
 {
-    "materialApp": {
-        "title": "Vocabulary Advancer"
+    "titles": {
+        "AppName": "Vocabulary Advancer",
+        "About": "About",
+        "Collections": "Collections",
+        "AddPhrase": "New Phrase",
+        "EditPhrase": "Edit Phrase",
+        "AddGroup": "New Group",
+        "RenameGroup": "Rename Phrase",
+        "Exercising": "Exercising"
     },
-    "phraseExampleTextFormField": {
-        "addExample": "Add Example"
+    "labels": {
+        "StatPhrases": "Phrases",
+        "StatWhen": "When",
+        "StatNow": "Now",
+        "StatRateLearning": "Learning",
+        "StatRateLearned": "Learned",
+        "StatRateReviewing": "Reviewing",
+        "EditorChangeGroup": "Change the group",
+        "EditorPhrase": "Phrase",
+        "EditorPronunciation": "Pronunciation",
+        "EditorDefinition": "Definition",
+        "GroupName": "Group Name",
+        "AddExample": "Add Example",
+        "Exercise": "Exercise",
+        "SaveAndClose": "Save and Close",
+        "Edit": "Edit",
+        "Add": "Add",
+        "About": "About"
+    },
+    "validationMessages": {
+        "PhraseRequired": "Phrase is required",
+        "DefinitionRequired": "Definition is required",
+        "ExampleRequired": "At least one example is required",
+        "GroupNameRequired": "Name is required",
+        "GroupExists": "Such group already exists"
+    },
+    "text": {
+        "About": "Flutter showcase app",
+        "NoData": "Nothing to show here..."
     }
 }

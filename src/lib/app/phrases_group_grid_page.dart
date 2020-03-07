@@ -10,7 +10,7 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
 
   @override
   AppBar buildAppBar(BuildContext context, PhraseGroupGridPageVM vm) => AppBar(
-        title: const Text('Collections'),
+        title: Text(svc.i18n.titlesCollections),
         actions: _buildAppBarActions(context, vm),
       );
 
@@ -21,7 +21,7 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
   @override
   Widget buildFAB(BuildContext context, PhraseGroupGridPageVM vm) => vm.anySelected
       ? FloatingActionButton(
-          tooltip: 'Exercise',
+          tooltip: svc.i18n.labelsExercise,
           onPressed: () {
             //TODO
           },
@@ -31,20 +31,20 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
   List<Widget> _buildAppBarActions(BuildContext context, PhraseGroupGridPageVM vm) => [
         if (vm.anySelected)
           IconButton(
-              icon: Icon(Icons.edit),
-              tooltip: 'Edit',
+              icon: const Icon(Icons.edit),
+              tooltip: svc.i18n.labelsEdit,
               onPressed: () async {
                 await vm.navigateToEditGroup();
               }),
         IconButton(
-            icon: Icon(Icons.plus_one),
-            tooltip: 'Add',
+            icon: const Icon(Icons.plus_one),
+            tooltip: svc.i18n.labelsAdd,
             onPressed: () async {
               await vm.navigateToAddGroup();
             }),
         IconButton(
-            icon: Icon(Icons.info),
-            tooltip: 'About',
+            icon: const Icon(Icons.info),
+            tooltip: svc.i18n.labelsAbout,
             onPressed: () async {
               await vm.navigateToAbout();
             })

@@ -26,16 +26,76 @@ class I18n implements WidgetsLocalizations {
   /// function to be invoked when changing the language
   static LocaleChangeCallback onLocaleChanged;
 
-  static I18n of(BuildContext context) => Localizations.of<I18n>(context, WidgetsLocalizations);
+  static I18n of(BuildContext context) =>
+    Localizations.of<I18n>(context, WidgetsLocalizations);
 
   @override
   TextDirection get textDirection => TextDirection.ltr;
 
   /// "Vocabulary Advancer"
-  String get materialAppTitle => "Vocabulary Advancer";
-
+  String get titlesAppName => "Vocabulary Advancer";
+  /// "About"
+  String get titlesAbout => "About";
+  /// "Collections"
+  String get titlesCollections => "Collections";
+  /// "New Phrase"
+  String get titlesAddPhrase => "New Phrase";
+  /// "Edit Phrase"
+  String get titlesEditPhrase => "Edit Phrase";
+  /// "New Group"
+  String get titlesAddGroup => "New Group";
+  /// "Rename Phrase"
+  String get titlesRenameGroup => "Rename Phrase";
+  /// "Exercising"
+  String get titlesExercising => "Exercising";
+  /// "Phrases"
+  String get labelsStatPhrases => "Phrases";
+  /// "When"
+  String get labelsStatWhen => "When";
+  /// "Now"
+  String get labelsStatNow => "Now";
+  /// "Learning"
+  String get labelsStatRateLearning => "Learning";
+  /// "Learned"
+  String get labelsStatRateLearned => "Learned";
+  /// "Reviewing"
+  String get labelsStatRateReviewing => "Reviewing";
+  /// "Change the group"
+  String get labelsEditorChangeGroup => "Change the group";
+  /// "Phrase"
+  String get labelsEditorPhrase => "Phrase";
+  /// "Pronunciation"
+  String get labelsEditorPronunciation => "Pronunciation";
+  /// "Definition"
+  String get labelsEditorDefinition => "Definition";
+  /// "Group Name"
+  String get labelsGroupName => "Group Name";
   /// "Add Example"
-  String get phraseExampleTextFormFieldAddExample => "Add Example";
+  String get labelsAddExample => "Add Example";
+  /// "Exercise"
+  String get labelsExercise => "Exercise";
+  /// "Save and Close"
+  String get labelsSaveAndClose => "Save and Close";
+  /// "Edit"
+  String get labelsEdit => "Edit";
+  /// "Add"
+  String get labelsAdd => "Add";
+  /// "About"
+  String get labelsAbout => "About";
+  /// "Phrase is required"
+  String get validationMessagesPhraseRequired => "Phrase is required";
+  /// "Definition is required"
+  String get validationMessagesDefinitionRequired => "Definition is required";
+  /// "At least one example is required"
+  String get validationMessagesExampleRequired => "At least one example is required";
+  /// "Name is required"
+  String get validationMessagesGroupNameRequired => "Name is required";
+  /// "Such group already exists"
+  String get validationMessagesGroupExists => "Such group already exists";
+  /// "Flutter showcase app"
+  String get textAbout => "Flutter showcase app";
+  /// "Nothing to show here..."
+  String get textNoData => "Nothing to show here...";
 }
 
 class _I18n_en_US extends I18n {
@@ -48,6 +108,7 @@ class _I18n_en_US extends I18n {
 class _I18n_ru_RU extends I18n {
   const _I18n_ru_RU();
 
+
   @override
   TextDirection get textDirection => TextDirection.ltr;
 }
@@ -55,7 +116,10 @@ class _I18n_ru_RU extends I18n {
 class GeneratedLocalizationsDelegate extends LocalizationsDelegate<WidgetsLocalizations> {
   const GeneratedLocalizationsDelegate();
   List<Locale> get supportedLocales {
-    return const <Locale>[Locale("en", "US"), Locale("ru", "RU")];
+    return const <Locale>[
+      Locale("en", "US"),
+      Locale("ru", "RU")
+    ];
   }
 
   LocaleResolutionCallback resolution({Locale fallback}) {
@@ -76,11 +140,14 @@ class GeneratedLocalizationsDelegate extends LocalizationsDelegate<WidgetsLocali
     final String languageCode = I18n._locale != null ? I18n._locale.languageCode : "";
     if ("en_US" == lang) {
       return SynchronousFuture<WidgetsLocalizations>(const _I18n_en_US());
-    } else if ("ru_RU" == lang) {
+    }
+    else if ("ru_RU" == lang) {
       return SynchronousFuture<WidgetsLocalizations>(const _I18n_ru_RU());
-    } else if ("en" == languageCode) {
+    }
+    else if ("en" == languageCode) {
       return SynchronousFuture<WidgetsLocalizations>(const _I18n_en_US());
-    } else if ("ru" == languageCode) {
+    }
+    else if ("ru" == languageCode) {
       return SynchronousFuture<WidgetsLocalizations>(const _I18n_ru_RU());
     }
 
