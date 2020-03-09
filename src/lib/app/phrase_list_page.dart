@@ -53,15 +53,14 @@ class PhraseListPage extends VAPageWithArgument<String, PhraseListPageVM> {
         title: Text(item.phrase),
         subtitle: Text(item.definition),
         isThreeLine: true,
-        trailing:
-            withStat && (item.rate.isRateLow() || item.targetUtc.differenceNowUtc().isTargetClose())
-                ? SizedBox(
-                    width: 60,
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [StatTarget(item.targetUtc.differenceNowUtc())]),
-                  )
-                : null,
+        trailing: withStat
+            ? SizedBox(
+                width: 60,
+                child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [StatTarget(item.targetUtc.differenceNowUtc())]),
+              )
+            : null,
       );
 
   List<Widget> _buildAppBarActions(BuildContext context, PhraseListPageVM vm) => [

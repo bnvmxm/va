@@ -10,9 +10,9 @@ class PhraseGroup {
 }
 
 class Phrase {
-  Phrase(this.groupName, this.id, this.phrase, this.pronunciation,
-      this.definition, this.examples, this.createdUtc,
-      {int rate, DateTime targetUtc})
+  Phrase(this.groupName, this.id, this.phrase, this.pronunciation, this.definition, this.examples,
+      this.createdUtc,
+      {int rate, DateTime targetUtc, this.updatedUtc})
       : rate = rate ?? 0,
         targetUtc = targetUtc ?? def.minDateTimeUtc;
 
@@ -26,6 +26,7 @@ class Phrase {
 
   final int rate;
   final DateTime targetUtc;
+  final DateTime updatedUtc;
 }
 
 enum RateFeedback { lowTheshold, negative, uncertain, positive, highThershold }

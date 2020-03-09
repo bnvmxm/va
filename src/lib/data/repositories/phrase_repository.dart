@@ -8,28 +8,25 @@ part 'phrase_repository.m.dart';
 class PhraseRepository {
   Iterable<Phrase> findMany(String groupName) {
     final groupFound = _findGroup(groupName);
-    return groupFound == null
-        ? []
-        : groupFound.phrases.map((x) => x.toModel(groupName));
+    return groupFound == null ? [] : groupFound.phrases.map((x) => x.toModel(groupName));
   }
 
-  Phrase getForExercise(String groupName) {
+  Phrase getForExercise(String groupName, {String exceptId = ''}) {
     final groupFound = _findGroup(groupName);
     if (groupFound == null) return null;
 
     final targeted = groupFound.phrases
-        .where((p) => p.targetUtc.differenceNowUtc().isTargetClose())
+        .where((p) => p.id != exceptId && p.targetUtc.differenceNowUtc().isTargetClose())
         .toList();
     if (targeted.isEmpty) return null;
 
     return targeted.length == 1
         ? targeted[0].toModel(groupName)
-        : targeted[DateTime.now().millisecondsSinceEpoch % targeted.length]
-            .toModel(groupName);
+        : targeted[DateTime.now().millisecondsSinceEpoch % targeted.length].toModel(groupName);
   }
 
-  Phrase create(String groupName, String phrase, String pronunciation,
-      String definition, List<String> examples) {
+  Phrase create(String groupName, String phrase, String pronunciation, String definition,
+      List<String> examples) {
     final groupFound = _findGroup(groupName);
     if (groupFound == null) return null;
 
@@ -41,6 +38,7 @@ class PhraseRepository {
         definition: definition,
         examples: List.from(examples),
         createdUtc: now,
+        updatedUtc: now,
         rate: 50,
         targetUtc: now.add(const Duration(hours: 1)));
 
@@ -48,38 +46,30 @@ class PhraseRepository {
     return dto.toModel(groupName);
   }
 
-  Phrase update(
-      String oldGroupName,
-      String newGroupName,
-      String phraseId,
-      String phrase,
-      String pronunciation,
-      String definition,
-      List<String> examples) {
+  Phrase update(String oldGroupName, String newGroupName, String phraseId, String phrase,
+      String pronunciation, String definition, List<String> examples) {
     final groupFound = oldGroupName != newGroupName
         ? _movePhrase(phraseId, oldGroupName, newGroupName)
         : _findGroup(newGroupName);
     if (groupFound == null) return null;
 
-    final dto = groupFound.phrases
-        .firstWhere((p) => p.id == phraseId, orElse: () => null);
+    final dto = groupFound.phrases.firstWhere((p) => p.id == phraseId, orElse: () => null);
     if (dto == null) return null;
 
     dto.phrase = phrase;
     dto.pronunciation = pronunciation;
     dto.definition = definition;
     dto.examples = List.from(examples);
+    dto.updatedUtc = DateTime.now().toUtc();
 
     return dto.toModel(newGroupName);
   }
 
-  Phrase updateStat(
-      String groupName, String phraseId, int newRate, Duration cooldownRange) {
+  Phrase updateStat(String groupName, String phraseId, int newRate, Duration cooldownRange) {
     final groupFound = _findGroup(groupName);
     if (groupFound == null) return null;
 
-    final dto = groupFound.phrases
-        .firstWhere((p) => p.id == phraseId, orElse: () => null);
+    final dto = groupFound.phrases.firstWhere((p) => p.id == phraseId, orElse: () => null);
     if (dto == null) return null;
 
     dto.rate = newRate;
@@ -87,13 +77,11 @@ class PhraseRepository {
     return dto.toModel(groupName);
   }
 
-  DataGroup _movePhrase(
-      String phraseId, String oldGroupName, String newGroupName) {
+  DataGroup _movePhrase(String phraseId, String oldGroupName, String newGroupName) {
     final oldGroupFound = _findGroup(oldGroupName);
     if (oldGroupFound == null) return null;
 
-    final phrase = oldGroupFound.phrases
-        .firstWhere((p) => p.id == phraseId, orElse: () => null);
+    final phrase = oldGroupFound.phrases.firstWhere((p) => p.id == phraseId, orElse: () => null);
     if (phrase == null) return null;
 
     final newGroupFound = _findGroup(newGroupName);
@@ -105,6 +93,6 @@ class PhraseRepository {
     return newGroupFound;
   }
 
-  DataGroup _findGroup(String groupName) => svc.dataProvider.data
-      .firstWhere((x) => x.name == groupName, orElse: () => null);
+  DataGroup _findGroup(String groupName) =>
+      svc.dataProvider.data.firstWhere((x) => x.name == groupName, orElse: () => null);
 }

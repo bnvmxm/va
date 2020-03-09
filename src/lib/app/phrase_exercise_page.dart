@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:vocabulary_advancer/app/common/card_decoration.dart';
+import 'package:vocabulary_advancer/app/common/rotatable.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/app/phrase_exercise_page_vm.dart';
 import 'package:vocabulary_advancer/app/base/va_page.dart';
@@ -21,7 +22,7 @@ class PhraseExercisePage
       ? OrientationBuilder(builder: (context, orientation) {
           return orientation == Orientation.portrait
               ? Column(children: [
-                  _buildDefinitionCard(context, vm),
+                  _buildAnimatedCard(context, vm, isVertical: true),
                   Expanded(
                     child: _buildExamplesCard(context, vm),
                   ),
@@ -34,13 +35,8 @@ class PhraseExercisePage
                               context, () => const VerticalDivider(indent: 12, endIndent: 24), vm)))
                 ])
               : Row(children: [
-                  Expanded(
-                      child: Column(children: [
-                    _buildDefinitionCard(context, vm),
-                    Expanded(
-                      child: _buildExamplesCard(context, vm),
-                    )
-                  ])),
+                  Expanded(child: _buildAnimatedCard(context, vm)),
+                  Expanded(child: _buildExamplesCard(context, vm)),
                   SizedBox(
                       width: 60,
                       child: Column(
@@ -55,7 +51,23 @@ class PhraseExercisePage
         })
       : _buildEmptyBody(context);
 
-  Widget _buildDefinitionCard(BuildContext context, PhraseExercisePageVM vm) => Padding(
+  Widget _buildAnimatedCard(BuildContext context, PhraseExercisePageVM vm,
+          {bool isVertical = false}) =>
+      vm.isOpen
+          ? _buildCard(context, vm.current.phrase, isAccent: true, isVertical: isVertical)
+          : vm.isOpening
+              ? Rotatable(
+                  onRotated: () => vm.setCardOpened(),
+                  child: _buildCard(context, '', isAccent: false, isVertical: isVertical),
+                )
+              : GestureDetector(
+                  onTap: () => vm.setCardOpening(),
+                  child: _buildCard(context, vm.current.definition,
+                      isAccent: false, isVertical: isVertical),
+                );
+
+  Widget _buildCard(BuildContext context, String value, {bool isAccent, bool isVertical = true}) =>
+      Padding(
         padding: const EdgeInsets.all(16.0),
         child: Container(
             padding: const EdgeInsets.all(16.0),
@@ -65,8 +77,23 @@ class PhraseExercisePage
               Expanded(
                   child: Padding(
                       padding: const EdgeInsets.only(left: 16.0),
-                      child: Text(vm.current.definition ?? '',
-                          style: Theme.of(context).textTheme.headline6)))
+                      child: isVertical
+                          ? SizedBox(
+                              height: 100,
+                              child: Text(value ?? '',
+                                  style: isAccent
+                                      ? Theme.of(context)
+                                          .textTheme
+                                          .headline6
+                                          .copyWith(color: Theme.of(context).accentColor)
+                                      : Theme.of(context).textTheme.headline6))
+                          : Text(value ?? '',
+                              style: isAccent
+                                  ? Theme.of(context)
+                                      .textTheme
+                                      .headline6
+                                      .copyWith(color: Theme.of(context).accentColor)
+                                  : Theme.of(context).textTheme.headline6)))
             ])),
       );
 

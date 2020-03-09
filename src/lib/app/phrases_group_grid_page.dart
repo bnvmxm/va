@@ -50,12 +50,13 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
               onPressed: () async {
                 await vm.navigateToEditGroup();
               }),
-        IconButton(
-            icon: const Icon(Icons.plus_one),
-            tooltip: svc.i18n.labelsAdd,
-            onPressed: () async {
-              await vm.navigateToAddGroup();
-            }),
+        if (!vm.anySelected)
+          IconButton(
+              icon: const Icon(Icons.plus_one),
+              tooltip: svc.i18n.labelsAdd,
+              onPressed: () async {
+                await vm.navigateToAddGroup();
+              }),
         IconButton(
             icon: const Icon(Icons.info),
             tooltip: svc.i18n.labelsAbout,
