@@ -8,7 +8,7 @@ import 'package:vocabulary_advancer/app/phrase_exercise_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrases_group_editor_page.dart';
 import 'package:vocabulary_advancer/app/phrases_group_grid_page.dart';
 import 'package:vocabulary_advancer/app/phrase_list_page.dart';
-import 'package:vocabulary_advancer/app/themes/dark_main.dart';
+import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/definitions.dart';
 import 'package:vocabulary_advancer/shared/i18n.dart';
@@ -20,28 +20,34 @@ class VAApp extends StatefulWidget {
 }
 
 class _VAAppState extends State<VAApp> {
+  VAThemeId _themeId;
+
   @override
   void initState() {
     super.initState();
+    _themeId = VAThemeId.darkCold;
     I18n.onLocaleChanged = _onLocaleChange;
   }
 
   @override
   Widget build(BuildContext context) {
     const i18n = I18n.delegate;
-    return MaterialApp(
-        theme: themeCurrent,
-        localizationsDelegates: const [
-          I18n.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate
-        ],
-        supportedLocales: i18n.supportedLocales,
-        localeResolutionCallback: i18n.resolution(fallback: const Locale("en", "US")),
-        navigatorKey: keys.navigation,
-        initialRoute: def.routeRoot,
-        onGenerateRoute: _generateRoute);
+    return VATheme(
+      _themeId,
+      child: MaterialApp(
+          theme: _themeId.asMaterialThemeData(),
+          localizationsDelegates: const [
+            I18n.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate
+          ],
+          supportedLocales: i18n.supportedLocales,
+          localeResolutionCallback: i18n.resolution(fallback: const Locale("en", "US")),
+          navigatorKey: keys.navigation,
+          initialRoute: def.routeRoot,
+          onGenerateRoute: _generateRoute),
+    );
   }
 
   void _onLocaleChange(Locale locale) {

@@ -3,6 +3,7 @@ import 'package:vocabulary_advancer/app/common/empty.dart';
 import 'package:vocabulary_advancer/app/common/phrase_group_grid.dart';
 import 'package:vocabulary_advancer/app/phrases_group_grid_page_vm.dart';
 import 'package:vocabulary_advancer/app/base/va_page.dart';
+import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
 class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
@@ -24,8 +25,8 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
       ? FloatingActionButton(
           tooltip: svc.i18n.labelsExercise,
           backgroundColor: vm.anySelectedAndNotEmpty
-              ? Theme.of(context).floatingActionButtonTheme.backgroundColor
-              : Theme.of(context).cardColor,
+              ? Color(VATheme.of(context).colorAccent)
+              : Color(VATheme.of(context).colorPrimary500),
           foregroundColor: vm.anySelectedAndNotEmpty
               ? Theme.of(context).primaryColor
               : Theme.of(context).dividerColor,

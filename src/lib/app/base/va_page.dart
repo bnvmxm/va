@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vocabulary_advancer/app/themes/dark_main.dart';
 import 'package:vocabulary_advancer/core/base_view_model.dart';
 import 'package:vocabulary_advancer/shared/i18n.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
@@ -21,7 +20,6 @@ abstract class VAPage<T extends BaseViewModel> extends StatelessWidget {
       child: Consumer<T>(builder: (context, vm, child) {
         return Scaffold(
             appBar: buildAppBar(context, vm),
-            backgroundColor: themeCurrent.backgroundColor,
             body: vm.isBusy ? buildBodyWhenBusy() : buildBody(context, vm),
             floatingActionButton: buildFAB(context, vm));
       }),
