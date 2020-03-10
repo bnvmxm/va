@@ -27,7 +27,7 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
               ? Theme.of(context).floatingActionButtonTheme.backgroundColor
               : Theme.of(context).cardColor,
           foregroundColor: vm.anySelectedAndNotEmpty
-              ? Theme.of(context).floatingActionButtonTheme.foregroundColor
+              ? Theme.of(context).primaryColor
               : Theme.of(context).dividerColor,
           onPressed: () async {
             await vm.navigateToExercise();

@@ -31,12 +31,12 @@ class PhraseGroupGridCard extends StatelessWidget {
   Widget _buildCardView(BuildContext context) => Padding(
       padding: const EdgeInsets.only(top: 2, left: 2, bottom: 2, right: 8),
       child: Card(
-          elevation: 0.0,
+          elevation: 1.0,
           clipBehavior: Clip.antiAliasWithSaveLayer,
           shape: RoundedRectangleBorder(
             side: BorderSide(
-                color: isSelected ? Theme.of(context).accentColor : Theme.of(context).dividerColor,
-                width: isSelected ? 2.0 : 1.0),
+                color: isSelected ? Theme.of(context).accentColor : Theme.of(context).cardColor,
+                width: isSelected ? 1.0 : 0.0),
             borderRadius: BorderRadius.circular(16.0),
           ),
           child: Column(children: [
@@ -47,12 +47,23 @@ class PhraseGroupGridCard extends StatelessWidget {
                     child: Text(name,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
-                        style: Theme.of(context).textTheme.subtitle1))),
+                        style: Theme.of(context)
+                            .textTheme
+                            .subtitle1
+                            .copyWith(color: Theme.of(context).secondaryHeaderColor)))),
             Container(
-                padding: const EdgeInsets.all(16.0),
+                padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 12.0),
                 alignment: Alignment.topLeft,
-                color: Theme.of(context).accentColor.withOpacity(0.1),
-                child: Column(mainAxisAlignment: MainAxisAlignment.center, children: [
+                decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [
+                      Theme.of(context).colorScheme.secondary,
+                      Theme.of(context).colorScheme.secondaryVariant
+                    ])),
+                child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                  const Divider(),
                   Row(children: [
                     Expanded(flex: 1, child: _buildCaption(context, svc.i18n.labelsStatPhrases)),
                     Expanded(
