@@ -11,14 +11,22 @@ class VAThemeSpecification {
   final Color colorPrimary700 = const Color(0xff2e2e32);
   final Color colorPrimary800 = const Color(0xff29292c);
   final Color colorPrimary900 = const Color(0xff1d1d20);
-  final Color colorAccent = const Color(0xffbf4636);
-  final Color colorAccentVariant = const Color(0xffd34d3a);
+
+  final Color colorAccent = const Color(0xff29b6f6);
+  final Color colorAccentVariant = const Color(0xff73e8ff);
+  
   final Color colorSecondary = const Color(0xff78909c);
   final Color colorSecondaryVariant = const Color(0xffa7c0cd);
+
+  Color get colorForeground => colorPrimary050;
+  Color get colorForegroundVariant => Colors.white;
 
   Color get colorPrimary => colorPrimary500;
   Color get colorPrimaryLight => colorPrimary300;
   Color get colorPrimaryDark => colorPrimary700;
+
+  Color get colorBackgroundMain => colorPrimary700;
+  Color get colorBackgroundCard => colorPrimary500;
 }
 
 class VAColdDarkThemeSpecification extends VAThemeSpecification {}

@@ -22,7 +22,7 @@ class PhraseExercisePage
       ? OrientationBuilder(builder: (context, orientation) {
           return orientation == Orientation.portrait
               ? Column(children: [
-                  _buildAnimatedCard(context, vm, isVertical: true),
+                  _buildAnimatedCard(context, vm),
                   Expanded(
                     child: _buildExamplesCard(context, vm),
                   ),
@@ -51,49 +51,43 @@ class PhraseExercisePage
         })
       : _buildEmptyBody(context);
 
-  Widget _buildAnimatedCard(BuildContext context, PhraseExercisePageVM vm,
-          {bool isVertical = false}) =>
-      vm.isOpen
-          ? _buildCard(context, vm.current.phrase, isAccent: true, isVertical: isVertical)
-          : vm.isOpening
-              ? Rotatable(
-                  onRotated: () => vm.setCardOpened(),
-                  child: _buildCard(context, '', isAccent: false, isVertical: isVertical),
-                )
-              : GestureDetector(
-                  onTap: () => vm.setCardOpening(),
-                  child: _buildCard(context, vm.current.definition,
-                      isAccent: false, isVertical: isVertical),
-                );
+  Widget _buildAnimatedCard(BuildContext context, PhraseExercisePageVM vm) => vm.isOpen
+      ? _buildCard(context, vm.current.phrase, isOpen: true)
+      : vm.isOpening
+          ? Rotatable(
+              onRotated: () => vm.setCardOpened(),
+              child: _buildCard(context, vm.current.definition, isOpening: true))
+          : GestureDetector(
+              onTap: () => vm.setCardOpening(),
+              child: _buildCard(
+                context,
+                vm.current.definition,
+              ));
 
-  Widget _buildCard(BuildContext context, String value, {bool isAccent, bool isVertical = true}) =>
+  Widget _buildCard(BuildContext context, String value,
+          {bool isOpening = false, bool isOpen = false}) =>
       Padding(
         padding: const EdgeInsets.all(16.0),
         child: Container(
             padding: const EdgeInsets.all(16.0),
             decoration: cardDecoration(context),
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Icon(Icons.mode_comment, color: Theme.of(context).accentColor),
+              Visibility(
+                  visible: !isOpening,
+                  child: Icon(Icons.mode_comment, color: Theme.of(context).accentColor)),
               Expanded(
                   child: Padding(
                       padding: const EdgeInsets.only(left: 16.0),
-                      child: isVertical
-                          ? SizedBox(
-                              height: 100,
-                              child: Text(value ?? '',
-                                  style: isAccent
-                                      ? Theme.of(context)
-                                          .textTheme
-                                          .headline6
-                                          .copyWith(color: Theme.of(context).accentColor)
-                                      : Theme.of(context).textTheme.headline6))
-                          : Text(value ?? '',
-                              style: isAccent
-                                  ? Theme.of(context)
-                                      .textTheme
-                                      .headline6
-                                      .copyWith(color: Theme.of(context).accentColor)
-                                  : Theme.of(context).textTheme.headline6)))
+                      child: Visibility(
+                        visible: !isOpening,
+                        child: Text(value ?? '',
+                            style: isOpen
+                                ? Theme.of(context)
+                                    .textTheme
+                                    .headline6
+                                    .copyWith(color: Theme.of(context).accentColor)
+                                : Theme.of(context).textTheme.headline6),
+                      )))
             ])),
       );
 
@@ -142,7 +136,7 @@ class PhraseExercisePage
         IconButton(
             iconSize: 24,
             tooltip: svc.i18n.labelsExerciseResultHigh,
-            icon: Icon(Icons.arrow_upward, color: Theme.of(context).primaryColor),
+            icon: Icon(Icons.arrow_upward, color: Theme.of(context).accentColor),
             onPressed: () => vm.next(RateFeedback.highThershold))
       ];
 

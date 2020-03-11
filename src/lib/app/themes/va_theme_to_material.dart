@@ -9,13 +9,13 @@ extension VAThemeIdExt on VAThemeId {
   ColorScheme getMaterialColorScheme() {
     return const ColorScheme.dark().copyWith(
         brightness: Brightness.dark,
-        background: _specs[this].colorPrimary,
-        error: _specs[this].colorAccent,
+        background: _specs[this].colorBackgroundMain,
+        error: _specs[this].colorAccentVariant,
         primary: _specs[this].colorPrimary,
         primaryVariant: _specs[this].colorPrimaryLight,
         secondary: _specs[this].colorSecondary,
         secondaryVariant: _specs[this].colorSecondaryVariant,
-        surface: _specs[this].colorPrimaryDark);
+        surface: _specs[this].colorBackgroundMain);
   }
 
   MaterialColor getMaterialColorSwatch() {
@@ -45,13 +45,28 @@ extension VAThemeIdExt on VAThemeId {
         primaryColor: cs.primary,
         primaryColorLight: _specs[this].colorPrimaryLight,
         primaryColorDark: _specs[this].colorPrimaryDark,
-        cardColor: cs.primary,
-        backgroundColor: _specs[this].colorPrimaryDark,
-        canvasColor: _specs[this].colorPrimaryDark,
-        dialogBackgroundColor: _specs[this].colorPrimaryDark,
-        scaffoldBackgroundColor: _specs[this].colorPrimaryDark,
+        cardColor: _specs[this].colorBackgroundCard,
+        backgroundColor: _specs[this].colorBackgroundMain,
+        canvasColor: _specs[this].colorBackgroundMain,
+        dialogBackgroundColor: _specs[this].colorBackgroundMain,
+        scaffoldBackgroundColor: _specs[this].colorBackgroundMain,
         secondaryHeaderColor: _specs[this].colorPrimary050,
         dividerColor: _specs[this].colorPrimaryLight,
-        splashColor: _specs[this].colorPrimaryLight);
+        splashColor: _specs[this].colorBackgroundMain,
+        toggleableActiveColor: _specs[this].colorAccentVariant,
+        appBarTheme: AppBarTheme(
+          brightness: Brightness.dark,
+          color: _specs[this].colorBackgroundCard,
+          iconTheme: IconThemeData(color: _specs[this].colorPrimary050),
+        ),
+        selectedRowColor: _specs[this].colorAccentVariant,
+        inputDecorationTheme: InputDecorationTheme(
+            focusedBorder: UnderlineInputBorder(
+                borderSide: BorderSide(color: _specs[this].colorAccentVariant, width: 1.0))),
+        accentIconTheme: IconThemeData(color: _specs[this].colorAccentVariant),
+        primaryIconTheme: IconThemeData(color: _specs[this].colorAccentVariant),
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+            foregroundColor: _specs[this].colorPrimaryDark,
+            backgroundColor: _specs[this].colorAccentVariant));
   }
 }

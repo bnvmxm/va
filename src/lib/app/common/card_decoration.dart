@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 
-Decoration cardDecoration(BuildContext context,
-        [double borderWidth = 1.0, Color borderColor, Color cardColor]) =>
-    BoxDecoration(
-        color: cardColor ?? Theme.of(context).cardColor,
-        borderRadius: BorderRadius.circular(8.0),
-        border:
-            Border.all(width: borderWidth, color: borderColor ?? Theme.of(context).dividerColor));
+Decoration cardDecoration(BuildContext context) => BoxDecoration(
+    color: VATheme.of(context).colorBackgroundCard,
+    borderRadius: BorderRadius.circular(8.0),
+    border: Border.all(width: 0, color: VATheme.of(context).colorBackgroundCard));

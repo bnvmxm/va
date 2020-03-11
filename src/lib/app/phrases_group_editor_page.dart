@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vocabulary_advancer/app/phrases_group_editor_page_vm.dart';
 import 'package:vocabulary_advancer/app/base/va_page.dart';
+import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
 class PhraseGroupEditorPage extends VAPageWithArgument<String, PhraseGroupEditorPageVM> {

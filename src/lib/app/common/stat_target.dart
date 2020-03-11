@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/core/extensions.dart';
 
 class StatTarget extends StatelessWidget {
-  const StatTarget(this.diff, {this.size = 14, this.textStyle});
+  const StatTarget(this.diff, {this.size = 16, this.textStyle});
 
   final Duration diff;
   final double size;
   final TextStyle textStyle;
 
-  Color getColor(BuildContext context) =>
-      diff.isTargetClose() ? getTextStyle(context).color : Theme.of(context).accentColor;
+  Color getColor(BuildContext context) => diff.isTargetClose()
+      ? VATheme.of(context).colorAccentVariant
+      : VATheme.of(context).colorForeground;
 
   IconData getIcon() => diff.isTargetFar()
       ? Icons.assignment_turned_in

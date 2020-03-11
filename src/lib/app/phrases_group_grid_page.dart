@@ -25,10 +25,10 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
       ? FloatingActionButton(
           tooltip: svc.i18n.labelsExercise,
           backgroundColor: vm.anySelectedAndNotEmpty
-              ? VATheme.of(context).colorAccent
-              : VATheme.of(context).colorPrimary,
+              ? VATheme.of(context).colorAccentVariant
+              : VATheme.of(context).colorBackgroundCard,
           foregroundColor: vm.anySelectedAndNotEmpty
-              ? VATheme.of(context).colorPrimary
+              ? VATheme.of(context).colorPrimaryDark
               : VATheme.of(context).colorPrimaryLight,
           onPressed: () async {
             await vm.navigateToExercise();
@@ -39,41 +39,30 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
   List<Widget> _buildAppBarActions(BuildContext context, PhraseGroupGridPageVM vm) => [
         if (vm.anySelected)
           IconButton(
-              icon: Icon(Icons.view_list),
+              icon: Icon(Icons.view_list, color: VATheme.of(context).colorAccentVariant),
               tooltip: svc.i18n.labelsView,
               onPressed: () async {
                 await vm.navigateToGroup();
               }),
         if (vm.anySelected)
           IconButton(
-              icon: Icon(Icons.edit),
+              icon: Icon(Icons.edit, color: VATheme.of(context).colorAccentVariant),
               tooltip: svc.i18n.labelsEdit,
               onPressed: () async {
                 await vm.navigateToEditGroup();
               }),
         if (!vm.anySelected)
           IconButton(
-              icon: const Icon(Icons.plus_one),
+              icon: Icon(Icons.plus_one),
               tooltip: svc.i18n.labelsAdd,
               onPressed: () async {
                 await vm.navigateToAddGroup();
               }),
         IconButton(
-            icon: const Icon(Icons.info),
+            icon: Icon(Icons.settings),
             tooltip: svc.i18n.labelsAbout,
             onPressed: () async {
               await vm.navigateToAbout();
-            }),
-        IconButton(
-            icon: const Icon(Icons.language),
-            tooltip: 'Language',
-            onPressed: () async {
-              final l10n = await svc.svcLocalization;
-              if (l10n.currentLocale.languageCode == 'en') {
-                l10n.setLocale(l10n.getSupportedLocales().last);
-              } else {
-                l10n.setLocale(l10n.getSupportedLocales().first);
-              }
             })
       ];
 }

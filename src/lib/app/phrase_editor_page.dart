@@ -4,6 +4,7 @@ import 'package:vocabulary_advancer/app/common/card_decoration.dart';
 import 'package:vocabulary_advancer/app/common/phrase_example_input.dart';
 import 'package:vocabulary_advancer/app/phrase_editor_page_vm.dart';
 import 'package:vocabulary_advancer/app/base/va_page.dart';
+import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
 class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, PhraseEditorPageVM> {
@@ -28,7 +29,7 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
           title: Text(vm.isNewPhrase ? svc.i18n.titlesAddPhrase : svc.i18n.titlesEditPhrase),
           actions: [
             IconButton(
-                icon: Icon(Icons.save),
+                icon: Icon(Icons.save, color: VATheme.of(context).colorAccentVariant),
                 tooltip: svc.i18n.labelsSaveAndClose,
                 onPressed: () => _onSave(vm))
           ]);
@@ -48,7 +49,13 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Chip(label: Text(vm.phraseGroupName)),
+                          Chip(
+                              label: Text(vm.phraseGroupName,
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .bodyText2
+                                      .copyWith(color: VATheme.of(context).colorAccentVariant)),
+                              backgroundColor: VATheme.of(context).colorBackgroundCard),
                           TypeAheadFormField<String>(
                             textFieldConfiguration: TextFieldConfiguration(
                                 focusNode: _focusNodes[0],
@@ -74,28 +81,32 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
                             hideOnEmpty: true,
                           )
                         ])),
-                const SizedBox(height: 24.0),
+                const SizedBox(height: 32.0),
                 TextFormField(
-                    decoration: InputDecoration(labelText: svc.i18n.labelsEditorPhrase),
+                    decoration: InputDecoration(
+                        labelText: svc.i18n.labelsEditorPhrase, icon: Icon(Icons.mode_comment)),
                     initialValue: vm.phrase,
                     validator: (v) => vm.validationMessageWhenEmpty(
                         value: v, onEmpty: () => svc.i18n.validationMessagesPhraseRequired),
                     onChanged: (v) => vm.updatePhrase(v, _formKey.currentState.validate),
                     focusNode: _focusNodes[1]),
+                const SizedBox(height: 16.0),
                 TextFormField(
                     decoration: InputDecoration(labelText: svc.i18n.labelsEditorPronunciation),
                     initialValue: vm.pronunciation,
                     onChanged: (v) => vm.updatePronunciation(v, _formKey.currentState.validate),
                     focusNode: _focusNodes[2]),
+                const SizedBox(height: 16.0),
                 TextFormField(
                     decoration: InputDecoration(labelText: svc.i18n.labelsEditorDefinition),
-                    minLines: 1,
-                    maxLines: 5,
+                    minLines: 3,
+                    maxLines: 6,
                     initialValue: vm.definition,
                     validator: (v) => vm.validationMessageWhenEmpty(
                         value: v, onEmpty: () => svc.i18n.validationMessagesDefinitionRequired),
                     onChanged: (v) => vm.updateDefinition(v, _formKey.currentState.validate),
                     focusNode: _focusNodes[3]),
+                const SizedBox(height: 32.0),
                 PhraseExampleTextFormField(
                     focusNode: _focusNodes[4],
                     onValidate: (v) => vm.validationMessageForExamples(
