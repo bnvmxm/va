@@ -25,11 +25,11 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
       ? FloatingActionButton(
           tooltip: svc.i18n.labelsExercise,
           backgroundColor: vm.anySelectedAndNotEmpty
-              ? Color(VATheme.of(context).colorAccent)
-              : Color(VATheme.of(context).colorPrimary500),
+              ? VATheme.of(context).colorAccent
+              : VATheme.of(context).colorPrimary,
           foregroundColor: vm.anySelectedAndNotEmpty
-              ? Theme.of(context).primaryColor
-              : Theme.of(context).dividerColor,
+              ? VATheme.of(context).colorPrimary
+              : VATheme.of(context).colorPrimaryLight,
           onPressed: () async {
             await vm.navigateToExercise();
           },

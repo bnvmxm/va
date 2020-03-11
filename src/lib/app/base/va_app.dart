@@ -35,7 +35,7 @@ class _VAAppState extends State<VAApp> {
     return VATheme(
       _themeId,
       child: MaterialApp(
-          theme: _themeId.asMaterialThemeData(),
+          theme: _themeId.getMaterialThemeData(),
           localizationsDelegates: const [
             I18n.delegate,
             GlobalMaterialLocalizations.delegate,

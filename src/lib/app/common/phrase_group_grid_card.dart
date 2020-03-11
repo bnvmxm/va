@@ -24,9 +24,9 @@ class PhraseGroupGridCard extends StatelessWidget {
       Stack(alignment: AlignmentDirectional.topEnd, children: [
         _buildCardView(context),
         CircleAvatar(
-            backgroundColor: Theme.of(context).accentColor,
+            backgroundColor: VATheme.of(context).colorAccent,
             radius: 16,
-            child: Icon(Icons.check, color: Theme.of(context).cardColor)),
+            child: Icon(Icons.check, color: VATheme.of(context).colorPrimary)),
       ]);
 
   Widget _buildCardView(BuildContext context) => Padding(
@@ -36,7 +36,8 @@ class PhraseGroupGridCard extends StatelessWidget {
           clipBehavior: Clip.antiAliasWithSaveLayer,
           shape: RoundedRectangleBorder(
             side: BorderSide(
-                color: isSelected ? Theme.of(context).accentColor : Theme.of(context).cardColor,
+                color:
+                    isSelected ? VATheme.of(context).colorAccent : VATheme.of(context).colorPrimary,
                 width: isSelected ? 1.0 : 0.0),
             borderRadius: BorderRadius.circular(16.0),
           ),
@@ -51,7 +52,7 @@ class PhraseGroupGridCard extends StatelessWidget {
                         style: Theme.of(context)
                             .textTheme
                             .subtitle1
-                            .copyWith(color: Theme.of(context).secondaryHeaderColor)))),
+                            .copyWith(color: VATheme.of(context).colorPrimary100)))),
             Container(
                 padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 12.0),
                 alignment: Alignment.topLeft,
@@ -60,8 +61,8 @@ class PhraseGroupGridCard extends StatelessWidget {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                      Color(VATheme.of(context).colorPrimary500),
-                      Color(VATheme.of(context).colorPrimary800)
+                      VATheme.of(context).colorPrimary,
+                      VATheme.of(context).colorPrimary600
                     ])),
                 child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
                   const Divider(),
