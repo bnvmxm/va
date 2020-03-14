@@ -74,7 +74,14 @@ class PhraseRepository {
 
     dto.rate = newRate;
     dto.targetUtc = DateTime.now().toUtc().add(cooldownRange);
-    return dto.toModel(groupName);
+    final result = dto.toModel(groupName);
+
+    if (!svc.dataProvider.dataStat.containsKey(phraseId)) {
+      svc.dataProvider.dataStat[phraseId] = [];
+    }
+    svc.dataProvider.dataStat[phraseId].add(DataRate(phraseId, newRate, result.updatedUtc));
+
+    return result;
   }
 
   DataGroup _movePhrase(String phraseId, String oldGroupName, String newGroupName) {
@@ -94,5 +101,5 @@ class PhraseRepository {
   }
 
   DataGroup _findGroup(String groupName) =>
-      svc.dataProvider.data.firstWhere((x) => x.name == groupName, orElse: () => null);
+      svc.dataProvider.dataGroups.firstWhere((x) => x.name == groupName, orElse: () => null);
 }

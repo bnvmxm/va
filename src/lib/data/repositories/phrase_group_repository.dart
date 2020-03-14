@@ -7,26 +7,27 @@ part 'phrase_group_repository.m.dart';
 
 class PhraseGroupRepository {
   Iterable<String> findKnownNames() {
-    return svc.dataProvider.data.map((x) => x.name);
+    return svc.dataProvider.dataGroups.map((x) => x.name);
   }
 
   Iterable<PhraseGroup> findMany() {
-    return svc.dataProvider.data.map((x) => x.toModel());
+    return svc.dataProvider.dataGroups.map((x) => x.toModel());
   }
 
   PhraseGroup findSingle(String name) {
-    final dto = svc.dataProvider.data.firstWhere((x) => x.name == name, orElse: () => null);
+    final dto = svc.dataProvider.dataGroups.firstWhere((x) => x.name == name, orElse: () => null);
     return dto?.toModel();
   }
 
   PhraseGroup create(String name) {
     final dto = DataGroup(name: name);
-    svc.dataProvider.data.add(dto);
+    svc.dataProvider.dataGroups.add(dto);
     return dto.toModel();
   }
 
   PhraseGroup rename(String fromName, String toName) {
-    final dto = svc.dataProvider.data.firstWhere((x) => x.name == fromName, orElse: () => null);
+    final dto =
+        svc.dataProvider.dataGroups.firstWhere((x) => x.name == fromName, orElse: () => null);
     if (dto == null) return null;
     dto.name = toName;
     return dto.toModel();

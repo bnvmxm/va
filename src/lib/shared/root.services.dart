@@ -6,7 +6,6 @@ class ServiceProvider {
   ServiceProvider._internal();
 
   I18n get i18n => _i18n;
-  Future<LocalizationService> get svcLocalization => _registry.getAsync<LocalizationService>();
 
   PhraseExercisePageVM get vmPhraseExercisePage => _registry.get<PhraseExercisePageVM>();
   PhraseEditorPageVM get vmPhraseEditorPage => _registry.get<PhraseEditorPageVM>();
@@ -15,7 +14,12 @@ class ServiceProvider {
   PhraseGroupGridPageVM get vmPhraseGroupGridPage => _registry.get<PhraseGroupGridPageVM>();
 
   NavigationService get nav => _registry.get<NavigationService>();
+
+  Future<LocalizationService> get svcLocalization => _registry.getAsync<LocalizationService>();
+  Future<SettingsRepository> get repSettings => _registry.getAsync<SettingsRepository>();
   PhraseGroupRepository get repPhraseGroup => _registry.get<PhraseGroupRepository>();
   PhraseRepository get repPhrase => _registry.get<PhraseRepository>();
   SampleDataProvider get dataProvider => _registry.get<SampleDataProvider>();
+
+  Future<AppLogger> get logger => _registry.getAsync<AppLogger>();
 }

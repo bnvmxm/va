@@ -24,6 +24,14 @@ class DataPhrase {
   DateTime updatedUtc;
 }
 
+class DataRate {
+  DataRate(this.phraseId, this.rate, this.updatedUtc);
+
+  final String phraseId;
+  final int rate;
+  final DateTime updatedUtc;
+}
+
 class DataGroup {
   DataGroup({this.name, Set<DataPhrase> phrases}) : phrases = phrases ?? {};
 
@@ -32,10 +40,13 @@ class DataGroup {
 }
 
 class SampleDataProvider {
-  Set<DataGroup> get data => _data;
+  Set<DataGroup> get dataGroups => _groups;
+  Map<String, List<DataRate>> get dataStat => _stat;
 }
 
-final Set<DataGroup> _data = <DataGroup>{
+final Map<String, List<DataRate>> _stat = {};
+
+final Set<DataGroup> _groups = <DataGroup>{
   DataGroup(name: 'Phrasal Verbs', phrases: <DataPhrase>{
     DataPhrase(
         id: '1',
