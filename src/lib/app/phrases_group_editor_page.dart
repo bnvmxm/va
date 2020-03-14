@@ -14,8 +14,9 @@ class PhraseGroupEditorPage extends VAPageWithArgument<String, PhraseGroupEditor
   PhraseGroupEditorPageVM createVM() => svc.vmPhraseGroupEditorPage;
 
   @override
-  AppBar buildAppBar(BuildContext context, PhraseGroupEditorPageVM vm) =>
-      AppBar(title: Text(vm.isNewGroup ? svc.i18n.titlesAddGroup : svc.i18n.titlesRenameGroup));
+  AppBar buildAppBar(BuildContext context, PhraseGroupEditorPageVM vm) => AppBar(
+      title: Text(vm.isNewGroup ? svc.i18n.titlesAddGroup : svc.i18n.titlesRenameGroup,
+          style: VATheme.of(context).textHeadline5));
 
   @override
   Widget buildBody(BuildContext context, PhraseGroupEditorPageVM vm) => SingleChildScrollView(
@@ -27,19 +28,19 @@ class PhraseGroupEditorPage extends VAPageWithArgument<String, PhraseGroupEditor
           child: Column(
             children: [
               TextFormField(
-                decoration: InputDecoration(labelText: svc.i18n.labelsGroupName),
-                initialValue: vm.initialGroupName,
-                validator: (v) => vm.validationMessage(
-                    onEmpty: () => svc.i18n.validationMessagesGroupNameRequired,
-                    onAlreadyExists: () => svc.i18n.validationMessagesGroupExists),
-                onChanged: (v) {
-                  vm.currentGroupName = v;
-                  if (vm.needInlineValidation && _formKey.currentState.validate()) {
-                    vm.needInlineValidation = false;
-                  }
-                },
-                focusNode: _focusNode,
-              )
+                  decoration: InputDecoration(labelText: svc.i18n.labelsGroupName),
+                  initialValue: vm.initialGroupName,
+                  validator: (v) => vm.validationMessage(
+                      onEmpty: () => svc.i18n.validationMessagesGroupNameRequired,
+                      onAlreadyExists: () => svc.i18n.validationMessagesGroupExists),
+                  onChanged: (v) {
+                    vm.currentGroupName = v;
+                    if (vm.needInlineValidation && _formKey.currentState.validate()) {
+                      vm.needInlineValidation = false;
+                    }
+                  },
+                  focusNode: _focusNode,
+                  style: VATheme.of(context).textBodyText1)
             ],
           ),
         ),

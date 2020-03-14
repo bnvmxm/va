@@ -12,7 +12,7 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
 
   @override
   AppBar buildAppBar(BuildContext context, PhraseGroupGridPageVM vm) => AppBar(
-        title: Text(svc.i18n.titlesCollections),
+        title: Text(svc.i18n.titlesCollections, style: VATheme.of(context).textHeadline5),
         actions: _buildAppBarActions(context, vm),
       );
 
@@ -39,7 +39,10 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
   List<Widget> _buildAppBarActions(BuildContext context, PhraseGroupGridPageVM vm) => [
         if (vm.anySelected)
           IconButton(
-              icon: Icon(Icons.view_list, color: VATheme.of(context).colorAccentVariant),
+              icon: Icon(Icons.view_list,
+                  color: vm.anySelectedAndNotEmpty
+                      ? VATheme.of(context).colorAccentVariant
+                      : VATheme.of(context).colorPrimaryLight),
               tooltip: svc.i18n.labelsView,
               onPressed: () async {
                 await vm.navigateToGroup();
@@ -58,11 +61,41 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
               onPressed: () async {
                 await vm.navigateToAddGroup();
               }),
-        IconButton(
-            icon: Icon(Icons.settings),
-            tooltip: svc.i18n.labelsAbout,
-            onPressed: () async {
-              await vm.navigateToAbout();
-            })
+        PopupMenuButton<int>(
+          onSelected: (index) async => _onActionSelected(index, vm),
+          itemBuilder: (context) => [
+            PopupMenuItem<int>(
+                value: 1,
+                child: Row(
+                  children: [
+                    Icon(Icons.language),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(svc.i18n.labelsLanguage),
+                    )
+                  ],
+                )),
+            PopupMenuItem(
+                value: 2,
+                child: Row(
+                  children: [
+                    Icon(Icons.info),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                      child: Text(svc.i18n.labelsAbout),
+                    )
+                  ],
+                ))
+          ],
+        ),
       ];
+
+  Future _onActionSelected(int index, PhraseGroupGridPageVM vm) async {
+    switch (index) {
+      case 1:
+        return vm.nextLanguage();
+      case 2:
+        return vm.navigateToAbout();
+    }
+  }
 }

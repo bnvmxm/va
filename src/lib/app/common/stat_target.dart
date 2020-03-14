@@ -16,14 +16,18 @@ class StatTarget extends StatelessWidget {
           : Icon(Icons.assignment, size: size);
 
   @override
-  Widget build(BuildContext context) => Row(children: [
-        getIcon(context),
-        const SizedBox(width: 4),
-        Text(diff.toStringAsTarget(),
+  Widget build(BuildContext context) {
+    final target = diff.toStringAsTarget();
+    return Row(children: [
+      getIcon(context),
+      if (target.isNotEmpty) const SizedBox(width: 4),
+      if (target.isNotEmpty)
+        Text(target,
             style: diff.isTargetFar()
                 ? VATheme.of(context).textAccentCaption
                 : diff.isTargetClose()
                     ? VATheme.of(context).textAttentionCaption
                     : VATheme.of(context).textCaption)
-      ]);
+    ]);
+  }
 }

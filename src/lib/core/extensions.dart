@@ -8,11 +8,7 @@ extension DurationExt on Duration {
   bool isTargetFar() => !isNegative && inHours > def.targetHoursHighThreshold;
 
   String toStringAsTarget() {
-    if (isNegative) return svc.i18n.labelsStatNow;
-
-    if (inSeconds < 60) {
-      return svc.i18n.labelsStatNow;
-    }
+    if (isNegative || inSeconds < 60) return '';
 
     final sb = StringBuffer();
 

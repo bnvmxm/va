@@ -62,7 +62,7 @@ class PhraseGroupGridPageVM extends BaseViewModel {
     }
   }
 
-  Future navigateToAbout() {
+  Future navigateToAbout() async {
     return svc.nav.forwardToAbout();
   }
 
@@ -73,5 +73,9 @@ class PhraseGroupGridPageVM extends BaseViewModel {
       _phraseGroupSelected = null;
       notify(() async => _reset(), asBusy: true);
     }
+  }
+
+  Future nextLanguage() async {
+    return (await svc.svcLocalization).nextLocale();
   }
 }

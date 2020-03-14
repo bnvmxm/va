@@ -16,7 +16,7 @@ class PhraseListPage extends VAPageWithArgument<String, PhraseListPageVM> {
 
   @override
   AppBar buildAppBar(BuildContext context, PhraseListPageVM vm) => AppBar(
-        title: Text(vm.phraseGroupName),
+        title: Text(vm.phraseGroupName, style: VATheme.of(context).textHeadline5),
         actions: _buildAppBarActions(context, vm),
       );
 

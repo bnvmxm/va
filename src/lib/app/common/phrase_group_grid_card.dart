@@ -64,22 +64,15 @@ class PhraseGroupGridCard extends StatelessWidget {
                     ])),
                 child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
                   const Divider(),
-                  Row(children: [
-                    Expanded(
-                        flex: 1,
-                        child: Text(svc.i18n.labelsStatPhrases,
-                            style: VATheme.of(context).textCaption)),
-                    Expanded(
-                        flex: 1,
-                        child: Text(phraseCount.toString(),
-                            textAlign: TextAlign.end, style: VATheme.of(context).textCaption))
-                  ]),
-                  Row(children: [
-                    Expanded(
-                        child: Text(phraseCount > 0 ? svc.i18n.labelsStatWhen : '',
-                            style: VATheme.of(context).textCaption)),
-                    if (phraseCount > 0) StatTarget(closeTargetUtc.differenceNowUtc())
-                  ])
+                  Padding(
+                    padding: const EdgeInsets.only(right: 8.0),
+                    child: Row(children: [
+                      Expanded(
+                          child: Text(svc.i18n.labelsStatPhrases(phraseCount.toString()),
+                              style: VATheme.of(context).textCaption)),
+                      if (phraseCount > 0) StatTarget(closeTargetUtc.differenceNowUtc()),
+                    ]),
+                  ),
                 ])),
           ])));
 }

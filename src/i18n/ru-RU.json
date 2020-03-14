@@ -9,9 +9,7 @@
         "Exercising": "Упражнение"
     },
     "labels": {
-        "StatPhrases": "Фраз",
-        "StatWhen": "Когда",
-        "StatNow": "Сейчас",
+        "StatPhrases": "{count} фраз",
         "StatRateLearning": "Запоминание",
         "StatRateLearned": "Выучено",
         "StatRateReviewing": "Закрепление",
@@ -33,6 +31,7 @@
         "Edit": "Изменить",
         "Add": "Добавить",
         "View": "Просмотр",
+        "Language": "Язык",
         "About": "Информация"
     },
     "validationMessages": {
@@ -43,7 +42,12 @@
         "GroupExists": "Такая Коллекция уже есть"
     },
     "text": {
-        "About": "Пример применения Flutter",
+        "About": "Vocabulary Advancer",
+        "AboutDescription": {
+            "Header": "Flutter starter app",
+            "P1": "Vocabulary Advancer, очевидно, еще одно приложение для закрепления выражений и фраз изучаемого языка, с помощью работы с карточками",
+            "P2": "Однако ж, этот проект преследует еще одну цель - определить основу для создания новых \"production-ready\" проектов на Flutter, с точки зрения архитектуры"
+        },
         "NoData": "Здесь пока нет данных...",
         "NoPhrase": "Выполнено! Пока больше нет Фраз на повторение в этой Коллекции."
     }

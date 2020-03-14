@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:vocabulary_advancer/app/common/card_decoration.dart';
 import 'package:vocabulary_advancer/app/common/phrase_example_input.dart';
 import 'package:vocabulary_advancer/app/phrase_editor_page_vm.dart';
 import 'package:vocabulary_advancer/app/base/va_page.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
+import 'package:vocabulary_advancer/app/themes/card_decoration.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
 class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, PhraseEditorPageVM> {
@@ -26,7 +26,8 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
 
   @override
   AppBar buildAppBar(BuildContext context, PhraseEditorPageVM vm) => AppBar(
-          title: Text(vm.isNewPhrase ? svc.i18n.titlesAddPhrase : svc.i18n.titlesEditPhrase),
+          title: Text(vm.isNewPhrase ? svc.i18n.titlesAddPhrase : svc.i18n.titlesEditPhrase,
+              style: VATheme.of(context).textHeadline5),
           actions: [
             IconButton(
                 icon: Icon(Icons.save, color: VATheme.of(context).colorAccentVariant),
@@ -45,14 +46,16 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 Container(
                     alignment: Alignment.topLeft,
+                    decoration: cardDecoration(context),
+                    padding: const EdgeInsets.all(16.0),
                     child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Chip(
                               label: Text(vm.phraseGroupName,
                                   style: VATheme.of(context).textBodyText2),
-                              backgroundColor: VATheme.of(context).colorBackgroundCard),
+                              backgroundColor: VATheme.of(context).colorBackgroundMain),
                           TypeAheadFormField<String>(
                             textFieldConfiguration: TextFieldConfiguration(
                                 focusNode: _focusNodes[0],
@@ -79,70 +82,97 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
                             hideOnEmpty: true,
                           )
                         ])),
-                const SizedBox(height: 32.0),
-                TextFormField(
-                    decoration: InputDecoration(
-                        labelText: svc.i18n.labelsEditorPhrase, icon: Icon(Icons.mode_comment)),
-                    initialValue: vm.phrase,
-                    validator: (v) => vm.validationMessageWhenEmpty(
-                        value: v, onEmpty: () => svc.i18n.validationMessagesPhraseRequired),
-                    onChanged: (v) => vm.updatePhrase(v, _formKey.currentState.validate),
-                    focusNode: _focusNodes[1],
-                    style: VATheme.of(context).textBodyText1),
                 const SizedBox(height: 16.0),
-                TextFormField(
-                    decoration: InputDecoration(labelText: svc.i18n.labelsEditorPronunciation),
-                    initialValue: vm.pronunciation,
-                    onChanged: (v) => vm.updatePronunciation(v, _formKey.currentState.validate),
-                    focusNode: _focusNodes[2],
-                    style: VATheme.of(context).textBodyText1),
+                Container(
+                    alignment: Alignment.topLeft,
+                    decoration: cardDecoration(context),
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          TextFormField(
+                              decoration: InputDecoration(
+                                  labelText: svc.i18n.labelsEditorPhrase,
+                                  icon: Icon(Icons.mode_comment)),
+                              initialValue: vm.phrase,
+                              validator: (v) => vm.validationMessageWhenEmpty(
+                                  value: v,
+                                  onEmpty: () => svc.i18n.validationMessagesPhraseRequired),
+                              onChanged: (v) => vm.updatePhrase(v, _formKey.currentState.validate),
+                              focusNode: _focusNodes[1],
+                              style: VATheme.of(context).textBodyText1),
+                          const SizedBox(height: 16.0),
+                          TextFormField(
+                              decoration:
+                                  InputDecoration(labelText: svc.i18n.labelsEditorPronunciation),
+                              initialValue: vm.pronunciation,
+                              onChanged: (v) =>
+                                  vm.updatePronunciation(v, _formKey.currentState.validate),
+                              focusNode: _focusNodes[2],
+                              style: VATheme.of(context).textBodyText1),
+                          const SizedBox(height: 16.0),
+                          TextFormField(
+                              decoration:
+                                  InputDecoration(labelText: svc.i18n.labelsEditorDefinition),
+                              minLines: 3,
+                              maxLines: 3,
+                              initialValue: vm.definition,
+                              validator: (v) => vm.validationMessageWhenEmpty(
+                                  value: v,
+                                  onEmpty: () => svc.i18n.validationMessagesDefinitionRequired),
+                              onChanged: (v) =>
+                                  vm.updateDefinition(v, _formKey.currentState.validate),
+                              focusNode: _focusNodes[3],
+                              style: VATheme.of(context).textBodyText1),
+                        ])),
                 const SizedBox(height: 16.0),
-                TextFormField(
-                    decoration: InputDecoration(labelText: svc.i18n.labelsEditorDefinition),
-                    minLines: 3,
-                    maxLines: 3,
-                    initialValue: vm.definition,
-                    validator: (v) => vm.validationMessageWhenEmpty(
-                        value: v, onEmpty: () => svc.i18n.validationMessagesDefinitionRequired),
-                    onChanged: (v) => vm.updateDefinition(v, _formKey.currentState.validate),
-                    focusNode: _focusNodes[3],
-                    style: VATheme.of(context).textBodyText1),
-                const SizedBox(height: 32.0),
-                PhraseExampleTextFormField(
-                    focusNode: _focusNodes[4],
-                    onValidate: (v) => vm.validationMessageForExamples(
-                        onEmpty: () => svc.i18n.validationMessagesExampleRequired),
-                    onSaved: (v) => vm.addExample(v, _formKey.currentState.validate)),
-                SizedBox(
-                    height: vm.examples.isNotEmpty ? 120 : 0,
-                    child: ListView.builder(
-                        itemCount: vm.examples.length,
-                        scrollDirection: Axis.horizontal,
-                        padding: const EdgeInsets.all(8.0),
-                        itemBuilder: (context, i) =>
-                            Stack(alignment: Alignment.topRight, children: [
-                              Container(
-                                alignment: Alignment.topLeft,
-                                width: 240,
-                                padding: const EdgeInsets.only(
-                                    top: 8.0, left: 8.0, right: 16.0, bottom: 16.0),
-                                margin: const EdgeInsets.only(top: 16.0, right: 16.0),
-                                decoration: cardDecoration(context),
-                                child: Wrap(
-                                    children: [Text(vm.examples[i], overflow: TextOverflow.fade)]),
-                              ),
-                              Transform.scale(
-                                  scale: 0.8,
-                                  child: CircleAvatar(
-                                    backgroundColor: VATheme.of(context).colorAccent,
-                                    child: IconButton(
-                                        icon: Icon(Icons.delete_outline),
-                                        color: Colors.white,
-                                        onPressed: () {
-                                          vm.removeExample(i);
-                                        }),
-                                  ))
-                            ])))
+                Container(
+                    alignment: Alignment.topLeft,
+                    decoration: cardDecoration(context),
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          PhraseExampleTextFormField(
+                              focusNode: _focusNodes[4],
+                              onValidate: (v) => vm.validationMessageForExamples(
+                                  onEmpty: () => svc.i18n.validationMessagesExampleRequired),
+                              onSaved: (v) => vm.addExample(v, _formKey.currentState.validate)),
+                          SizedBox(
+                              height: vm.examples.isNotEmpty ? 120 : 0,
+                              child: ListView.builder(
+                                  itemCount: vm.examples.length,
+                                  scrollDirection: Axis.horizontal,
+                                  padding: const EdgeInsets.all(8.0),
+                                  itemBuilder: (context, i) =>
+                                      Stack(alignment: Alignment.topRight, children: [
+                                        Container(
+                                          alignment: Alignment.topLeft,
+                                          width: 240,
+                                          padding: const EdgeInsets.only(
+                                              top: 8.0, left: 8.0, right: 16.0, bottom: 16.0),
+                                          margin: const EdgeInsets.only(top: 16.0, right: 16.0),
+                                          decoration:
+                                              cardDecoration(context, mainBackgroundColor: true),
+                                          child: Wrap(children: [
+                                            Text(vm.examples[i], overflow: TextOverflow.fade)
+                                          ]),
+                                        ),
+                                        Transform.scale(
+                                            scale: 0.8,
+                                            child: CircleAvatar(
+                                              backgroundColor: VATheme.of(context).colorAccent,
+                                              child: IconButton(
+                                                  icon: Icon(Icons.delete_outline),
+                                                  color: Colors.white,
+                                                  onPressed: () {
+                                                    vm.removeExample(i);
+                                                  }),
+                                            ))
+                                      ])))
+                        ])),
               ]))));
 
   void _selectGroup(PhraseEditorPageVM vm, String phraseGroupName, {bool andCleanInput}) {

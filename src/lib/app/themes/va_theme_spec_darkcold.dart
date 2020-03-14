@@ -65,9 +65,9 @@ class VAThemeSpecification {
   );
   final TextStyle textHeadline6 = TextStyle(
     fontFamily: _fontFamilyHeader,
-    fontWeight: FontWeight.normal,
+    fontWeight: FontWeight.w300,
     fontSize: 20.0,
-    letterSpacing: 0.15,
+    letterSpacing: 0.8,
   );
   final TextStyle textSubtitle1 = TextStyle(
     fontFamily: _fontFamilyHeader,

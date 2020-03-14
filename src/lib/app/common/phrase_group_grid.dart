@@ -20,7 +20,7 @@ class PhraseGroupGridView extends StatelessWidget {
           crossAxisCount: isPortrait ? 1 : 2,
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
-          childAspectRatio: isPortrait ? 2 : 1.6,
+          childAspectRatio: isPortrait ? 2 : 1.8,
           padding: const EdgeInsets.all(8.0),
           children: vm.phraseGroups.map((x) => _buildGridViewTile(vm, x)).toList()));
 

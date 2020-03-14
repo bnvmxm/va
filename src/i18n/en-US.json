@@ -9,9 +9,7 @@
         "Exercising": "Exercising"
     },
     "labels": {
-        "StatPhrases": "Phrases",
-        "StatWhen": "When",
-        "StatNow": "Now",
+        "StatPhrases": "{count} phrases",
         "StatRateLearning": "Learning",
         "StatRateLearned": "Learned",
         "StatRateReviewing": "Reviewing",
@@ -33,6 +31,7 @@
         "Edit": "Edit",
         "Add": "Add",
         "View": "View",
+        "Language": "Language",
         "About": "About"
     },
     "validationMessages": {
@@ -43,7 +42,12 @@
         "GroupExists": "Such group already exists"
     },
     "text": {
-        "About": "Flutter showcase app",
+        "About": "Vocabulary Advancer",
+        "AboutDescription": {
+            "Header": "Flutter starter app",
+            "P1": "The Vocabulary Advancer app's first purpose is apparently to assist in settlement of advanced vocabulary with phrase cards... which should be reviewed at appropriate intervals.",
+            "P2": "But being just an another pet Flutter project, this app's aim is to also define a starting baseline, from mobile app production-ready architecture perspective."
+        },
         "NoData": "Nothing to show here...",
         "NoPhrase": "Done! No Phrases to exercise now from this Collection."
     }

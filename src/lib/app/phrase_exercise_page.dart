@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vocabulary_advancer/app/common/card_decoration.dart';
 import 'package:vocabulary_advancer/app/common/rotatable.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
+import 'package:vocabulary_advancer/app/themes/card_decoration.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/app/phrase_exercise_page_vm.dart';
 import 'package:vocabulary_advancer/app/base/va_page.dart';
@@ -15,8 +15,9 @@ class PhraseExercisePage
   PhraseExercisePageVM createVM() => svc.vmPhraseExercisePage;
 
   @override
-  AppBar buildAppBar(BuildContext context, PhraseExercisePageVM vm) =>
-      AppBar(title: Text(vm.groupName ?? svc.i18n.titlesExercising));
+  AppBar buildAppBar(BuildContext context, PhraseExercisePageVM vm) => AppBar(
+      title: Text(vm.groupName ?? svc.i18n.titlesExercising,
+          style: VATheme.of(context).textHeadline5));
 
   @override
   Widget buildBody(BuildContext context, PhraseExercisePageVM vm) => vm.isAny
