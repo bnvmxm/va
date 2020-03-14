@@ -17,11 +17,11 @@ class PhraseGroupGridView extends StatelessWidget {
 
   Widget _buildGridView({bool isPortrait}) => Consumer<PhraseGroupGridPageVM>(
       builder: (context, vm, child) => GridView.count(
-          crossAxisCount: isPortrait ? 2 : 3,
-          childAspectRatio: isPortrait ? 1 : 1.25,
-          padding: const EdgeInsets.all(8.0),
+          crossAxisCount: isPortrait ? 1 : 2,
           crossAxisSpacing: 8.0,
           mainAxisSpacing: 8.0,
+          childAspectRatio: isPortrait ? 2 : 1.6,
+          padding: const EdgeInsets.all(8.0),
           children: vm.phraseGroups.map((x) => _buildGridViewTile(vm, x)).toList()));
 
   Widget _buildGridViewTile(PhraseGroupGridPageVM vm, PhraseGroup item) => GestureDetector(

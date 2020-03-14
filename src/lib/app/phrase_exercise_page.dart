@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vocabulary_advancer/app/common/card_decoration.dart';
 import 'package:vocabulary_advancer/app/common/rotatable.dart';
+import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/app/phrase_exercise_page_vm.dart';
 import 'package:vocabulary_advancer/app/base/va_page.dart';
@@ -31,10 +32,9 @@ class PhraseExercisePage
                       child: Row(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: _buildActionButtons(
-                              context, () => const VerticalDivider(indent: 12, endIndent: 24), vm)))
+                          children: _buildActionButtons(context, true, vm)))
                 ])
-              : Row(children: [
+              : Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
                   Expanded(child: _buildAnimatedCard(context, vm)),
                   Expanded(child: _buildExamplesCard(context, vm)),
                   SizedBox(
@@ -42,10 +42,7 @@ class PhraseExercisePage
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: _buildActionButtons(
-                                context, () => const Divider(indent: 8, endIndent: 24), vm)
-                            .reversed
-                            .toList(),
+                        children: _buildActionButtons(context, false, vm).reversed.toList(),
                       ))
                 ]);
         })
@@ -67,14 +64,17 @@ class PhraseExercisePage
   Widget _buildCard(BuildContext context, String value,
           {bool isOpening = false, bool isOpen = false}) =>
       Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
         child: Container(
             padding: const EdgeInsets.all(16.0),
             decoration: cardDecoration(context),
             child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Visibility(
                   visible: !isOpening,
-                  child: Icon(Icons.mode_comment, color: Theme.of(context).accentColor)),
+                  child: Icon(Icons.mode_comment,
+                      color: isOpen
+                          ? VATheme.of(context).colorAccentVariant
+                          : VATheme.of(context).colorForeground)),
               Expanded(
                   child: Padding(
                       padding: const EdgeInsets.only(left: 16.0),
@@ -82,61 +82,58 @@ class PhraseExercisePage
                         visible: !isOpening,
                         child: Text(value ?? '',
                             style: isOpen
-                                ? Theme.of(context)
-                                    .textTheme
-                                    .headline6
-                                    .copyWith(color: Theme.of(context).accentColor)
-                                : Theme.of(context).textTheme.headline6),
+                                ? VATheme.of(context).textAccentHeadline5
+                                : VATheme.of(context).textSubtitle2),
                       )))
             ])),
       );
 
   Widget _buildExamplesCard(BuildContext context, PhraseExercisePageVM vm) => Padding(
-        padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 16.0),
+        padding: const EdgeInsets.all(16.0),
         child: Container(
             padding: const EdgeInsets.all(16.0),
             decoration: cardDecoration(context),
             child: ListView.separated(
                 itemCount: vm.current.examples.length,
-                separatorBuilder: (context, i) => const Divider(indent: 32.0),
+                separatorBuilder: (context, i) => const Divider(indent: 8.0, endIndent: 8.0),
                 itemBuilder: (context, i) => Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(vm.current.examples[i] ?? '',
-                          style: Theme.of(context).textTheme.subtitle1),
+                          style: VATheme.of(context).textBodyText2),
                     ))),
       );
 
   List<Widget> _buildActionButtons(
-          BuildContext context, Widget Function() divider, PhraseExercisePageVM vm) =>
+          BuildContext context, bool withDivider, PhraseExercisePageVM vm) =>
       [
         IconButton(
             iconSize: 24,
             tooltip: svc.i18n.labelsExerciseResultLow,
-            icon: Icon(Icons.arrow_downward, color: Theme.of(context).errorColor),
+            icon: Icon(Icons.arrow_downward, color: VATheme.of(context).colorAttention),
             onPressed: () => vm.next(RateFeedback.lowTheshold)),
-        divider(),
+        if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
         IconButton(
             iconSize: 24,
             tooltip: svc.i18n.labelsExerciseResultNegative,
-            icon: Icon(Icons.trending_down, color: Theme.of(context).dividerColor.withOpacity(1)),
+            icon: Icon(Icons.trending_down, color: VATheme.of(context).colorForeground),
             onPressed: () => vm.next(RateFeedback.negative)),
-        divider(),
+        if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
         IconButton(
             iconSize: 24,
             tooltip: svc.i18n.labelsExerciseResultUncertain,
-            icon: Icon(Icons.trending_flat, color: Theme.of(context).dividerColor.withOpacity(1)),
+            icon: Icon(Icons.trending_flat, color: VATheme.of(context).colorForeground),
             onPressed: () => vm.next(RateFeedback.uncertain)),
-        divider(),
+        if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
         IconButton(
             iconSize: 24,
             tooltip: svc.i18n.labelsExerciseResultPositive,
-            icon: Icon(Icons.trending_up, color: Theme.of(context).dividerColor.withOpacity(1)),
+            icon: Icon(Icons.trending_up, color: VATheme.of(context).colorForeground),
             onPressed: () => vm.next(RateFeedback.positive)),
-        divider(),
+        if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
         IconButton(
             iconSize: 24,
             tooltip: svc.i18n.labelsExerciseResultHigh,
-            icon: Icon(Icons.arrow_upward, color: Theme.of(context).accentColor),
+            icon: Icon(Icons.arrow_upward, color: VATheme.of(context).colorAccentVariant),
             onPressed: () => vm.next(RateFeedback.highThershold))
       ];
 

@@ -50,10 +50,7 @@ class PhraseGroupGridCard extends StatelessWidget {
                     child: Text(name,
                         overflow: TextOverflow.ellipsis,
                         maxLines: 2,
-                        style: Theme.of(context)
-                            .textTheme
-                            .subtitle1
-                            .copyWith(color: VATheme.of(context).colorPrimary100)))),
+                        style: VATheme.of(context).textAccentSubtitle1))),
             Container(
                 padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 12.0),
                 alignment: Alignment.topLeft,
@@ -68,20 +65,21 @@ class PhraseGroupGridCard extends StatelessWidget {
                 child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
                   const Divider(),
                   Row(children: [
-                    Expanded(flex: 1, child: _buildCaption(context, svc.i18n.labelsStatPhrases)),
                     Expanded(
                         flex: 1,
-                        child: _buildCaption(context, phraseCount.toString(), TextAlign.end))
+                        child: Text(svc.i18n.labelsStatPhrases,
+                            style: VATheme.of(context).textCaption)),
+                    Expanded(
+                        flex: 1,
+                        child: Text(phraseCount.toString(),
+                            textAlign: TextAlign.end, style: VATheme.of(context).textCaption))
                   ]),
                   Row(children: [
                     Expanded(
-                        child:
-                            _buildCaption(context, phraseCount > 0 ? svc.i18n.labelsStatWhen : '')),
+                        child: Text(phraseCount > 0 ? svc.i18n.labelsStatWhen : '',
+                            style: VATheme.of(context).textCaption)),
                     if (phraseCount > 0) StatTarget(closeTargetUtc.differenceNowUtc())
                   ])
                 ])),
           ])));
-
-  Widget _buildCaption(BuildContext context, String caption, [TextAlign align = TextAlign.start]) =>
-      Text(caption, textAlign: align, style: Theme.of(context).textTheme.caption);
 }

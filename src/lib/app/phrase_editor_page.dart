@@ -51,10 +51,7 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
                         children: [
                           Chip(
                               label: Text(vm.phraseGroupName,
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .bodyText2
-                                      .copyWith(color: VATheme.of(context).colorAccentVariant)),
+                                  style: VATheme.of(context).textBodyText2),
                               backgroundColor: VATheme.of(context).colorBackgroundCard),
                           TypeAheadFormField<String>(
                             textFieldConfiguration: TextFieldConfiguration(
@@ -62,6 +59,7 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
                                 controller: _typeAheadController,
                                 decoration:
                                     InputDecoration(labelText: svc.i18n.labelsEditorChangeGroup),
+                                style: VATheme.of(context).textBodyText1,
                                 onEditingComplete: () {
                                   _selectGroup(vm, _typeAheadController.text, andCleanInput: true);
                                 }),
@@ -89,23 +87,26 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
                     validator: (v) => vm.validationMessageWhenEmpty(
                         value: v, onEmpty: () => svc.i18n.validationMessagesPhraseRequired),
                     onChanged: (v) => vm.updatePhrase(v, _formKey.currentState.validate),
-                    focusNode: _focusNodes[1]),
+                    focusNode: _focusNodes[1],
+                    style: VATheme.of(context).textBodyText1),
                 const SizedBox(height: 16.0),
                 TextFormField(
                     decoration: InputDecoration(labelText: svc.i18n.labelsEditorPronunciation),
                     initialValue: vm.pronunciation,
                     onChanged: (v) => vm.updatePronunciation(v, _formKey.currentState.validate),
-                    focusNode: _focusNodes[2]),
+                    focusNode: _focusNodes[2],
+                    style: VATheme.of(context).textBodyText1),
                 const SizedBox(height: 16.0),
                 TextFormField(
                     decoration: InputDecoration(labelText: svc.i18n.labelsEditorDefinition),
                     minLines: 3,
-                    maxLines: 6,
+                    maxLines: 3,
                     initialValue: vm.definition,
                     validator: (v) => vm.validationMessageWhenEmpty(
                         value: v, onEmpty: () => svc.i18n.validationMessagesDefinitionRequired),
                     onChanged: (v) => vm.updateDefinition(v, _formKey.currentState.validate),
-                    focusNode: _focusNodes[3]),
+                    focusNode: _focusNodes[3],
+                    style: VATheme.of(context).textBodyText1),
                 const SizedBox(height: 32.0),
                 PhraseExampleTextFormField(
                     focusNode: _focusNodes[4],
@@ -133,7 +134,7 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
                               Transform.scale(
                                   scale: 0.8,
                                   child: CircleAvatar(
-                                    backgroundColor: Theme.of(context).accentColor,
+                                    backgroundColor: VATheme.of(context).colorAccent,
                                     child: IconButton(
                                         icon: Icon(Icons.delete_outline),
                                         color: Colors.white,

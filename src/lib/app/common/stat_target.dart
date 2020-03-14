@@ -9,26 +9,21 @@ class StatTarget extends StatelessWidget {
   final double size;
   final TextStyle textStyle;
 
-  Color getColor(BuildContext context) => diff.isTargetClose()
-      ? VATheme.of(context).colorAccentVariant
-      : VATheme.of(context).colorForeground;
-
-  IconData getIcon() => diff.isTargetFar()
-      ? Icons.assignment_turned_in
-      : diff.isTargetClose() ? Icons.assignment_late : Icons.assignment;
-
-  TextStyle getTextStyle(BuildContext context) => textStyle ?? Theme.of(context).textTheme.caption;
-  TextStyle getTextStyleWithColor(BuildContext context) =>
-      getTextStyle(context).copyWith(color: getColor(context));
+  Icon getIcon(BuildContext context) => diff.isTargetFar()
+      ? Icon(Icons.assignment_turned_in, color: VATheme.of(context).colorAccentVariant, size: size)
+      : diff.isTargetClose()
+          ? Icon(Icons.assignment_late, color: VATheme.of(context).colorAttention, size: size)
+          : Icon(Icons.assignment, size: size);
 
   @override
   Widget build(BuildContext context) => Row(children: [
-        Icon(
-          getIcon(),
-          color: getColor(context),
-          size: size,
-        ),
+        getIcon(context),
         const SizedBox(width: 4),
-        Text(diff.toStringAsTarget(), style: getTextStyleWithColor(context))
+        Text(diff.toStringAsTarget(),
+            style: diff.isTargetFar()
+                ? VATheme.of(context).textAccentCaption
+                : diff.isTargetClose()
+                    ? VATheme.of(context).textAttentionCaption
+                    : VATheme.of(context).textCaption)
       ]);
 }

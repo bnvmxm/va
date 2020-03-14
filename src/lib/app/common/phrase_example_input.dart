@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
 class PhraseExampleTextFormField extends StatefulWidget {
@@ -41,12 +42,13 @@ class _PhraseExampleTextFormFieldState extends State<PhraseExampleTextFormField>
                 onChanged: (value) {
                   setState(() {});
                 },
-                focusNode: widget.focusNode)),
+                focusNode: widget.focusNode,
+                style: VATheme.of(context).textBodyText1)),
         if (_exampleController.text.isNotEmpty)
           IconButton(
               icon: Icon(Icons.add_circle_outline),
               iconSize: widget.iconSize,
-              color: Theme.of(context).accentColor,
+              color: VATheme.of(context).colorAccent,
               padding: const EdgeInsets.all(16.0),
               onPressed: () {
                 widget.onSaved(_exampleController.text);

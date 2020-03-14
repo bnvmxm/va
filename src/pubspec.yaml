@@ -37,3 +37,12 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/fonts/
+  fonts:
+    - family: Oswald
+      fonts:
+        - asset: assets/fonts/Oswald-Light.ttf
+          weight: 300
+        - asset: assets/fonts/Oswald-Regular.ttf
+        - asset: assets/fonts/Oswald-SemiBold.ttf
+          weight: 700

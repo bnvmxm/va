@@ -67,6 +67,20 @@ extension VAThemeIdExt on VAThemeId {
         primaryIconTheme: IconThemeData(color: _specs[this].colorAccentVariant),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
             foregroundColor: _specs[this].colorPrimaryDark,
-            backgroundColor: _specs[this].colorAccentVariant));
+            backgroundColor: _specs[this].colorAccentVariant),
+        textTheme: TextTheme(
+          headline1: _specs[this].textHeadline1,
+          headline2: _specs[this].textHeadline2,
+          headline3: _specs[this].textHeadline3,
+          headline4: _specs[this].textHeadline4,
+          headline5: _specs[this].textHeadline5,
+          headline6: _specs[this].textHeadline6,
+          subtitle1: _specs[this].textSubtitle1,
+          subtitle2: _specs[this].textSubtitle2,
+          bodyText1: _specs[this].textBodyText1,
+          bodyText2: _specs[this].textBodyText2,
+          caption: _specs[this].textCaption,
+          button: _specs[this].textButton,
+        ));
   }
 }

@@ -36,7 +36,7 @@ class PhraseListPage extends VAPageWithArgument<String, PhraseListPageVM> {
         child: ListTile(
             selected: vm.isSelected(index),
             onTap: () => vm.isSelected(index) ? vm.unselect() : vm.select(index),
-            title: Text(item.phrase),
+            title: Text(item.phrase, style: VATheme.of(context).textBodyText1),
             dense: false,
             leading: vm.isSelected(index)
                 ? CircleAvatar(
