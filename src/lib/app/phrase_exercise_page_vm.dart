@@ -1,13 +1,11 @@
+import 'package:flutter/material.dart';
+import 'package:vocabulary_advancer/app/phrase_exercise_page.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/core/extensions.dart';
-import 'package:vocabulary_advancer/core/base_view_model.dart';
+import 'package:vocabulary_advancer/app/base/base_view_model.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
-class PhraseExercisePageArgument {
-  PhraseExercisePageArgument(this.groupName, {this.isExerciseFirst = true});
-  final String groupName;
-  final bool isExerciseFirst;
-}
+part 'phrase_exercise_page_vm.navigation.dart';
 
 class PhraseExercisePageVM extends BaseViewModel<PhraseExercisePageArgument> {
   Phrase current;

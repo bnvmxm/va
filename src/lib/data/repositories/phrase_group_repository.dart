@@ -32,4 +32,8 @@ class PhraseGroupRepository {
     dto.name = toName;
     return dto.toModel();
   }
+
+  void delete(String name) {
+    svc.dataProvider.dataGroups.removeWhere((gr) => gr.name == name);
+  }
 }

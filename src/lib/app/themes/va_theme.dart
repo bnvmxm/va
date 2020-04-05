@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 part 'va_theme_spec_darkcold.dart';
 part 'va_theme_spec_light.dart';
+part 'va_theme_spec.dart';
 part 'va_theme_to_material.dart';
 
 enum VAThemeId { darkCold, light }

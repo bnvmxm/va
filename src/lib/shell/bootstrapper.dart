@@ -5,8 +5,7 @@ import 'package:vocabulary_advancer/app/phrase_exercise_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrases_group_editor_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrases_group_grid_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrase_list_page_vm.dart';
-import 'package:vocabulary_advancer/core/services/localization_service.dart';
-import 'package:vocabulary_advancer/core/services/navigation.dart';
+import 'package:vocabulary_advancer/app/services/localization_service.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_group_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/settings_repository.dart';
@@ -28,8 +27,6 @@ void setupApp({@required Profile profile, Map<Feature, bool> features}) {
   registry.registerLazySingleton(() => SampleDataProvider());
   registry.registerLazySingleton(() => PhraseGroupRepository());
   registry.registerLazySingleton(() => PhraseRepository());
-
-  registry.registerLazySingleton(() => NavigationService());
 
   registry.registerFactory(() => PhraseGroupGridPageVM());
   registry.registerFactory(() => PhraseGroupEditorPageVM());

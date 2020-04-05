@@ -1,7 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:vocabulary_advancer/app/phrase_exercise_page_vm.dart';
+import 'package:vocabulary_advancer/app/phrases_group_editor_page_vm.dart';
+import 'package:vocabulary_advancer/app/phrases_group_grid_page.dart';
+import 'package:vocabulary_advancer/app/services/navigation.dart';
 import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/core/base_view_model.dart';
+import 'package:vocabulary_advancer/app/base/base_view_model.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
+
+part 'phrases_group_grid_page_vm.navigation.dart';
 
 class PhraseGroupGridPageVM extends BaseViewModel {
   PhraseGroup _phraseGroupSelected;
@@ -33,22 +39,25 @@ class PhraseGroupGridPageVM extends BaseViewModel {
   Future navigateToEditGroup() => _navigateToEditor(isNew: false);
   Future _navigateToEditor({@required bool isNew}) async {
     assert(isNew || anySelected);
-    final newPhraseGroup = isNew
-        ? await svc.nav.forwardToAddPhraseGroup()
-        : await svc.nav.forwardToEditPhraseGroup(_phraseGroupSelected.name);
+    final result = isNew
+        ? await forwardToAddPhraseGroup()
+        : await forwardToEditPhraseGroup(_phraseGroupSelected.name);
 
-    if (newPhraseGroup == null) return;
+    if (result == null) return;
 
     notify(() {
       if (isNew) {
-        phraseGroups.add(newPhraseGroup);
+        phraseGroups.add(result.group);
+      } else if (result.isDeleted) {
+        phraseGroups.remove(_phraseGroupSelected);
+        _phraseGroupSelected = null;
       } else {
         for (var i = 0; i < phraseGroups.length; i++) {
           if (phraseGroups[i] == _phraseGroupSelected) {
-            phraseGroups[i] = newPhraseGroup;
+            phraseGroups[i] = result.group;
           }
         }
-        _phraseGroupSelected = newPhraseGroup;
+        _phraseGroupSelected = result.group;
       }
     });
   }
@@ -56,20 +65,20 @@ class PhraseGroupGridPageVM extends BaseViewModel {
   Future navigateToGroup() async {
     assert(_phraseGroupSelected != null);
     if (_phraseGroupSelected.phraseCount > 0) {
-      await svc.nav.forwardToPhraseGroup(_phraseGroupSelected.name);
+      await forwardToPhraseGroup(_phraseGroupSelected.name);
       _phraseGroupSelected = null;
       notify(() async => _reset(), asBusy: true);
     }
   }
 
   Future navigateToAbout() async {
-    return svc.nav.forwardToAbout();
+    return forwardToAbout();
   }
 
   Future navigateToExercise() async {
     assert(_phraseGroupSelected != null);
     if (_phraseGroupSelected.phraseCount > 0) {
-      await svc.nav.forwardToExercise(_phraseGroupSelected.name);
+      await forwardToExercise(_phraseGroupSelected.name);
       _phraseGroupSelected = null;
       notify(() async => _reset(), asBusy: true);
     }

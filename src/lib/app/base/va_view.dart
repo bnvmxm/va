@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vocabulary_advancer/core/base_view_model.dart';
+import 'package:vocabulary_advancer/app/base/base_view_model.dart';
 
 abstract class VAView<T extends BaseViewModel> extends StatelessWidget {
   T createVM();

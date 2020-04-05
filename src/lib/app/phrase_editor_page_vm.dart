@@ -1,21 +1,16 @@
-import 'dart:collection';
+// ignore_for_file: use_setters_to_change_properties
 
-import 'package:flutter/foundation.dart';
-import 'package:vocabulary_advancer/core/base_view_model.dart';
+import 'dart:collection';
+import 'package:flutter/material.dart';
+import 'package:vocabulary_advancer/app/base/base_view_model.dart';
+import 'package:vocabulary_advancer/app/base/form_validation.dart';
+import 'package:vocabulary_advancer/app/phrase_editor_page.dart';
+import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
-class PhraseEditorPageArgument {
-  PhraseEditorPageArgument(this.phraseGroupName,
-      {this.id, this.phrase, this.definition, this.pronunciation, this.examples});
-  final String phraseGroupName;
-  final String id;
-  final String phrase;
-  final String definition;
-  final String pronunciation;
-  final UnmodifiableListView<String> examples;
-}
+part 'phrase_editor_page_vm.navigation.dart';
 
-class PhraseEditorPageVM extends BaseViewModel<PhraseEditorPageArgument> {
+class PhraseEditorPageVM extends BaseViewModel<PhraseEditorPageArgument> with FormValidation {
   PhraseEditorPageArgument initialValues;
 
   String phraseGroupName = '';
@@ -30,7 +25,6 @@ class PhraseEditorPageVM extends BaseViewModel<PhraseEditorPageArgument> {
       phraseGroupsKnown.where((x) => x != phraseGroupName).toList();
 
   bool get isNewPhrase => id.isEmpty;
-  bool _needInlineValidation = false;
 
   @override
   Future Function(PhraseEditorPageArgument argument) get initializer => (argument) async {
@@ -47,40 +41,39 @@ class PhraseEditorPageVM extends BaseViewModel<PhraseEditorPageArgument> {
         phraseGroupsKnown = svc.repPhraseGroup.findKnownNames().toList();
       };
 
-  bool validate(bool Function() validator) {
-    _needInlineValidation = !validator();
-    return !_needInlineValidation;
-  }
-
-  void _validateInlineIfNeeded(bool Function() validator) {
-    if (_needInlineValidation && validator()) {
-      _needInlineValidation = false;
-    }
-  }
-
   void updateGroupName(String value) {
     notify(() => phraseGroupName = value);
   }
 
-  void updatePhrase(String value, bool Function() validator) {
+  String validatorForPhrase(String value, String validationMessage) {
+    return validationMessageWhenEmpty(value: value, messageWhenEmpty: () => validationMessage);
+  }
+
+  void updatePhrase(String value) {
     phrase = value;
-    _validateInlineIfNeeded(validator);
+    validateInlineIfNeeded();
   }
 
-  void updatePronunciation(String value, bool Function() validator) {
+  void updatePronunciation(String value) {
     pronunciation = value;
-    _validateInlineIfNeeded(validator);
   }
 
-  void updateDefinition(String value, bool Function() validator) {
+  String validatorForDefinition(String value, String validationMessage) {
+    return validationMessageWhenEmpty(value: value, messageWhenEmpty: () => validationMessage);
+  }
+
+  void updateDefinition(String value) {
     definition = value;
-    _validateInlineIfNeeded(validator);
+    validateInlineIfNeeded();
   }
 
-  void addExample(String value, bool Function() validator) {
+  String validatorForExamples(String validationMessage) =>
+      examples.isEmpty ? validationMessage : null;
+
+  void addExample(String value) {
     if (value?.isNotEmpty ?? false) {
       notify(() => examples.add(value));
-      _validateInlineIfNeeded(validator);
+      validateInlineIfNeeded();
     }
   }
 
@@ -88,29 +81,24 @@ class PhraseEditorPageVM extends BaseViewModel<PhraseEditorPageArgument> {
     notify(() => examples.removeAt(index));
   }
 
-  String validationMessageWhenEmpty({@required String value, @required String Function() onEmpty}) {
-    final val = value.trim();
-
-    if (val.isEmpty) return onEmpty();
-    return null;
-  }
-
-  String validationMessageForExamples({@required String Function() onEmpty}) {
-    if (examples.isEmpty) {
-      return onEmpty();
+  void deletePhraseAndClose() {
+    if (!isNewPhrase) {
+      svc.repPhrase.delete(phraseGroupName, id);
     }
 
-    return null;
+    backWithResult(PhraseEditorPageResult.deleted());
   }
 
-  void applyAndClose() {
-    assert(phraseGroupName.isNotEmpty);
+  void tryApplyAndClose() {
+    if (validate()) {
+      assert(phraseGroupName.isNotEmpty);
 
-    final result = isNewPhrase
-        ? svc.repPhrase.create(phraseGroupName, phrase, pronunciation, definition, examples)
-        : svc.repPhrase.update(initialValues.phraseGroupName, phraseGroupName, id, phrase,
-            pronunciation, definition, examples);
+      final result = isNewPhrase
+          ? svc.repPhrase.create(phraseGroupName, phrase, pronunciation, definition, examples)
+          : svc.repPhrase.update(initialValues.phraseGroupName, phraseGroupName, id, phrase,
+              pronunciation, definition, examples);
 
-    svc.nav.backWithResult(result);
+      backWithResult(PhraseEditorPageResult.completed(result));
+    }
   }
 }

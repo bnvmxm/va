@@ -46,6 +46,13 @@ class PhraseRepository {
     return dto.toModel(groupName);
   }
 
+  void delete(String groupName, String phraseId) {
+    final groupFound = _findGroup(groupName);
+    if (groupFound == null) return;
+
+    groupFound.phrases.removeWhere((phrase) => phrase.id == phraseId);
+  }
+
   Phrase update(String oldGroupName, String newGroupName, String phraseId, String phrase,
       String pronunciation, String definition, List<String> examples) {
     final groupFound = oldGroupName != newGroupName

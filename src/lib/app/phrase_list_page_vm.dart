@@ -1,9 +1,14 @@
 import 'dart:collection';
 
+import 'package:flutter/material.dart';
 import 'package:vocabulary_advancer/app/phrase_editor_page_vm.dart';
+import 'package:vocabulary_advancer/app/phrase_list_page.dart';
+import 'package:vocabulary_advancer/app/services/navigation.dart';
 import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/core/base_view_model.dart';
+import 'package:vocabulary_advancer/app/base/base_view_model.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
+
+part 'phrase_list_page_vm.navigation.dart';
 
 class PhraseListPageVM extends BaseViewModel<String> {
   String phraseGroupName = '';
@@ -30,10 +35,10 @@ class PhraseListPageVM extends BaseViewModel<String> {
   bool isSelected(int index) => selectedIndex == index;
 
   Future navigateToAddPhrase() async {
-    final result = await svc.nav.forwardToAddPhrase(phraseGroupName);
+    final result = await forwardToAddPhrase(phraseGroupName);
 
-    if (result != null && result.groupName == phraseGroupName) {
-      notify(() => phrases.add(result));
+    if (result != null && result.phrase.groupName == phraseGroupName) {
+      notify(() => phrases.add(result.phrase));
     }
   }
 
@@ -42,19 +47,18 @@ class PhraseListPageVM extends BaseViewModel<String> {
     final selectedPhrase = phrases[selectedIndex];
     assert(selectedPhrase != null);
 
-    final editedPhrase = await svc.nav.forwardToEditPhrase(PhraseEditorPageArgument(phraseGroupName,
+    final result = await forwardToEditPhrase(PhraseEditorPageArgument(phraseGroupName,
         id: selectedPhrase.id,
         phrase: selectedPhrase.phrase,
         pronunciation: selectedPhrase.pronunciation,
         definition: selectedPhrase.definition,
         examples: UnmodifiableListView(selectedPhrase.examples)));
 
-    if (editedPhrase == null) return;
+    if (result == null) return;
 
-    if (editedPhrase.groupName == phraseGroupName) {
-      notify(() => phrases[selectedIndex] = editedPhrase);
+    if (!result.isDeleted && result.phrase.groupName == phraseGroupName) {
+      notify(() => phrases[selectedIndex] = result.phrase);
     } else {
-      // moved to another group
       notify(() {
         phrases.removeAt(selectedIndex);
         selectedIndex = null;

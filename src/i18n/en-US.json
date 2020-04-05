@@ -6,7 +6,8 @@
         "EditPhrase": "Edit Phrase",
         "AddGroup": "New Group",
         "RenameGroup": "Rename Phrase",
-        "Exercising": "Exercising"
+        "Exercising": "Exercising",
+        "Confirm": "Confirm"
     },
     "labels": {
         "StatPhrases": "{count} phrases",
@@ -32,7 +33,11 @@
         "Add": "Add",
         "View": "View",
         "Language": "Language",
-        "About": "About"
+        "About": "About",
+        "Yes": "Yes",
+        "No": "No",
+        "Cancel": "Cancel",
+        "Close": "Close"
     },
     "validationMessages": {
         "PhraseRequired": "Phrase is required",
@@ -49,6 +54,10 @@
             "P2": "But being just an another pet Flutter project, this app's aim is to also define a starting baseline, from mobile app production-ready architecture perspective."
         },
         "NoData": "Nothing to show here...",
-        "NoPhrase": "Done! No Phrases to exercise now from this Collection."
+        "NoPhrase": "Done! No Phrases to exercise now from this Collection.",
+        "Confirmation": {
+            "DeleteGroup": "Delete the Phrase group?",
+            "DeletePhrase": "Delete the Phrase?"
+        }
     }
 }

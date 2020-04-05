@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:vocabulary_advancer/core/base_view_model.dart';
+import 'package:vocabulary_advancer/app/base/base_view_model.dart';
 import 'package:vocabulary_advancer/shared/i18n.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 
@@ -29,11 +29,11 @@ abstract class VAPage<T extends BaseViewModel> extends StatelessWidget {
   Widget buildBodyWhenBusy() => const Center(child: CircularProgressIndicator());
 }
 
-abstract class VAPageWithArgument<TArg, T extends BaseViewModel<TArg>> extends VAPage<T> {
+abstract class VAPageWithArgument<TArg, TVM extends BaseViewModel<TArg>> extends VAPage<TVM> {
   VAPageWithArgument(this.argument);
 
   final TArg argument;
 
   @override
-  T _createAndInitializeVM() => createVM()..initialize(argument: argument);
+  TVM _createAndInitializeVM() => createVM()..initialize(argument: argument);
 }

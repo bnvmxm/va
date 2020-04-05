@@ -13,8 +13,6 @@ class ServiceProvider {
   PhraseGroupEditorPageVM get vmPhraseGroupEditorPage => _registry.get<PhraseGroupEditorPageVM>();
   PhraseGroupGridPageVM get vmPhraseGroupGridPage => _registry.get<PhraseGroupGridPageVM>();
 
-  NavigationService get nav => _registry.get<NavigationService>();
-
   Future<LocalizationService> get svcLocalization => _registry.getAsync<LocalizationService>();
   Future<SettingsRepository> get repSettings => _registry.getAsync<SettingsRepository>();
   PhraseGroupRepository get repPhraseGroup => _registry.get<PhraseGroupRepository>();
