@@ -29,7 +29,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
   }
 
   if (settings?.name == navigationRoutePhraseGroup) {
-    return routePhraseListPage();
+    return routePhraseListPage(groupName: settings.arguments as String);
   }
 
   if (settings?.name == navigationRouteAddPhrase) {

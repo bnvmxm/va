@@ -15,7 +15,7 @@ class PhraseGroupEditorPage extends VAPageWithArgument<String, PhraseGroupEditor
 
   @override
   AppBar buildAppBar(BuildContext context, PhraseGroupEditorPageVM vm) => AppBar(
-        title: Text(vm.isNewGroup ? svc.i18n.titlesAddGroup : svc.i18n.titlesRenameGroup,
+        title: Text(vm.isNewGroup ? svc.i18n.titlesAddGroup : svc.i18n.titlesEditGroup,
             style: VATheme.of(context).textHeadline5),
         actions: [
           if (!vm.isNewGroup)

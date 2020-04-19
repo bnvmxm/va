@@ -3,14 +3,14 @@
         "About": "Информация",
         "Collections": "Коллекции",
         "AddPhrase": "Новая Фраза",
-        "EditPhrase": "Корректирование",
+        "EditPhrase": "Изменение Фразы",
         "AddGroup": "Новая Коллекция",
-        "RenameGroup": "Переименование",
+        "EditGroup": "Изменение Коллекции",
         "Exercising": "Упражнение",
         "Confirm": "Подтверждение"
     },
     "labels": {
-        "StatPhrases": "{count} фраз",
+        "StatPhrases": "Фраз: {count}",
         "StatRateLearning": "Запоминание",
         "StatRateLearned": "Выучено",
         "StatRateReviewing": "Закрепление",

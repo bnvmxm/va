@@ -139,5 +139,14 @@ class PhraseExercisePage
       ];
 
   Widget _buildEmptyBody(BuildContext context) => Padding(
-      padding: const EdgeInsets.all(16.0), child: Center(child: Text(svc.i18n.textNoPhrase)));
+      padding: const EdgeInsets.all(64.0),
+      child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Icon(Icons.check_circle_outline,
+                size: 32, color: VATheme.of(context).colorAccentVariant),
+            const SizedBox(height: 16.0),
+            Text(svc.i18n.textNoPhrase),
+          ]));
 }
