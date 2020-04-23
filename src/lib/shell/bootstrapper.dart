@@ -19,14 +19,15 @@ void setupApp({@required Profile profile, Map<Feature, bool> features}) {
   Environment.setup(profile: profile);
 
   final registry = GetIt.I;
-  registry.registerSingletonAsync(() async => AppLogger());
-  registry.registerSingletonAsync(() async => SettingsRepository());
-  registry.registerSingletonAsync(() async => LocalizationService()..initialize(),
+  registry.registerSingletonAsync<AppLogger>(() async => AppLogger());
+  registry.registerSingletonAsync<SettingsRepository>(() async => SettingsRepository());
+  registry.registerSingletonAsync<LocalizationService>(
+      () async => LocalizationService()..initialize(),
       dependsOn: [SettingsRepository, AppLogger]);
 
-  registry.registerLazySingleton(() => SampleDataProvider());
-  registry.registerLazySingleton(() => PhraseGroupRepository());
-  registry.registerLazySingleton(() => PhraseRepository());
+  registry.registerLazySingleton<SampleDataProvider>(() => SampleDataProvider());
+  registry.registerLazySingleton<PhraseGroupRepository>(() => PhraseGroupRepository());
+  registry.registerLazySingleton<PhraseRepository>(() => PhraseRepository());
 
   registry.registerFactory(() => PhraseGroupGridPageVM());
   registry.registerFactory(() => PhraseGroupEditorPageVM());

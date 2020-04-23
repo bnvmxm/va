@@ -85,6 +85,6 @@ class PhraseGroupGridPageVM extends BaseViewModel {
   }
 
   Future nextLanguage() async {
-    return (await svc.svcLocalization).nextLocale();
+    return svc.svcLocalization.nextLocale();
   }
 }

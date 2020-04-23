@@ -48,7 +48,7 @@ class PhraseExercisePageVM extends BaseViewModel<PhraseExercisePageArgument> {
     final curTarget = current.targetUtc;
     final newRate = current.rate.asRate(feedback);
     final newDuration = newRate.asCooldown(feedback);
-    (await svc.logger).debug(() =>
+    svc.logger.debug(() =>
         '${current.phrase}: $curRate -> $newRate, ${curTarget.difference(current.updatedUtc)} -> $newDuration');
 
     svc.repPhrase.updateStat(groupName, current.id, newRate, newDuration);

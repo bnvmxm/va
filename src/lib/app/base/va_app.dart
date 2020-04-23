@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:get_it/get_it.dart';
 
 import 'package:vocabulary_advancer/app/services/navigation.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
@@ -14,6 +15,8 @@ class VAApp extends StatefulWidget {
 class _VAAppState extends State<VAApp> {
   VAThemeId _themeId;
 
+  Future get serviceLocatorReady => GetIt.I.allReady();
+
   @override
   void initState() {
     super.initState();
@@ -26,19 +29,23 @@ class _VAAppState extends State<VAApp> {
     const i18n = I18n.delegate;
     return VATheme(
       _themeId,
-      child: MaterialApp(
-          theme: _themeId.getMaterialThemeData(),
-          localizationsDelegates: const [
-            I18n.delegate,
-            GlobalMaterialLocalizations.delegate,
-            GlobalWidgetsLocalizations.delegate,
-            GlobalCupertinoLocalizations.delegate
-          ],
-          supportedLocales: i18n.supportedLocales,
-          localeResolutionCallback: i18n.resolution(fallback: const Locale("en", "US")),
-          navigatorKey: keys.navigation,
-          initialRoute: navigationRouteRoot,
-          onGenerateRoute: (settings) => generateRoute(settings)),
+      child: FutureBuilder<Object>(
+          future: serviceLocatorReady,
+          builder: (context, snapshot) {
+            return MaterialApp(
+                theme: _themeId.getMaterialThemeData(),
+                localizationsDelegates: const [
+                  I18n.delegate,
+                  GlobalMaterialLocalizations.delegate,
+                  GlobalWidgetsLocalizations.delegate,
+                  GlobalCupertinoLocalizations.delegate
+                ],
+                supportedLocales: i18n.supportedLocales,
+                locale: svc.svcLocalization.currentLocale,
+                navigatorKey: keys.navigation,
+                initialRoute: navigationRouteRoot,
+                onGenerateRoute: (settings) => generateRoute(settings));
+          }),
     );
   }
 

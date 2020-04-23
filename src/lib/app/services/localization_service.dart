@@ -7,7 +7,7 @@ class LocalizationService {
   Locale currentLocale;
 
   Future initialize() async {
-    final tag = await (await svc.repSettings).getLanguageTag(fallback: () => null);
+    final tag = await svc.repSettings.getLanguageTag(fallback: () => null);
     final locale = tag == null
         ? I18n.delegate.supportedLocales.first
         : I18n.delegate.supportedLocales.firstWhere((l) => l.toLanguageTag() == tag);
@@ -20,7 +20,7 @@ class LocalizationService {
     for (final l in I18n.delegate.supportedLocales) {
       if (found) {
         await setLocale(l);
-        await (await svc.repSettings).setLanguageTag(l.toLanguageTag());
+        await svc.repSettings.setLanguageTag(l.toLanguageTag());
         return;
       }
 
@@ -28,8 +28,7 @@ class LocalizationService {
     }
 
     await setLocale(I18n.delegate.supportedLocales.first);
-    await (await svc.repSettings)
-        .setLanguageTag(I18n.delegate.supportedLocales.first.toLanguageTag());
+    await svc.repSettings.setLanguageTag(I18n.delegate.supportedLocales.first.toLanguageTag());
   }
 
   Future setLocale(Locale locale) async {
