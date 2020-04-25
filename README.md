@@ -2,6 +2,8 @@
 
 The Vocabulary Advancer app's first purpose is apparently to assist in settlement of advanced vocabulary with phrase cards... which should be reviewed at appropriate intervals. So, this is an another one mobile app for words memorization. 
 
+![Vocabulary Advancer](docs/app-screens-v1.png "Vocabulary Advancer")
+
 The trick is, its main purpose is not just that. This repository serves the **Flutter Starter App** baseline solution, showcasing the initial project setup and helping to minimize the gap between hello-world-tutorials and a production ready Flutter app.
 
 ## Flutter Starter app
@@ -48,15 +50,33 @@ This app is actually one of many examples which help to settle a minimal set of 
 6. If needed by your IDE, add a new Build Configuration with **./src/lib/main.dart** Flutter app entry point
 7. Run on a selected device/emulator
 
-## Architecture
+## Starter's Architecture
 
 From high perspective, the following code decomposition was considered for this Starter App:
 
 ![Architecture](docs/architecture-layers-v1.png "Architecture")
 
+This seems to be the essential setup, aiming any production-ready app which is pretty familiar to any developer from any technology stack. We should bear in mind that Flutter's *"everything is a widget"* term is nearly a metaphor, and as an approach to a production-ready solution, should be treated as the UI construction paradigm only.
+
+Even for minimal apps based on this Starter baseline, for good Testability and easier code maintenace, the following areas are explicitly distinguished and considered as separated in terms of code responsibility:
+* **App**, Application Presentation Layer 
+    * **Presentation** (Widgets and navigation routing aware UI)
+    * **Presentation Logic** (View Models: UI state management and invalidation, interactivity reactions)
+    * **Presentation Services** (UX patterns implementation, navigation, etc.)
+* **Core**, Domain Business Layer
+    * **Model** (for now, just plain entities or value like types)
+    * **Application Services** (Domain services which encapsulate the business rules)
+    * **Extensions** (Value types converters and data interpretation helpers)
+* **Data**, Data Access Layer, Networking and Persistence
+    * **Repositories** (probably, the most common pattern today)
+    * **Mappings** (Data Transfer Objects to Entities transformations)
+    * **Data Sources** (Local storage and Remote API clients)
+* **Shared**, Cross-Cutting or common code. The most important here is:
+    * **Service Locator** (Inversion-Of-Control dependencies registry)
+* **Shell**, the essential part of the infrastructure to manage the app startup and initialization:
+    * **Environment** (basic DEV/QA/PROD flavours support)
+    * **Bootstrapper** (application-level dependencies initializer)
+
 ## LICENSE
 
-MIT License
-
-              
-
+[MIT License](src/LICENSE)
