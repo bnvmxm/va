@@ -38,15 +38,25 @@ This app is actually one of many examples which help to settle a minimal set of 
 10. Unit tests
 11. Code analysis enforced
 
+## How to start
+
+1. If not yet, ensure Flutter SDK is installed correctly, visit https://flutter.dev/docs/get-started/install for details.
+2. If not yet, add a Flutter plugin to your IDE. Supported: **Android Studio**, **VS Code**, **IntelliJ IDEA**. Review instructions: https://flutter.dev/docs/development/tools
+3. Git clone this repository, ``git clone https://github.com/kugjo/va.git``
+4. Stay on the **master** branch
+5. Fetch dependent Dart/Flutter packages, ``flutter pub get``
+6. If needed by your IDE, add a new Build Configuration with **./src/lib/main.dart** Flutter app entry point
+7. Run on a selected device/emulator
+
+## Architecture
+
+From high perspective, the following code decomposition was considered for this Starter App:
+
+![Architecture](docs/architecture-layers-v1.png "Architecture")
+
 ## LICENSE
 
 MIT License
 
-Copyright 2020 Maxim Biyanov
-
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                   
+              
 
