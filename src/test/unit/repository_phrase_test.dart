@@ -9,7 +9,7 @@ import '../bootstrapper.dart';
 
 void main() {
   group(PhraseRepository, () {
-    setUp(setupMocks);
+    setUp(bootstrap);
 
     test('findMany() successfully lists phrases within', () async {
       // Arrange

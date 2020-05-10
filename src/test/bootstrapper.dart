@@ -15,7 +15,7 @@ import 'package:vocabulary_advancer/shared/root.dart';
 
 part 'bootstrapper.mocks.dart';
 
-void setupMocks() {
+void bootstrap() {
   final registry = GetIt.I;
   registry.registerSingletonAsync<AppLogger>(() async => MockedAppLogger());
   registry.registerSingletonAsync<SettingsRepository>(() async => MockedSettingsRepository());

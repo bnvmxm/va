@@ -15,7 +15,7 @@ import 'package:vocabulary_advancer/shell/environment.dart';
 import 'package:vocabulary_advancer/shared/root.dart';
 import 'package:vocabulary_advancer/shell/feature.dart';
 
-void setupApp({@required Profile profile, Map<Feature, bool> features}) {
+void bootstrap({@required Profile profile, Map<Feature, bool> features}) {
   Environment.setup(profile: profile);
 
   final registry = GetIt.I;

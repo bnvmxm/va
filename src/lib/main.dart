@@ -4,6 +4,6 @@ import 'package:vocabulary_advancer/shell/bootstrapper.dart';
 import 'package:vocabulary_advancer/shell/environment.dart';
 
 void main() {
-  setupApp(profile: Profile.dev);
+  bootstrap(profile: Profile.dev);
   runApp(VAApp());
 }
