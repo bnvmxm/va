@@ -28,9 +28,9 @@ This app is actually one of many examples which help to settle a minimal set of 
 6. Centralized Dialog service
 7. Model validation 
 8. Application themes (and custom font)
-9. Localization
-10. Unit tests
-11. Code analysis enforced
+9. Localization (for now, with vscode-flutter-i18n-json)
+10. Unit tests (with [mockito](https://pub.dev/packages/mockito))
+11. Code analysis enforced (with [lint](https://pub.dev/packages/lint))
 
 ## How to start
 
