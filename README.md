@@ -20,22 +20,14 @@ This app is actually one of many examples which help to settle a minimal set of 
 
 ## What's included
 
-1. Overall decomposition of app architectural layers and segregation of concerns, such as:
-    * Presentation
-    * Presentation Logic
-    * Business Logic
-    * Data access and mapping
-    * Cross-cutting
-    * Dependency Resolution
-    * Bootstrapping
-    * Mocks
+1. Overall decomposition of app architectural layers sample
 2. Application and Dependency registry initialization
 3. Environment Flavours (DEV vs QA vs PROD, etc.)
 4. Feature Toggles (opt-in functionalty)
 5. Centralized and strongly typed Navigation service
 6. Centralized Dialog service
 7. Model validation 
-8. Application themes 
+8. Application themes (and custom font)
 9. Localization
 10. Unit tests
 11. Code analysis enforced
@@ -56,7 +48,7 @@ From high perspective, the following code decomposition was considered for this 
 
 ![Architecture](docs/architecture-layers-v1.png "Architecture")
 
-This seems to be the essential setup, aiming any production-ready app which is pretty familiar to any developer from any technology stack. We should bear in mind that Flutter's *"everything is a widget"* term is nearly a metaphor, and as an approach to a production-ready solution, should be treated as the UI construction paradigm only.
+This seems to be the essential setup which is pretty familiar to any developer from any technology stack. We should bear in mind that Flutter's *"everything is a widget"* term is nearly a metaphor, and as an approach to a production-ready solution, should be treated as the UI construction paradigm only.
 
 Even for minimal apps based on this Starter baseline, for good Testability and easier code maintenace, the following areas are explicitly distinguished and considered as separated in terms of code responsibility:
 * **App**, Application Presentation Layer 
