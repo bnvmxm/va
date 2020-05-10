@@ -17,7 +17,7 @@ abstract class BaseViewModel<TArgument> with ChangeNotifier {
   Future Function(TArgument argument) get initializer;
 
   Future initialize({TArgument argument}) async {
-    notifyWhen(() => initializer(argument), asBusy: true, asMicrotask: true);
+    notifyWhen(() => initializer(argument), asBusy: true);
   }
 
   void invalidate() {
