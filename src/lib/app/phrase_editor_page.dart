@@ -1,12 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
-import 'package:vocabulary_advancer/app/common/phrase_example_input.dart';
-import 'package:vocabulary_advancer/app/phrase_editor_page_vm.dart';
 import 'package:vocabulary_advancer/app/base/va_page.dart';
+import 'package:vocabulary_advancer/app/common/phrase_example_input.dart';
+import 'package:vocabulary_advancer/app/i18n/strings.g.dart';
+import 'package:vocabulary_advancer/app/phrase_editor_page_vm.dart';
 import 'package:vocabulary_advancer/app/services/dialogs.dart';
-import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/app/themes/card_decoration.dart';
-import 'package:vocabulary_advancer/shared/root.dart';
+import 'package:vocabulary_advancer/app/themes/va_theme.dart';
+import 'package:vocabulary_advancer/shared/svc.dart';
 
 class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, PhraseEditorPageVM> {
   PhraseEditorPage(PhraseEditorPageArgument argument) : super(argument);
@@ -26,9 +27,16 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
 
   @override
   AppBar buildAppBar(BuildContext context, PhraseEditorPageVM vm) => AppBar(
-        title: Text(vm.isNewPhrase ? svc.i18n.titlesAddPhrase : svc.i18n.titlesEditPhrase,
+        title: Text(
+            vm.isNewPhrase
+                ? Translations.of(context).titles.AddPhrase
+                : Translations.of(context).titles.EditPhrase,
             style: VATheme.of(context).textHeadline5),
         actions: [
+          IconButton(
+              icon: Icon(Icons.save),
+              color: VATheme.of(context).colorAccentVariant,
+              onPressed: () => vm.tryApplyAndClose()),
           if (!vm.isNewPhrase)
             IconButton(
                 icon: Icon(Icons.delete),
@@ -37,9 +45,10 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
                   final dialog = ConfirmDialog();
                   final confirmed = await dialog.showModal(
                       context: context,
-                      title: svc.i18n.titlesConfirm,
-                      messages: [svc.i18n.textConfirmationDeletePhrase],
-                      confirmText: svc.i18n.labelsYes,
+                      title: Translations.of(context).titles.Confirm,
+                      messages: [Translations.of(context).text.Confirmation.DeletePhrase],
+                      confirmText: Translations.of(context).labels.Yes,
+                      declineText: Translations.of(context).labels.No,
                       isDestructive: true);
                   if (confirmed) {
                     vm.deletePhraseAndClose();
@@ -73,8 +82,8 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
                             textFieldConfiguration: TextFieldConfiguration(
                                 focusNode: _focusNodes[0],
                                 controller: _typeAheadController,
-                                decoration:
-                                    InputDecoration(labelText: svc.i18n.labelsEditorChangeGroup),
+                                decoration: InputDecoration(
+                                    labelText: Translations.of(context).labels.EditorChangeGroup),
                                 style: VATheme.of(context).textBodyText1,
                                 onEditingComplete: () {
                                   _selectGroup(vm, _typeAheadController.text, andCleanInput: true);
@@ -83,14 +92,15 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
                             itemBuilder: (context, suggestion) => ListTile(
                               title: Text(suggestion),
                             ),
-                            transitionBuilder: (context, suggestionsBox, controller) {
-                              return suggestionsBox;
-                            },
+                            transitionBuilder: (context, suggestionsBox, controller) =>
+                                suggestionsBox,
                             onSuggestionSelected: (suggestion) {
                               _selectGroup(vm, suggestion, andCleanInput: true);
                             },
                             onSaved: (value) {
-                              _selectGroup(vm, value, andCleanInput: true);
+                              if (value != null) {
+                                _selectGroup(vm, value, andCleanInput: true);
+                              }
                             },
                             hideOnEmpty: true,
                           )
@@ -106,31 +116,31 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
                         children: [
                           TextFormField(
                               decoration: InputDecoration(
-                                  labelText: svc.i18n.labelsEditorPhrase,
+                                  labelText: Translations.of(context).labels.EditorPhrase,
                                   icon: Icon(Icons.mode_comment)),
                               initialValue: vm.phrase,
                               validator: (v) => vm.validatorForPhrase(
-                                  v, svc.i18n.validationMessagesPhraseRequired),
+                                  v, Translations.of(context).validationMessages.PhraseRequired),
                               onChanged: (v) => vm.updatePhrase(v),
                               focusNode: _focusNodes[1],
                               style: VATheme.of(context).textBodyText1),
                           const SizedBox(height: 16.0),
                           TextFormField(
-                              decoration:
-                                  InputDecoration(labelText: svc.i18n.labelsEditorPronunciation),
+                              decoration: InputDecoration(
+                                  labelText: Translations.of(context).labels.EditorPronunciation),
                               initialValue: vm.pronunciation,
                               onChanged: (v) => vm.updatePronunciation(v),
                               focusNode: _focusNodes[2],
                               style: VATheme.of(context).textBodyText1),
                           const SizedBox(height: 16.0),
                           TextFormField(
-                              decoration:
-                                  InputDecoration(labelText: svc.i18n.labelsEditorDefinition),
+                              decoration: InputDecoration(
+                                  labelText: Translations.of(context).labels.EditorDefinition),
                               minLines: 3,
                               maxLines: 3,
                               initialValue: vm.definition,
-                              validator: (v) => vm.validatorForDefinition(
-                                  v, svc.i18n.validationMessagesDefinitionRequired),
+                              validator: (v) => vm.validatorForDefinition(v,
+                                  Translations.of(context).validationMessages.DefinitionRequired),
                               onChanged: (v) => vm.updateDefinition(v),
                               focusNode: _focusNodes[3],
                               style: VATheme.of(context).textBodyText1),
@@ -146,8 +156,8 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
                         children: [
                           PhraseExampleTextFormField(
                               focusNode: _focusNodes[4],
-                              onValidate: (v) => vm
-                                  .validatorForExamples(svc.i18n.validationMessagesExampleRequired),
+                              onValidate: (v) => vm.validatorForExamples(
+                                  Translations.of(context).validationMessages.ExampleRequired),
                               onSaved: vm.addExample),
                           SizedBox(
                               height: vm.examples.isNotEmpty ? 120 : 0,
@@ -184,13 +194,7 @@ class PhraseEditorPage extends VAPageWithArgument<PhraseEditorPageArgument, Phra
                         ])),
               ]))));
 
-  @override
-  Widget buildFAB(BuildContext context, PhraseEditorPageVM vm) => FloatingActionButton(
-      tooltip: svc.i18n.labelsSaveAndClose,
-      onPressed: vm.tryApplyAndClose,
-      child: Icon(Icons.save));
-
-  void _selectGroup(PhraseEditorPageVM vm, String phraseGroupName, {bool andCleanInput}) {
+  void _selectGroup(PhraseEditorPageVM vm, String phraseGroupName, {required bool andCleanInput}) {
     vm.updateGroupName(phraseGroupName);
 
     if (andCleanInput) {

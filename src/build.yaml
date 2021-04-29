@@ -1,0 +1,10 @@
+targets:
+  $default:
+    builders:
+      fast_i18n:i18nBuilder:
+        options:
+          base_locale: en-US
+          input_directory: lib/app/i18n
+          input_file_pattern: .json
+          output_directory: lib/app/i18n
+          output_file_pattern: .g.dart

@@ -1,26 +1,26 @@
 import 'dart:collection';
 
 import 'package:flutter/material.dart';
+import 'package:vocabulary_advancer/app/base/base_view_model.dart';
 import 'package:vocabulary_advancer/app/phrase_editor_page_vm.dart';
 import 'package:vocabulary_advancer/app/phrase_list_page.dart';
 import 'package:vocabulary_advancer/app/services/navigation.dart';
 import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/app/base/base_view_model.dart';
-import 'package:vocabulary_advancer/shared/root.dart';
+import 'package:vocabulary_advancer/shared/svc.dart';
 
 part 'phrase_list_page_vm.navigation.dart';
 
 class PhraseListPageVM extends BaseViewModel<String> {
   String phraseGroupName = '';
-  int selectedIndex;
+  int? selectedIndex;
   List<Phrase> phrases = [];
 
   bool get isNotEmpty => isReady && phrases.isNotEmpty;
   bool get anySelected => selectedIndex != null;
 
   @override
-  Future Function(String argument) get initializer => (argument) async {
-        phraseGroupName = argument;
+  Future Function(String? argument) get initializer => (argument) async {
+        phraseGroupName = argument ?? '';
         phrases = svc.repPhrase.findMany(phraseGroupName).toList();
       };
 
@@ -37,15 +37,14 @@ class PhraseListPageVM extends BaseViewModel<String> {
   Future navigateToAddPhrase() async {
     final result = await forwardToAddPhrase(phraseGroupName);
 
-    if (result != null && result.phrase.groupName == phraseGroupName) {
-      notify(() => phrases.add(result.phrase));
+    if (result?.phrase?.groupName == phraseGroupName) {
+      notify(() => phrases.add(result!.phrase!));
     }
   }
 
   Future navigateToEditPhrase() async {
     assert(selectedIndex != null);
-    final selectedPhrase = phrases[selectedIndex];
-    assert(selectedPhrase != null);
+    final selectedPhrase = phrases[selectedIndex!];
 
     final result = await forwardToEditPhrase(PhraseEditorPageArgument(phraseGroupName,
         id: selectedPhrase.id,
@@ -56,11 +55,11 @@ class PhraseListPageVM extends BaseViewModel<String> {
 
     if (result == null) return;
 
-    if (!result.isDeleted && result.phrase.groupName == phraseGroupName) {
-      notify(() => phrases[selectedIndex] = result.phrase);
+    if (!result.isDeleted && result.phrase?.groupName == phraseGroupName) {
+      notify(() => phrases[selectedIndex!] = result.phrase!);
     } else {
       notify(() {
-        phrases.removeAt(selectedIndex);
+        phrases.removeAt(selectedIndex!);
         selectedIndex = null;
       });
     }

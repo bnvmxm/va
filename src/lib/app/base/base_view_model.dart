@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 enum ViewModelState { busy, ready }
 
 abstract class BaseViewModel<TArgument> with ChangeNotifier {
-  ViewModelState _state;
+  ViewModelState? _state;
 
   bool get isReady => _state != null && _state == ViewModelState.ready;
   bool get isBusy => _state != null && _state == ViewModelState.busy;
@@ -14,11 +14,10 @@ abstract class BaseViewModel<TArgument> with ChangeNotifier {
     });
   }
 
-  Future Function(TArgument argument) get initializer;
+  Future<void> Function(TArgument? argument) get initializer;
 
-  Future initialize({TArgument argument}) async {
-    notifyWhen(() => initializer(argument), asBusy: true);
-  }
+  Future<void> initialize({TArgument? argument}) =>
+      notifyWhen(() => initializer(argument), asBusy: true);
 
   void invalidate() {
     notifyListeners();

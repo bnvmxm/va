@@ -1,17 +1,18 @@
 // ignore_for_file: use_setters_to_change_properties
 
 import 'dart:collection';
+
 import 'package:flutter/material.dart';
 import 'package:vocabulary_advancer/app/base/base_view_model.dart';
 import 'package:vocabulary_advancer/app/base/form_validation.dart';
 import 'package:vocabulary_advancer/app/phrase_editor_page.dart';
 import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/shared/root.dart';
+import 'package:vocabulary_advancer/shared/svc.dart';
 
 part 'phrase_editor_page_vm.navigation.dart';
 
 class PhraseEditorPageVM extends BaseViewModel<PhraseEditorPageArgument> with FormValidation {
-  PhraseEditorPageArgument initialValues;
+  PhraseEditorPageArgument? initialValues;
 
   String phraseGroupName = '';
   String id = '';
@@ -27,16 +28,14 @@ class PhraseEditorPageVM extends BaseViewModel<PhraseEditorPageArgument> with Fo
   bool get isNewPhrase => id.isEmpty;
 
   @override
-  Future Function(PhraseEditorPageArgument argument) get initializer => (argument) async {
+  Future Function(PhraseEditorPageArgument? argument) get initializer => (argument) async {
         initialValues = argument;
-        phraseGroupName = initialValues.phraseGroupName ?? '';
-        id = initialValues.id ?? '';
-        phrase = initialValues.phrase ?? '';
-        pronunciation = initialValues.pronunciation ?? '';
-        definition = initialValues.definition ?? '';
-        if (initialValues.examples?.isNotEmpty ?? false) {
-          examples = List.from(initialValues.examples);
-        }
+        phraseGroupName = initialValues?.phraseGroupName ?? '';
+        id = initialValues?.id ?? '';
+        phrase = initialValues?.phrase ?? '';
+        pronunciation = initialValues?.pronunciation ?? '';
+        definition = initialValues?.definition ?? '';
+        examples = List.from(initialValues?.examples ?? <String>[]);
 
         phraseGroupsKnown = svc.repPhraseGroup.findKnownNames().toList();
       };
@@ -45,9 +44,8 @@ class PhraseEditorPageVM extends BaseViewModel<PhraseEditorPageArgument> with Fo
     notify(() => phraseGroupName = value);
   }
 
-  String validatorForPhrase(String value, String validationMessage) {
-    return validationMessageWhenEmpty(value: value, messageWhenEmpty: () => validationMessage);
-  }
+  String? validatorForPhrase(String? value, String validationMessage) =>
+      validationMessageWhenEmpty(value: value, messageWhenEmpty: () => validationMessage);
 
   void updatePhrase(String value) {
     phrase = value;
@@ -58,21 +56,20 @@ class PhraseEditorPageVM extends BaseViewModel<PhraseEditorPageArgument> with Fo
     pronunciation = value;
   }
 
-  String validatorForDefinition(String value, String validationMessage) {
-    return validationMessageWhenEmpty(value: value, messageWhenEmpty: () => validationMessage);
-  }
+  String? validatorForDefinition(String? value, String validationMessage) =>
+      validationMessageWhenEmpty(value: value, messageWhenEmpty: () => validationMessage);
 
   void updateDefinition(String value) {
     definition = value;
     validateInlineIfNeeded();
   }
 
-  String validatorForExamples(String validationMessage) =>
+  String? validatorForExamples(String validationMessage) =>
       examples.isEmpty ? validationMessage : null;
 
-  void addExample(String value) {
+  void addExample(String? value) {
     if (value?.isNotEmpty ?? false) {
-      notify(() => examples.add(value));
+      notify(() => examples.add(value!));
       validateInlineIfNeeded();
     }
   }
@@ -95,7 +92,7 @@ class PhraseEditorPageVM extends BaseViewModel<PhraseEditorPageArgument> with Fo
 
       final result = isNewPhrase
           ? svc.repPhrase.create(phraseGroupName, phrase, pronunciation, definition, examples)
-          : svc.repPhrase.update(initialValues.phraseGroupName, phraseGroupName, id, phrase,
+          : svc.repPhrase.update(initialValues?.phraseGroupName, phraseGroupName, id, phrase,
               pronunciation, definition, examples);
 
       backWithResult(PhraseEditorPageResult.completed(result));

@@ -8,21 +8,21 @@ class FormValidation {
   bool needInlineValidation = false;
 
   bool validate() {
-    needInlineValidation = !formKey.currentState.validate();
-    return !needInlineValidation;
+    final ok = formKey.currentState?.validate() ?? true;
+    needInlineValidation = !ok;
+    return ok;
   }
 
   @protected
   void validateInlineIfNeeded() {
-    if (needInlineValidation && formKey.currentState.validate()) {
+    if (needInlineValidation && formKey.currentState != null && formKey.currentState!.validate()) {
       needInlineValidation = false;
     }
   }
 
   @protected
-  String validationMessageWhenEmpty(
-      {@required String value, @required String Function() messageWhenEmpty}) {
-    final val = value.trim();
+  String? validationMessageWhenEmpty({String? value, required String Function() messageWhenEmpty}) {
+    final val = value?.trim() ?? '';
 
     if (val.isEmpty) return messageWhenEmpty();
     return null;

@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:vocabulary_advancer/app/base/va_page.dart';
 import 'package:vocabulary_advancer/app/common/empty.dart';
 import 'package:vocabulary_advancer/app/common/stat_target.dart';
+import 'package:vocabulary_advancer/app/i18n/strings.g.dart';
 import 'package:vocabulary_advancer/app/phrase_list_page_vm.dart';
-import 'package:vocabulary_advancer/app/base/va_page.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
-import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/shared/root.dart';
 import 'package:vocabulary_advancer/core/extensions.dart';
+import 'package:vocabulary_advancer/core/model.dart';
+import 'package:vocabulary_advancer/shared/svc.dart';
 
 class PhraseListPage extends VAPageWithArgument<String, PhraseListPageVM> {
-  PhraseListPage({@required String groupName}) : super(groupName);
+  PhraseListPage({required String groupName}) : super(groupName);
 
   @override
   PhraseListPageVM createVM() => svc.vmPhraseListPage;
@@ -21,14 +22,12 @@ class PhraseListPage extends VAPageWithArgument<String, PhraseListPageVM> {
       );
 
   @override
-  Widget buildBody(BuildContext context, PhraseListPageVM vm) {
-    return vm.phrases.isNotEmpty
-        ? ListView.separated(
-            itemCount: vm.phrases.length,
-            itemBuilder: (context, i) => _buildPhraseItem(context, vm, i, vm.phrases[i]),
-            separatorBuilder: (context, i) => const Divider(indent: 16, endIndent: 16))
-        : Empty();
-  }
+  Widget buildBody(BuildContext context, PhraseListPageVM vm) => vm.phrases.isNotEmpty
+      ? ListView.separated(
+          itemCount: vm.phrases.length,
+          itemBuilder: (context, i) => _buildPhraseItem(context, vm, i, vm.phrases[i]),
+          separatorBuilder: (context, i) => const Divider(indent: 16, endIndent: 16))
+      : Empty();
 
   Widget _buildPhraseItem(BuildContext context, PhraseListPageVM vm, int index, Phrase item) =>
       ListTileTheme(
@@ -58,13 +57,13 @@ class PhraseListPage extends VAPageWithArgument<String, PhraseListPageVM> {
         if (vm.anySelected)
           IconButton(
               icon: Icon(Icons.edit, color: VATheme.of(context).colorAccentVariant),
-              tooltip: svc.i18n.labelsEdit,
+              tooltip: Translations.of(context).labels.Edit,
               onPressed: () async {
                 await vm.navigateToEditPhrase();
               }),
         IconButton(
             icon: Icon(Icons.plus_one),
-            tooltip: svc.i18n.labelsAdd,
+            tooltip: Translations.of(context).labels.Add,
             onPressed: () async {
               await vm.navigateToAddPhrase();
             })

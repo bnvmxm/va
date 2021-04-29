@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:vocabulary_advancer/app/base/va_page.dart';
 import 'package:vocabulary_advancer/app/common/empty.dart';
 import 'package:vocabulary_advancer/app/common/phrase_group_grid.dart';
+import 'package:vocabulary_advancer/app/i18n/strings.g.dart';
 import 'package:vocabulary_advancer/app/phrases_group_grid_page_vm.dart';
-import 'package:vocabulary_advancer/app/base/va_page.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
-import 'package:vocabulary_advancer/shared/root.dart';
+import 'package:vocabulary_advancer/shared/svc.dart';
 
 class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
   @override
@@ -12,7 +13,8 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
 
   @override
   AppBar buildAppBar(BuildContext context, PhraseGroupGridPageVM vm) => AppBar(
-        title: Text(svc.i18n.titlesCollections, style: VATheme.of(context).textHeadline5),
+        title: Text(Translations.of(context).titles.Collections,
+            style: VATheme.of(context).textHeadline5),
         actions: _buildAppBarActions(context, vm),
       );
 
@@ -21,9 +23,9 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
       vm.isNotEmpty ? PhraseGroupGridView() : Empty();
 
   @override
-  Widget buildFAB(BuildContext context, PhraseGroupGridPageVM vm) => vm.anySelected
+  Widget? buildFAB(BuildContext context, PhraseGroupGridPageVM vm) => vm.anySelected
       ? FloatingActionButton(
-          tooltip: svc.i18n.labelsExercise,
+          tooltip: Translations.of(context).labels.Exercise,
           backgroundColor: vm.anySelectedAndNotEmpty
               ? VATheme.of(context).colorAccentVariant
               : VATheme.of(context).colorBackgroundCard,
@@ -39,25 +41,22 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
   List<Widget> _buildAppBarActions(BuildContext context, PhraseGroupGridPageVM vm) => [
         if (vm.anySelected)
           IconButton(
-              icon: Icon(Icons.view_list,
-                  color: vm.anySelectedAndNotEmpty
-                      ? VATheme.of(context).colorAccentVariant
-                      : VATheme.of(context).colorPrimaryLight),
-              tooltip: svc.i18n.labelsView,
+              icon: Icon(Icons.view_list, color: VATheme.of(context).colorAccentVariant),
+              tooltip: Translations.of(context).labels.View,
               onPressed: () async {
                 await vm.navigateToGroup();
               }),
         if (vm.anySelected)
           IconButton(
               icon: Icon(Icons.edit, color: VATheme.of(context).colorAccentVariant),
-              tooltip: svc.i18n.labelsEdit,
+              tooltip: Translations.of(context).labels.Edit,
               onPressed: () async {
                 await vm.navigateToEditGroup();
               }),
         if (!vm.anySelected)
           IconButton(
               icon: Icon(Icons.plus_one),
-              tooltip: svc.i18n.labelsAdd,
+              tooltip: Translations.of(context).labels.Add,
               onPressed: () async {
                 await vm.navigateToAddGroup();
               }),
@@ -71,7 +70,7 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
                     Icon(Icons.language),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(svc.i18n.labelsLanguage),
+                      child: Text(Translations.of(context).labels.Language),
                     )
                   ],
                 )),
@@ -82,7 +81,7 @@ class PhraseGroupGridPage extends VAPage<PhraseGroupGridPageVM> {
                     Icon(Icons.info),
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(svc.i18n.labelsAbout),
+                      child: Text(Translations.of(context).labels.About),
                     )
                   ],
                 ))

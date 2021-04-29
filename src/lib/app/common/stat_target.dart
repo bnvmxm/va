@@ -7,7 +7,7 @@ class StatTarget extends StatelessWidget {
 
   final Duration diff;
   final double size;
-  final TextStyle textStyle;
+  final TextStyle? textStyle;
 
   Icon getIcon(BuildContext context) => diff.isTargetFar()
       ? Icon(Icons.assignment_turned_in, color: VATheme.of(context).colorAccentVariant, size: size)

@@ -1,32 +1,79 @@
-import 'package:logger/logger.dart';
-import 'package:vocabulary_advancer/shell/environment.dart';
+import 'package:flutter/foundation.dart';
+import 'package:logging/logging.dart';
+import 'package:vocabulary_advancer/shared/settings.dart';
 
-const Level _devLevel = Level.verbose;
-const Level _relLevel = Level.warning;
+// ignore_for_file: avoid_print
 
 class AppLogger {
-  AppLogger()
-      : _level = Environment.current().isDev ? _devLevel : _relLevel,
-        _logger = Logger(
-            level: Environment.current().isDev ? _devLevel : _relLevel,
-            output: ConsoleOutput(),
-            printer: SimplePrinter());
+  AppLogger._();
 
-  final Level _level;
-  final Logger _logger;
+  factory AppLogger.init() {
+    Logger.root.level = Level.INFO;
+    Logger.root.onRecord.listen((rec) {
+      if (kDebugMode && rec.level >= Logger.root.level) {
+        final msg = rec.message.replaceAll('\n', ' ');
+        print('${rec.level.name} | ${rec.time} | ${rec.loggerName} | $msg');
+      }
+    });
 
-  void verbose(String Function() str) {
-    if (_level.index > Level.verbose.index) return;
-    _logger.v(str?.call());
+    return AppLogger._();
   }
 
-  void debug(String Function() str) {
-    if (_level.index > Level.debug.index) return;
-    _logger.d(str?.call());
+  final Map<String, Logger> _namedLoggers = {};
+
+  /// (Verbose) Log a message at level [Level.FINEST].
+  /// Consider for all possible noisy messages like read/write to local cache.
+  void v(String Function() message, [String? logName]) {
+    if (settings.isLogEnabled) {
+      _logInternally(Level.FINEST, logName, message);
+    }
   }
 
-  void warning(String Function() str, [Error err, StackTrace st]) {
-    if (_level.index > Level.warning.index) return;
-    _logger.w(str?.call(), err, st);
+  /// (Trace) Log a message at level [Level.FINER].
+  /// Consider for HTTP requests or other tracing info.
+  void t(String Function() message, [String? logName]) {
+    if (settings.isLogEnabled) {
+      _logInternally(Level.FINER, logName, message);
+    }
+  }
+
+  /// (Debug) Log a message at level [Level.FINE].
+  /// Consider for HTTP responses.
+  void d(String Function() message, [String? logName]) {
+    if (settings.isLogEnabled) {
+      _logInternally(Level.FINE, logName, message);
+    }
+  }
+
+  /// (Info) Log a message at level [Level.INFO].
+  /// Consider for meaningful logic-related messages.
+  void i(String Function() message, [String? logName]) {
+    if (settings.isLogEnabled) {
+      _logInternally(Level.INFO, logName, message);
+    }
+  }
+
+  /// (Warning) Log a message at level [Level.WARNING].
+  /// Consider for exceptions and errors handled when fallback is possible.
+  void w(String Function() message, [String? logName]) {
+    if (settings.isLogEnabled) {
+      _logInternally(Level.WARNING, logName, message);
+    }
+  }
+
+  /// (Error) Log a message at level [Level.SEVERE].
+  /// Consider for unhandled exceptions and errors which definitely cause user flow disruption.
+  void e(String Function() message, {String? logName}) {
+    if (settings.isLogEnabled) {
+      _logInternally(Level.SEVERE, logName, message);
+    }
+  }
+
+  void _logInternally(Level level, String? logName, String Function() message) {
+    final logNameResolved = logName ?? 'APP';
+    if (!_namedLoggers.containsKey(logNameResolved)) {
+      _namedLoggers[logNameResolved] = Logger(logNameResolved);
+    }
+    _namedLoggers[logNameResolved]!.log(level, message);
   }
 }

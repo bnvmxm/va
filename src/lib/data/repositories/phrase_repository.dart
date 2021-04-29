@@ -1,7 +1,8 @@
-import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/shared/root.dart';
+import 'package:collection/collection.dart';
 import 'package:vocabulary_advancer/core/extensions.dart';
+import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/data/sample_data_provider.dart';
+import 'package:vocabulary_advancer/shared/svc.dart';
 
 part 'phrase_repository.m.dart';
 
@@ -11,7 +12,7 @@ class PhraseRepository {
     return groupFound == null ? [] : groupFound.phrases.map((x) => x.toModel(groupName));
   }
 
-  Phrase getForExercise(String groupName, {String exceptId = ''}) {
+  Phrase? getForExercise(String? groupName, {String? exceptId}) {
     final groupFound = _findGroup(groupName);
     if (groupFound == null) return null;
 
@@ -21,11 +22,11 @@ class PhraseRepository {
     if (targeted.isEmpty) return null;
 
     return targeted.length == 1
-        ? targeted[0].toModel(groupName)
-        : targeted[DateTime.now().millisecondsSinceEpoch % targeted.length].toModel(groupName);
+        ? targeted[0].toModel(groupName!)
+        : targeted[DateTime.now().millisecondsSinceEpoch % targeted.length].toModel(groupName!);
   }
 
-  Phrase create(String groupName, String phrase, String pronunciation, String definition,
+  Phrase? create(String groupName, String phrase, String pronunciation, String definition,
       List<String> examples) {
     final groupFound = _findGroup(groupName);
     if (groupFound == null) return null;
@@ -53,14 +54,14 @@ class PhraseRepository {
     groupFound.phrases.removeWhere((phrase) => phrase.id == phraseId);
   }
 
-  Phrase update(String oldGroupName, String newGroupName, String phraseId, String phrase,
+  Phrase? update(String? oldGroupName, String newGroupName, String phraseId, String phrase,
       String pronunciation, String definition, List<String> examples) {
     final groupFound = oldGroupName != newGroupName
         ? _movePhrase(phraseId, oldGroupName, newGroupName)
         : _findGroup(newGroupName);
     if (groupFound == null) return null;
 
-    final dto = groupFound.phrases.firstWhere((p) => p.id == phraseId, orElse: () => null);
+    final dto = groupFound.phrases.firstWhereOrNull((p) => p.id == phraseId);
     if (dto == null) return null;
 
     dto.phrase = phrase;
@@ -72,30 +73,30 @@ class PhraseRepository {
     return dto.toModel(newGroupName);
   }
 
-  Phrase updateStat(String groupName, String phraseId, int newRate, Duration cooldownRange) {
+  Phrase? updateStat(String? groupName, String phraseId, int newRate, Duration cooldownRange) {
     final groupFound = _findGroup(groupName);
     if (groupFound == null) return null;
 
-    final dto = groupFound.phrases.firstWhere((p) => p.id == phraseId, orElse: () => null);
+    final dto = groupFound.phrases.firstWhereOrNull((p) => p.id == phraseId);
     if (dto == null) return null;
 
     dto.rate = newRate;
     dto.targetUtc = DateTime.now().toUtc().add(cooldownRange);
-    final result = dto.toModel(groupName);
+    final result = dto.toModel(groupName!);
 
     if (!svc.dataProvider.dataStat.containsKey(phraseId)) {
       svc.dataProvider.dataStat[phraseId] = [];
     }
-    svc.dataProvider.dataStat[phraseId].add(DataRate(phraseId, newRate, result.updatedUtc));
+    svc.dataProvider.dataStat[phraseId]!.add(DataRate(phraseId, newRate, result.updatedUtc));
 
     return result;
   }
 
-  DataGroup _movePhrase(String phraseId, String oldGroupName, String newGroupName) {
+  DataGroup? _movePhrase(String phraseId, String? oldGroupName, String newGroupName) {
     final oldGroupFound = _findGroup(oldGroupName);
     if (oldGroupFound == null) return null;
 
-    final phrase = oldGroupFound.phrases.firstWhere((p) => p.id == phraseId, orElse: () => null);
+    final phrase = oldGroupFound.phrases.firstWhereOrNull((p) => p.id == phraseId);
     if (phrase == null) return null;
 
     final newGroupFound = _findGroup(newGroupName);
@@ -107,6 +108,6 @@ class PhraseRepository {
     return newGroupFound;
   }
 
-  DataGroup _findGroup(String groupName) =>
-      svc.dataProvider.dataGroups.firstWhere((x) => x.name == groupName, orElse: () => null);
+  DataGroup? _findGroup(String? groupName) =>
+      svc.dataProvider.dataGroups.firstWhereOrNull((x) => x.name == groupName);
 }

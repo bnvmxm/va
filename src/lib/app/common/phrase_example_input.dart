@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:vocabulary_advancer/app/i18n/strings.g.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
-import 'package:vocabulary_advancer/shared/root.dart';
 
 class PhraseExampleTextFormField extends StatefulWidget {
   const PhraseExampleTextFormField(
-      {@required this.onSaved,
-      @required this.onValidate,
-      @required this.focusNode,
+      {required this.onSaved,
+      required this.onValidate,
+      required this.focusNode,
       this.labelText,
       this.maxLines = 3,
       this.iconSize = 32,
-      Key key})
+      Key? key})
       : super(key: key);
 
-  final String labelText;
+  final String? labelText;
   final FocusNode focusNode;
   final int maxLines;
   final double iconSize;
 
   final void Function(String value) onSaved;
-  final String Function(String value) onValidate;
+  final String? Function(String? value) onValidate;
 
   @override
   State<PhraseExampleTextFormField> createState() => _PhraseExampleTextFormFieldState();
@@ -34,8 +34,8 @@ class _PhraseExampleTextFormFieldState extends State<PhraseExampleTextFormField>
             padding: EdgeInsets.only(right: _exampleController.text.isEmpty ? 0 : 64.0),
             child: TextFormField(
                 controller: _exampleController,
-                decoration:
-                    InputDecoration(labelText: widget.labelText ?? svc.i18n.labelsAddExample),
+                decoration: InputDecoration(
+                    labelText: widget.labelText ?? Translations.of(context).labels.AddExample),
                 minLines: 1,
                 maxLines: widget.maxLines,
                 validator: widget.onValidate,

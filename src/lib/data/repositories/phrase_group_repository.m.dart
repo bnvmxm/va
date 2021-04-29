@@ -3,20 +3,17 @@ part of 'phrase_group_repository.dart';
 class _Stat {
   int phraseCount = 0;
   int minRate = 0;
-  DateTime closeTargetUtc = def.minDateTimeUtc;
+  DateTime closeTargetUtc = settings.minDateTimeUtc;
 }
 
 extension on DataGroup {
   PhraseGroup toModel() {
-    final result = PhraseGroup(name);
     final stat = phrases.fold(_Stat(), reduce);
-    if (stat.closeTargetUtc == def.minDateTimeUtc) {
+    if (stat.closeTargetUtc == settings.minDateTimeUtc) {
       stat.closeTargetUtc = DateTime.now().toUtc();
     }
-    result.phraseCount = stat.phraseCount;
-    result.minRate = stat.minRate;
-    result.closeTargetUtc = stat.closeTargetUtc;
-    return result;
+    return PhraseGroup(name,
+        phraseCount: stat.phraseCount, minRate: stat.minRate, closeTargetUtc: stat.closeTargetUtc);
   }
 
   _Stat reduce(_Stat current, DataPhrase item) {
@@ -26,7 +23,7 @@ extension on DataGroup {
       current.minRate = item.rate;
     }
 
-    if (current.closeTargetUtc == def.minDateTimeUtc ||
+    if (current.closeTargetUtc == settings.minDateTimeUtc ||
         current.closeTargetUtc.isAfter(item.targetUtc)) {
       current.closeTargetUtc = item.targetUtc;
     }

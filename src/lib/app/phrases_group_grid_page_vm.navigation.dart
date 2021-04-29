@@ -1,31 +1,31 @@
 part of 'phrases_group_grid_page_vm.dart';
 
-Route routePhraseGroupGridPage() => MaterialPageRoute(builder: (context) => PhraseGroupGridPage());
+Route routePhraseGroupGridPage() =>
+    MaterialPageRoute<void>(builder: (context) => PhraseGroupGridPage());
 
 extension on PhraseGroupGridPageVM {
-  Future forwardToAbout() {
-    return keys.navigation.currentState.pushNamed(navigationRouteAbout);
-  }
+  Future forwardToAbout() async =>
+      svc.keys.navigationRoot.currentState?.pushNamed(navigationRouteAbout);
 
-  Future<PhraseGroupEditorPageResult> forwardToAddPhraseGroup() {
-    return keys.navigation.currentState.pushNamed(navigationRouteAddPhraseGroup);
-  }
+  Future<PhraseGroupEditorPageResult?> forwardToAddPhraseGroup() async =>
+      svc.keys.navigationRoot.currentState?.pushNamed(navigationRouteAddPhraseGroup);
 
-  Future<PhraseGroupEditorPageResult> forwardToEditPhraseGroup(String groupName) {
+  Future<PhraseGroupEditorPageResult?> forwardToEditPhraseGroup(String groupName) async {
     assert(groupName.isNotEmpty);
-    return keys.navigation.currentState.pushNamed<PhraseGroupEditorPageResult>(
+    return svc.keys.navigationRoot.currentState?.pushNamed<PhraseGroupEditorPageResult>(
         navigationRouteEditPhraseGroup,
         arguments: groupName);
   }
 
-  Future forwardToPhraseGroup(String groupName) {
+  Future forwardToPhraseGroup(String groupName) async {
     assert(groupName.isNotEmpty);
-    return keys.navigation.currentState.pushNamed(navigationRoutePhraseGroup, arguments: groupName);
+    return svc.keys.navigationRoot.currentState
+        ?.pushNamed(navigationRoutePhraseGroup, arguments: groupName);
   }
 
-  Future forwardToExercise(String groupName, {bool exampleFirst = true}) {
+  Future forwardToExercise(String groupName, {bool exampleFirst = true}) async {
     assert(groupName.isNotEmpty);
-    return keys.navigation.currentState.pushNamed(navigationRouteExercise,
+    return svc.keys.navigationRoot.currentState?.pushNamed(navigationRouteExercise,
         arguments: PhraseExercisePageArgument(groupName, isExerciseFirst: exampleFirst));
   }
 }

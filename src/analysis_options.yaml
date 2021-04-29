@@ -1,14 +1,90 @@
-include: package:lint/analysis_options.yaml
-
+#Source of lint rules:  https://dart-lang.github.io/linter/lints/
+#Prefer rules defined with '#'
 analyzer:
-  exclude:
-    - lib/**.g.dart
-    - lib/**.chopper.dart
+  strong-mode:
+    implicit-casts: false
+    implicit-dynamic: false
   errors:
-      todo: warning
-      dead_code: info
-      
+    avoid_as: error
+    unnecessary_const: info
+    todo: warning
+    dead_code: error
+
+  exclude:
+    - "lib/app/i18n"
+    - "lib/**/*.g.dart"
+    - "**/*.freezed.dart"
+
 linter:
   rules:
+    - avoid_print
+    #pedantic
+    - avoid_empty_else
+    - avoid_init_to_null
+    - await_only_futures
+    - avoid_relative_lib_imports
+    - avoid_null_checks_in_equality_operators
+    - avoid_void_async
+    - avoid_return_types_on_setters
+    - avoid_shadowing_type_parameters
+    - avoid_types_as_parameter_names
+    - curly_braces_in_flow_control_structures
+    - empty_catches
+    - empty_constructor_bodies
+    - library_names
+    - library_prefixes
+    - no_duplicate_case_values
+    - null_closures
+    - prefer_contains
+    - prefer_equal_for_default_values
+    - prefer_is_empty
+    - prefer_is_not_empty
+    - prefer_iterable_whereType
+    - recursive_getters
+    - slash_for_doc_comments
+    - type_init_formals
+    - unawaited_futures
+    - unnecessary_const
+    - unnecessary_new
+    - unnecessary_null_in_if_null_operators
+    - unrelated_type_equality_checks
+    - use_rethrow_when_possible
+    - valid_regexps
+    #Effective Dart: Style
+    - camel_case_types
+    - file_names
+    - non_constant_identifier_names
+    - constant_identifier_names #
+    - directives_ordering
+    #Effective Dart: Documentation
+    - package_api_docs #
+    - comment_references
+    #Effective Dart: Usage
+    - prefer_adjacent_string_concatenation
+    - prefer_interpolation_to_compose_strings #
+    - unnecessary_brace_in_string_interps
+    - prefer_collection_literals
+    - avoid_function_literals_in_foreach_calls
+    - prefer_function_declarations_over_variables
+    - unnecessary_lambdas
+    - unnecessary_getters_setters
+    - prefer_expression_function_bodies
+    - unnecessary_this
+    - avoid_catches_without_on_clauses
+    #Effective Dart: Design
+    - use_to_and_as_if_applicable #
     - one_member_abstracts
-    - sort_constructors_first
+    - avoid_classes_with_only_static_members
+    - prefer_final_fields
+    - use_setters_to_change_properties
+    - avoid_setters_without_getters
+    - avoid_returning_null
+    - avoid_returning_this
+    - type_annotate_public_apis
+    - prefer_typing_uninitialized_variables
+    - omit_local_variable_types
+    - prefer_generic_function_type_aliases
+    - avoid_private_typedef_functions #
+    - use_function_type_syntax_for_parameters
+    - avoid_positional_boolean_parameters
+    - hash_and_equals

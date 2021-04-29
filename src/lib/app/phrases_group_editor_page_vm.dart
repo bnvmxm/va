@@ -3,7 +3,7 @@ import 'package:vocabulary_advancer/app/base/base_view_model.dart';
 import 'package:vocabulary_advancer/app/base/form_validation.dart';
 import 'package:vocabulary_advancer/app/phrases_group_editor_page.dart';
 import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/shared/root.dart';
+import 'package:vocabulary_advancer/shared/svc.dart';
 
 part 'phrases_group_editor_page_vm.navigation.dart';
 
@@ -14,12 +14,13 @@ class PhraseGroupEditorPageVM extends BaseViewModel<String> with FormValidation 
   bool get isNewGroup => initialGroupName.isEmpty;
 
   @override
-  Future Function(String argument) get initializer => (argument) async {
+  Future Function(String? argument) get initializer => (argument) async {
         initialGroupName = argument ?? '';
         currentGroupName = initialGroupName;
       };
 
-  String validatorForName(String value, String messageWhenEmpty, String messageWhenAlreadyExists) {
+  String? validatorForName(
+      String? value, String messageWhenEmpty, String messageWhenAlreadyExists) {
     final empty =
         validationMessageWhenEmpty(value: value, messageWhenEmpty: () => messageWhenEmpty);
 

@@ -7,15 +7,12 @@ import 'package:vocabulary_advancer/core/model.dart';
 
 class PhraseGroupGridView extends StatelessWidget {
   @override
-  Widget build(BuildContext context) {
-    return OrientationBuilder(builder: (context, orientation) {
-      return orientation == Orientation.portrait
+  Widget build(BuildContext context) => OrientationBuilder(
+      builder: (context, orientation) => orientation == Orientation.portrait
           ? _buildGridView(isPortrait: true)
-          : SafeArea(child: _buildGridView(isPortrait: false));
-    });
-  }
+          : SafeArea(child: _buildGridView(isPortrait: false)));
 
-  Widget _buildGridView({bool isPortrait}) => Consumer<PhraseGroupGridPageVM>(
+  Widget _buildGridView({required bool isPortrait}) => Consumer<PhraseGroupGridPageVM>(
       builder: (context, vm, child) => GridView.count(
           crossAxisCount: isPortrait ? 1 : 2,
           crossAxisSpacing: 8.0,

@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:vocabulary_advancer/app/phrase_exercise_page.dart';
-import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/core/extensions.dart';
 import 'package:vocabulary_advancer/app/base/base_view_model.dart';
-import 'package:vocabulary_advancer/shared/root.dart';
+import 'package:vocabulary_advancer/app/phrase_exercise_page.dart';
+import 'package:vocabulary_advancer/core/extensions.dart';
+import 'package:vocabulary_advancer/core/model.dart';
+import 'package:vocabulary_advancer/shared/svc.dart';
 
 part 'phrase_exercise_page_vm.navigation.dart';
 
 class PhraseExercisePageVM extends BaseViewModel<PhraseExercisePageArgument> {
-  Phrase current;
-  String groupName;
-  bool isExerciseFirst;
-  bool isOpen;
-  bool isOpening;
+  Phrase? current;
+  String? groupName;
+  bool isExerciseFirst = true;
+  bool isOpen = false;
+  bool isOpening = false;
 
   bool get isAny => current != null;
 
   @override
-  Future Function(PhraseExercisePageArgument argument) get initializer => (argument) async {
-        groupName = argument.groupName;
-        isExerciseFirst = argument.isExerciseFirst;
+  Future Function(PhraseExercisePageArgument? argument) get initializer => (argument) async {
+        groupName = argument?.groupName;
+        isExerciseFirst = argument?.isExerciseFirst ?? true;
         isOpen = false;
         isOpening = false;
         await _fetchNextPhrase();
@@ -42,16 +42,13 @@ class PhraseExercisePageVM extends BaseViewModel<PhraseExercisePageArgument> {
   }
 
   Future next(RateFeedback feedback) async {
-    assert(isAny);
+    if (!isAny) return;
 
-    final curRate = current.rate;
-    final curTarget = current.targetUtc;
-    final newRate = current.rate.asRate(feedback);
+    final newRate = current!.rate.asRate(feedback);
     final newDuration = newRate.asCooldown(feedback);
-    svc.logger.debug(() =>
-        '${current.phrase}: $curRate -> $newRate, ${curTarget.difference(current.updatedUtc)} -> $newDuration');
+    svc.log.d(() => '${current!.phrase}: ${current!.rate} -> $newRate, $newDuration', 'STAT');
 
-    svc.repPhrase.updateStat(groupName, current.id, newRate, newDuration);
+    svc.repPhrase.updateStat(groupName, current!.id, newRate, newDuration);
     await _fetchNextPhrase();
     isOpen = false;
     isOpening = false;

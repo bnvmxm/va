@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:vocabulary_advancer/app/common/rotatable.dart';
-import 'package:vocabulary_advancer/app/themes/va_theme.dart';
-import 'package:vocabulary_advancer/app/themes/card_decoration.dart';
-import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/app/phrase_exercise_page_vm.dart';
 import 'package:vocabulary_advancer/app/base/va_page.dart';
-import 'package:vocabulary_advancer/shared/root.dart';
+import 'package:vocabulary_advancer/app/common/rotatable.dart';
+import 'package:vocabulary_advancer/app/i18n/strings.g.dart';
+import 'package:vocabulary_advancer/app/phrase_exercise_page_vm.dart';
+import 'package:vocabulary_advancer/app/themes/card_decoration.dart';
+import 'package:vocabulary_advancer/app/themes/va_theme.dart';
+import 'package:vocabulary_advancer/core/model.dart';
+import 'package:vocabulary_advancer/shared/svc.dart';
 
 class PhraseExercisePage
     extends VAPageWithArgument<PhraseExercisePageArgument, PhraseExercisePageVM> {
@@ -16,13 +17,13 @@ class PhraseExercisePage
 
   @override
   AppBar buildAppBar(BuildContext context, PhraseExercisePageVM vm) => AppBar(
-      title: Text(vm.groupName ?? svc.i18n.titlesExercising,
+      title: Text(vm.groupName ?? Translations.of(context).titles.Exercising,
           style: VATheme.of(context).textHeadline5));
 
   @override
   Widget buildBody(BuildContext context, PhraseExercisePageVM vm) => vm.isAny
-      ? OrientationBuilder(builder: (context, orientation) {
-          return orientation == Orientation.portrait
+      ? OrientationBuilder(
+          builder: (context, orientation) => orientation == Orientation.portrait
               ? Column(children: [
                   _buildAnimatedCard(context, vm),
                   Expanded(
@@ -45,21 +46,20 @@ class PhraseExercisePage
                         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                         children: _buildActionButtons(context, false, vm).reversed.toList(),
                       ))
-                ]);
-        })
+                ]))
       : _buildEmptyBody(context);
 
   Widget _buildAnimatedCard(BuildContext context, PhraseExercisePageVM vm) => vm.isOpen
-      ? _buildCard(context, vm.current.phrase, isOpen: true)
+      ? _buildCard(context, vm.current!.phrase, isOpen: true)
       : vm.isOpening
           ? Rotatable(
               onRotated: () => vm.setCardOpened(),
-              child: _buildCard(context, vm.current.definition, isOpening: true))
+              child: _buildCard(context, vm.current!.definition, isOpening: true))
           : GestureDetector(
               onTap: () => vm.setCardOpening(),
               child: _buildCard(
                 context,
-                vm.current.definition,
+                vm.current!.definition,
               ));
 
   Widget _buildCard(BuildContext context, String value,
@@ -81,7 +81,7 @@ class PhraseExercisePage
                       padding: const EdgeInsets.only(left: 16.0),
                       child: Visibility(
                         visible: !isOpening,
-                        child: Text(value ?? '',
+                        child: Text(value,
                             style: isOpen
                                 ? VATheme.of(context).textAccentHeadline5
                                 : VATheme.of(context).textSubtitle2),
@@ -95,12 +95,12 @@ class PhraseExercisePage
             padding: const EdgeInsets.all(16.0),
             decoration: cardDecoration(context),
             child: ListView.separated(
-                itemCount: vm.current.examples.length,
+                itemCount: vm.current!.examples.length,
                 separatorBuilder: (context, i) => const Divider(indent: 8.0, endIndent: 8.0),
                 itemBuilder: (context, i) => Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child: Text(vm.current.examples[i] ?? '',
-                          style: VATheme.of(context).textBodyText2),
+                      child:
+                          Text(vm.current!.examples[i], style: VATheme.of(context).textBodyText2),
                     ))),
       );
 
@@ -109,31 +109,31 @@ class PhraseExercisePage
       [
         IconButton(
             iconSize: 24,
-            tooltip: svc.i18n.labelsExerciseResultLow,
+            tooltip: Translations.of(context).labels.ExerciseResult.Low,
             icon: Icon(Icons.arrow_downward, color: VATheme.of(context).colorAttention),
             onPressed: () => vm.next(RateFeedback.lowTheshold)),
         if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
         IconButton(
             iconSize: 24,
-            tooltip: svc.i18n.labelsExerciseResultNegative,
+            tooltip: Translations.of(context).labels.ExerciseResult.Negative,
             icon: Icon(Icons.trending_down, color: VATheme.of(context).colorForeground),
             onPressed: () => vm.next(RateFeedback.negative)),
         if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
         IconButton(
             iconSize: 24,
-            tooltip: svc.i18n.labelsExerciseResultUncertain,
+            tooltip: Translations.of(context).labels.ExerciseResult.Uncertain,
             icon: Icon(Icons.trending_flat, color: VATheme.of(context).colorForeground),
             onPressed: () => vm.next(RateFeedback.uncertain)),
         if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
         IconButton(
             iconSize: 24,
-            tooltip: svc.i18n.labelsExerciseResultPositive,
+            tooltip: Translations.of(context).labels.ExerciseResult.Positive,
             icon: Icon(Icons.trending_up, color: VATheme.of(context).colorForeground),
             onPressed: () => vm.next(RateFeedback.positive)),
         if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
         IconButton(
             iconSize: 24,
-            tooltip: svc.i18n.labelsExerciseResultHigh,
+            tooltip: Translations.of(context).labels.ExerciseResult.High,
             icon: Icon(Icons.arrow_upward, color: VATheme.of(context).colorAccentVariant),
             onPressed: () => vm.next(RateFeedback.highThershold))
       ];
@@ -147,6 +147,6 @@ class PhraseExercisePage
             Icon(Icons.check_circle_outline,
                 size: 32, color: VATheme.of(context).colorAccentVariant),
             const SizedBox(height: 16.0),
-            Text(svc.i18n.textNoPhrase),
+            Text(Translations.of(context).text.NoPhrase),
           ]));
 }

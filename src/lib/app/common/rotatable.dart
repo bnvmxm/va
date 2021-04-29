@@ -3,18 +3,18 @@ import 'dart:math';
 import 'package:flutter/cupertino.dart';
 
 class Rotatable extends StatefulWidget {
-  const Rotatable({@required this.child, this.onRotated});
+  const Rotatable({required this.child, this.onRotated});
 
   final Widget child;
-  final Function onRotated;
+  final Function? onRotated;
 
   @override
   _RotatableState createState() => _RotatableState();
 }
 
 class _RotatableState extends State<Rotatable> with SingleTickerProviderStateMixin {
-  Animation<double> _rotation;
-  AnimationController _controller;
+  late Animation<double> _rotation;
+  late AnimationController _controller;
 
   @override
   void initState() {
@@ -23,7 +23,7 @@ class _RotatableState extends State<Rotatable> with SingleTickerProviderStateMix
     if (widget.onRotated != null) {
       _controller.addStatusListener((status) {
         if (status == AnimationStatus.completed || status == AnimationStatus.dismissed) {
-          widget.onRotated();
+          widget.onRotated!();
         }
       });
     }

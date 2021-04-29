@@ -2,15 +2,15 @@ import 'dart:core';
 
 class DataPhrase {
   DataPhrase(
-      {this.id,
-      this.phrase,
-      this.pronunciation,
-      this.definition,
-      this.examples,
-      this.rate,
-      this.targetUtc,
-      this.createdUtc,
-      this.updatedUtc});
+      {required this.id,
+      required this.phrase,
+      required this.pronunciation,
+      required this.definition,
+      required this.examples,
+      required this.rate,
+      required this.targetUtc,
+      required this.createdUtc,
+      required this.updatedUtc});
 
   String id;
   String phrase;
@@ -29,11 +29,11 @@ class DataRate {
 
   final String phraseId;
   final int rate;
-  final DateTime updatedUtc;
+  final DateTime? updatedUtc;
 }
 
 class DataGroup {
-  DataGroup({this.name, Set<DataPhrase> phrases}) : phrases = phrases ?? {};
+  DataGroup({required this.name, required this.phrases});
 
   String name;
   Set<DataPhrase> phrases;

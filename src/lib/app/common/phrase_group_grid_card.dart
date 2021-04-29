@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:vocabulary_advancer/app/common/stat_target.dart';
+import 'package:vocabulary_advancer/app/i18n/strings.g.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/core/extensions.dart';
-import 'package:vocabulary_advancer/shared/root.dart';
 
 class PhraseGroupGridCard extends StatelessWidget {
-  PhraseGroupGridCard({bool isSelected, String name, int phraseCount, DateTime closeTargetUtc})
+  PhraseGroupGridCard({bool? isSelected, String? name, int? phraseCount, DateTime? closeTargetUtc})
       : isSelected = isSelected ?? false,
         name = name ?? '',
         phraseCount = phraseCount ?? 0,
@@ -68,7 +68,8 @@ class PhraseGroupGridCard extends StatelessWidget {
                     padding: const EdgeInsets.only(right: 8.0),
                     child: Row(children: [
                       Expanded(
-                          child: Text(svc.i18n.labelsStatPhrases(phraseCount.toString()),
+                          child: Text(
+                              Translations.of(context).labels.StatPhrases(count: phraseCount),
                               style: VATheme.of(context).textCaption)),
                       if (phraseCount > 0) StatTarget(closeTargetUtc.differenceNowUtc()),
                     ]),

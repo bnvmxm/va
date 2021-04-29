@@ -10,7 +10,7 @@
         "Confirm": "Confirm"
     },
     "labels": {
-        "StatPhrases": "{count} phrases",
+        "StatPhrases": "$count phrases",
         "StatRateLearning": "Learning",
         "StatRateLearned": "Learned",
         "StatRateReviewing": "Reviewing",

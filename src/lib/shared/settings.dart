@@ -1,7 +1,9 @@
-final Definitions def = Definitions._internal();
+const bool _isLogEnabled = bool.fromEnvironment('VA_IS_LOG_ENABLED', defaultValue: false);
 
-class Definitions {
-  Definitions._internal();
+final Settings settings = Settings._internal();
+
+class Settings {
+  Settings._internal();
 
   final DateTime minDateTimeUtc = DateTime.fromMicrosecondsSinceEpoch(0, isUtc: true);
 
@@ -10,4 +12,6 @@ class Definitions {
 
   final int rateLowThreshold = 35;
   final int rateHighThreshold = 75;
+
+  bool get isLogEnabled => _isLogEnabled;
 }

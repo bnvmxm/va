@@ -10,7 +10,7 @@
         "Confirm": "Подтверждение"
     },
     "labels": {
-        "StatPhrases": "Фраз: {count}",
+        "StatPhrases": "Фраз: $count",
         "StatRateLearning": "Запоминание",
         "StatRateLearned": "Выучено",
         "StatRateReviewing": "Закрепление",
