@@ -4,7 +4,7 @@ import 'package:vocabulary_advancer/app/phrase_editor_vm.dart';
 import 'package:vocabulary_advancer/app/phrase_exercise_vm.dart';
 import 'package:vocabulary_advancer/app/phrase_list_vm.dart';
 import 'package:vocabulary_advancer/app/phrases_group_editor_vm.dart';
-import 'package:vocabulary_advancer/app/phrases_group_grid_page_vm.dart';
+import 'package:vocabulary_advancer/app/phrases_group_grid_vm.dart';
 
 const String navigationRouteRoot = '/';
 const String navigationRouteAbout = '/about';

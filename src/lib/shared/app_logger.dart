@@ -8,11 +8,12 @@ class AppLogger {
   AppLogger._();
 
   factory AppLogger.init() {
-    Logger.root.level = Level.INFO;
+    Logger.root.level = Level.FINER;
     Logger.root.onRecord.listen((rec) {
       if (kDebugMode && rec.level >= Logger.root.level) {
         final msg = rec.message.replaceAll('\n', ' ');
-        print('${rec.level.name} | ${rec.time} | ${rec.loggerName} | $msg');
+        debugPrint(
+            '${rec.level.name} | ${rec.time} | ${rec.loggerName} | $msg');
       }
     });
 

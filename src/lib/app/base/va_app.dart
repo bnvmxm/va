@@ -23,6 +23,7 @@ class _VAAppState extends State<VAApp> {
         _themeId,
         child: TranslationProvider(
           child: MaterialApp(
+              debugShowCheckedModeBanner: false,
               theme: _themeId.getMaterialThemeData(),
               localizationsDelegates: const [
                 GlobalMaterialLocalizations.delegate,

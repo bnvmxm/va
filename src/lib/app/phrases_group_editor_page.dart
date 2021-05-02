@@ -60,6 +60,7 @@ class _PhraseGroupEditorPageState extends State<PhraseGroupEditorPage> {
                                     .DeleteGroup
                               ],
                               confirmText: Translations.of(context).labels.Yes,
+                              declineText: Translations.of(context).labels.No,
                               isDestructive: true);
                           if (confirmed) {
                             _vm.deleteAndClose();

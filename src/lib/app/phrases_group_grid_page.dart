@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/common/empty.dart';
 import 'package:vocabulary_advancer/app/common/phrase_group_grid_card.dart';
 import 'package:vocabulary_advancer/app/i18n/strings.g.dart';
-import 'package:vocabulary_advancer/app/phrases_group_grid_page_vm.dart';
+import 'package:vocabulary_advancer/app/phrases_group_grid_vm.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 
@@ -18,7 +18,7 @@ class _PhraseGroupGridPageState extends State<PhraseGroupGridPage> {
   @override
   void initState() {
     super.initState();
-    _vm = PhraseGroupGridViewModel();
+    _vm = PhraseGroupGridViewModel()..init();
   }
 
   @override

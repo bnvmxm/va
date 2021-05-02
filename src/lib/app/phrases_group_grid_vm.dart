@@ -7,7 +7,7 @@ import 'package:vocabulary_advancer/app/services/navigation.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
-part 'phrases_group_grid_page_vm.navigation.dart';
+part 'phrases_group_grid_vm.nav.dart';
 
 class PhraseGroupGridModel {
   PhraseGroup? phraseGroupSelected;
@@ -71,13 +71,12 @@ class PhraseGroupGridViewModel extends Cubit<PhraseGroupGridModel> {
         ? await forwardToAddPhraseGroup()
         : await forwardToEditPhraseGroup(state.phraseGroupSelected!.name);
 
-    if (result?.group == null) return;
-    if (isNew) {
-      state.phraseGroups.add(result!.group!);
-    } else if (result!.isDeleted) {
+    if (result?.isDeleted ?? false) {
       state.removeSelected();
-    } else {
-      state.updateSelected(result.group!);
+    } else if (isNew && result?.group != null) {
+      state.phraseGroups.add(result!.group!);
+    } else if (result?.group != null) {
+      state.updateSelected(result!.group!);
     }
 
     emit(PhraseGroupGridModel.from(state));

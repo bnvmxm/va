@@ -1,4 +1,4 @@
-part of 'phrases_group_grid_page_vm.dart';
+part of 'phrases_group_grid_vm.dart';
 
 Route routePhraseGroupGridPage() =>
     MaterialPageRoute<void>(builder: (context) => PhraseGroupGridPage());
