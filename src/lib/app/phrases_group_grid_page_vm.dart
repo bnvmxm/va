@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vocabulary_advancer/app/base/base_view_model.dart';
-import 'package:vocabulary_advancer/app/phrase_exercise_page_vm.dart';
-import 'package:vocabulary_advancer/app/phrases_group_editor_page_vm.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vocabulary_advancer/app/phrase_exercise_vm.dart';
+import 'package:vocabulary_advancer/app/phrases_group_editor_vm.dart';
 import 'package:vocabulary_advancer/app/phrases_group_grid_page.dart';
 import 'package:vocabulary_advancer/app/services/navigation.dart';
 import 'package:vocabulary_advancer/core/model.dart';
@@ -9,75 +9,100 @@ import 'package:vocabulary_advancer/shared/svc.dart';
 
 part 'phrases_group_grid_page_vm.navigation.dart';
 
-class PhraseGroupGridPageVM extends BaseViewModel<void> {
-  PhraseGroup? _phraseGroupSelected;
+class PhraseGroupGridModel {
+  PhraseGroup? phraseGroupSelected;
   List<PhraseGroup> phraseGroups = [];
 
-  bool get anySelected => isReady && _phraseGroupSelected != null;
+  bool get anySelected => phraseGroupSelected != null;
   bool get anySelectedAndNotEmpty =>
-      isReady && _phraseGroupSelected != null && _phraseGroupSelected!.phraseCount > 0;
-  bool get isNotEmpty => isReady && phraseGroups.isNotEmpty;
+      phraseGroupSelected != null && phraseGroupSelected!.phraseCount > 0;
+  bool get isNotEmpty => phraseGroups.isNotEmpty;
 
-  @override
-  Future Function(void) get initializer => (_) async => _reset();
+  bool isSelected(PhraseGroup item) => item.name == phraseGroupSelected?.name;
 
-  Future _reset() async {
-    phraseGroups = svc.repPhraseGroup.findMany().toList();
+  PhraseGroupGridModel();
+  PhraseGroupGridModel.from(
+    PhraseGroupGridModel model, {
+    PhraseGroup? phraseGroupSelected,
+    List<PhraseGroup>? phraseGroups,
+  }) {
+    this.phraseGroupSelected = phraseGroupSelected ?? model.phraseGroupSelected;
+    this.phraseGroups = phraseGroups ?? model.phraseGroups;
   }
 
+  void unselect() => phraseGroupSelected = null;
+  void removeSelected() {
+    if (anySelected) {
+      phraseGroups.remove(phraseGroupSelected);
+      phraseGroupSelected = null;
+    }
+  }
+
+  void updateSelected(PhraseGroup item) {
+    for (var i = 0; i < phraseGroups.length; i++) {
+      if (phraseGroups[i] == phraseGroupSelected) {
+        phraseGroups[i] = item;
+        break;
+      }
+    }
+    phraseGroupSelected = item;
+  }
+}
+
+class PhraseGroupGridViewModel extends Cubit<PhraseGroupGridModel> {
+  PhraseGroupGridViewModel() : super(PhraseGroupGridModel());
+
+  void init() => _reset();
+
   void select(PhraseGroup item) {
-    notify(() => _phraseGroupSelected = item);
+    emit(PhraseGroupGridModel.from(state, phraseGroupSelected: item));
   }
 
   void unselect() {
-    notify(() => _phraseGroupSelected = null);
+    emit(PhraseGroupGridModel.from(state..unselect()));
   }
-
-  bool isSelected(PhraseGroup item) => item == _phraseGroupSelected;
 
   Future navigateToAddGroup() => _navigateToEditor(isNew: true);
   Future navigateToEditGroup() => _navigateToEditor(isNew: false);
+
   Future _navigateToEditor({required bool isNew}) async {
-    assert(isNew || anySelected);
+    assert(isNew || state.anySelected);
     final result = isNew
         ? await forwardToAddPhraseGroup()
-        : await forwardToEditPhraseGroup(_phraseGroupSelected!.name);
+        : await forwardToEditPhraseGroup(state.phraseGroupSelected!.name);
 
     if (result?.group == null) return;
+    if (isNew) {
+      state.phraseGroups.add(result!.group!);
+    } else if (result!.isDeleted) {
+      state.removeSelected();
+    } else {
+      state.updateSelected(result.group!);
+    }
 
-    notify(() {
-      if (isNew) {
-        phraseGroups.add(result!.group!);
-      } else if (result!.isDeleted) {
-        phraseGroups.remove(_phraseGroupSelected);
-        _phraseGroupSelected = null;
-      } else {
-        for (var i = 0; i < phraseGroups.length; i++) {
-          if (phraseGroups[i] == _phraseGroupSelected) {
-            phraseGroups[i] = result.group!;
-          }
-        }
-        _phraseGroupSelected = result.group;
-      }
-    });
+    emit(PhraseGroupGridModel.from(state));
   }
 
   Future navigateToGroup() async {
-    assert(_phraseGroupSelected != null);
-    await forwardToPhraseGroup(_phraseGroupSelected!.name);
-    _phraseGroupSelected = null;
-    notify(() async => _reset(), asBusy: true);
+    assert(state.phraseGroupSelected != null);
+    await forwardToPhraseGroup(state.phraseGroupSelected!.name);
+    state.unselect();
+    await _reset();
+  }
+
+  Future navigateToExercise() async {
+    if (state.anySelectedAndNotEmpty) {
+      await forwardToExercise(state.phraseGroupSelected!.name);
+      state.unselect();
+      await _reset();
+    }
   }
 
   Future navigateToAbout() async => forwardToAbout();
 
-  Future navigateToExercise() async {
-    assert(_phraseGroupSelected != null);
-    if (_phraseGroupSelected!.phraseCount > 0) {
-      await forwardToExercise(_phraseGroupSelected!.name);
-      _phraseGroupSelected = null;
-      notify(() async => _reset(), asBusy: true);
-    }
+  Future _reset() async {
+    emit(PhraseGroupGridModel.from(state,
+        phraseGroups: svc.repPhraseGroup.findMany().toList()));
   }
 
   Future<void> nextLanguage() => svc.localizationService.switchLocale();

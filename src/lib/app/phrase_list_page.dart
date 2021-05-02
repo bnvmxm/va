@@ -1,71 +1,105 @@
 import 'package:flutter/material.dart';
-import 'package:vocabulary_advancer/app/base/va_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/common/empty.dart';
 import 'package:vocabulary_advancer/app/common/stat_target.dart';
 import 'package:vocabulary_advancer/app/i18n/strings.g.dart';
-import 'package:vocabulary_advancer/app/phrase_list_page_vm.dart';
+import 'package:vocabulary_advancer/app/phrase_list_vm.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/core/extensions.dart';
-import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/shared/svc.dart';
 
-class PhraseListPage extends VAPageWithArgument<String, PhraseListPageVM> {
-  PhraseListPage({required String groupName}) : super(groupName);
+class PhraseListPage extends StatefulWidget {
+  PhraseListPage({required this.groupName});
 
-  @override
-  PhraseListPageVM createVM() => svc.vmPhraseListPage;
+  final String groupName;
 
   @override
-  AppBar buildAppBar(BuildContext context, PhraseListPageVM vm) => AppBar(
-        title: Text(vm.phraseGroupName, style: VATheme.of(context).textHeadline5),
-        actions: _buildAppBarActions(context, vm),
-      );
+  _PhraseListPageState createState() => _PhraseListPageState();
+}
+
+class _PhraseListPageState extends State<PhraseListPage> {
+  late PhraseListViewModel _vm;
 
   @override
-  Widget buildBody(BuildContext context, PhraseListPageVM vm) => vm.phrases.isNotEmpty
-      ? ListView.separated(
-          itemCount: vm.phrases.length,
-          itemBuilder: (context, i) => _buildPhraseItem(context, vm, i, vm.phrases[i]),
-          separatorBuilder: (context, i) => const Divider(indent: 16, endIndent: 16))
-      : Empty();
+  void initState() {
+    super.initState();
+    _vm = PhraseListViewModel(widget.groupName)..init();
+  }
 
-  Widget _buildPhraseItem(BuildContext context, PhraseListPageVM vm, int index, Phrase item) =>
+  @override
+  void dispose() {
+    _vm.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      BlocBuilder<PhraseListViewModel, PhraseListModel>(
+          bloc: _vm,
+          builder: (context, model) => Scaffold(
+              appBar: model.isLoading
+                  ? null
+                  : AppBar(
+                      title: Text(model.phraseGroupName,
+                          style: VATheme.of(context).textHeadline5),
+                      actions: _buildAppBarActions(context, model),
+                    ),
+              body: model.isLoading
+                  ? CircularProgressIndicator()
+                  : model.phrases.isNotEmpty
+                      ? ListView.separated(
+                          itemCount: model.phrases.length,
+                          itemBuilder: (context, i) =>
+                              _buildPhraseItem(context, model, i),
+                          separatorBuilder: (context, i) =>
+                              const Divider(indent: 16, endIndent: 16))
+                      : Empty()));
+
+  Widget _buildPhraseItem(
+          BuildContext context, PhraseListModel model, int index) =>
       ListTileTheme(
         selectedColor: VATheme.of(context).colorAccentVariant,
         child: ListTile(
-            selected: vm.isSelected(index),
-            onTap: () => vm.isSelected(index) ? vm.unselect() : vm.select(index),
-            title: Text(item.phrase, style: VATheme.of(context).textBodyText1),
+            selected: model.isSelected(index),
+            onTap: () =>
+                model.isSelected(index) ? _vm.unselect() : _vm.select(index),
+            title: Text(model.phrases[index].phrase,
+                style: VATheme.of(context).textBodyText1),
             dense: false,
-            leading: vm.isSelected(index)
+            leading: model.isSelected(index)
                 ? CircleAvatar(
                     backgroundColor: VATheme.of(context).colorAccentVariant,
                     radius: 12,
-                    child: Icon(Icons.check, size: 12, color: VATheme.of(context).colorPrimaryDark))
+                    child: Icon(Icons.check,
+                        size: 12, color: VATheme.of(context).colorPrimaryDark))
                 : CircleAvatar(
                     backgroundColor: VATheme.of(context).colorPrimaryLight,
                     radius: 12,
-                    child:
-                        Icon(Icons.check, size: 12, color: VATheme.of(context).colorPrimaryDark)),
+                    child: Icon(Icons.check,
+                        size: 12, color: VATheme.of(context).colorPrimaryDark)),
             trailing: SizedBox(
               width: 48,
-              child: Center(child: StatTarget(item.targetUtc.differenceNowUtc())),
+              child: Center(
+                  child: StatTarget(
+                      model.phrases[index].targetUtc.differenceNowUtc())),
             )),
       );
 
-  List<Widget> _buildAppBarActions(BuildContext context, PhraseListPageVM vm) => [
-        if (vm.anySelected)
+  List<Widget> _buildAppBarActions(
+          BuildContext context, PhraseListModel model) =>
+      [
+        if (model.anySelected)
           IconButton(
-              icon: Icon(Icons.edit, color: VATheme.of(context).colorAccentVariant),
+              icon: Icon(Icons.edit,
+                  color: VATheme.of(context).colorAccentVariant),
               tooltip: Translations.of(context).labels.Edit,
               onPressed: () async {
-                await vm.navigateToEditPhrase();
+                await _vm.navigateToEditPhrase();
               }),
         IconButton(
             icon: Icon(Icons.plus_one),
             tooltip: Translations.of(context).labels.Add,
             onPressed: () async {
-              await vm.navigateToAddPhrase();
+              await _vm.navigateToAddPhrase();
             })
       ];
 }

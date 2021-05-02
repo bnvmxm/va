@@ -1,66 +1,107 @@
 import 'package:flutter/material.dart';
-import 'package:vocabulary_advancer/app/base/va_page.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/common/rotatable.dart';
 import 'package:vocabulary_advancer/app/i18n/strings.g.dart';
-import 'package:vocabulary_advancer/app/phrase_exercise_page_vm.dart';
+import 'package:vocabulary_advancer/app/phrase_exercise_vm.dart';
 import 'package:vocabulary_advancer/app/themes/card_decoration.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/shared/svc.dart';
 
-class PhraseExercisePage
-    extends VAPageWithArgument<PhraseExercisePageArgument, PhraseExercisePageVM> {
-  PhraseExercisePage(PhraseExercisePageArgument argument) : super(argument);
+class PhraseExercisePage extends StatefulWidget {
+  final PhraseExercisePageArgument arg;
 
-  @override
-  PhraseExercisePageVM createVM() => svc.vmPhraseExercisePage;
+  PhraseExercisePage(this.arg);
 
   @override
-  AppBar buildAppBar(BuildContext context, PhraseExercisePageVM vm) => AppBar(
-      title: Text(vm.groupName ?? Translations.of(context).titles.Exercising,
-          style: VATheme.of(context).textHeadline5));
+  _PhraseExercisePageState createState() => _PhraseExercisePageState();
+}
+
+class _PhraseExercisePageState extends State<PhraseExercisePage> {
+  late PhraseExerciseViewModel _vm;
 
   @override
-  Widget buildBody(BuildContext context, PhraseExercisePageVM vm) => vm.isAny
-      ? OrientationBuilder(
-          builder: (context, orientation) => orientation == Orientation.portrait
-              ? Column(children: [
-                  _buildAnimatedCard(context, vm),
-                  Expanded(
-                    child: _buildExamplesCard(context, vm),
-                  ),
-                  SizedBox(
-                      height: 60,
-                      child: Row(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.spaceAround,
-                          children: _buildActionButtons(context, true, vm)))
-                ])
-              : Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-                  Expanded(child: _buildAnimatedCard(context, vm)),
-                  Expanded(child: _buildExamplesCard(context, vm)),
-                  SizedBox(
-                      width: 60,
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                        children: _buildActionButtons(context, false, vm).reversed.toList(),
-                      ))
-                ]))
-      : _buildEmptyBody(context);
+  void initState() {
+    super.initState();
+    _vm = PhraseExerciseViewModel(widget.arg)..init();
+  }
 
-  Widget _buildAnimatedCard(BuildContext context, PhraseExercisePageVM vm) => vm.isOpen
-      ? _buildCard(context, vm.current!.phrase, isOpen: true)
-      : vm.isOpening
-          ? Rotatable(
-              onRotated: () => vm.setCardOpened(),
-              child: _buildCard(context, vm.current!.definition, isOpening: true))
-          : GestureDetector(
-              onTap: () => vm.setCardOpening(),
-              child: _buildCard(
-                context,
-                vm.current!.definition,
+  @override
+  void dispose() {
+    _vm.close();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) =>
+      BlocBuilder<PhraseExerciseViewModel, PhraseExerciseModel>(
+          bloc: _vm,
+          builder: (context, model) => Scaffold(
+                appBar: model.isLoading
+                    ? null
+                    : AppBar(
+                        title: Text(model.groupName,
+                            style: VATheme.of(context).textHeadline5)),
+                body: model.isLoading
+                    ? CircularProgressIndicator()
+                    : model.isAny
+                        ? OrientationBuilder(
+                            builder: (context, orientation) => orientation ==
+                                    Orientation.portrait
+                                ? Column(children: [
+                                    _buildAnimatedCard(context, model),
+                                    Expanded(
+                                      child: _buildExamplesCard(context, model),
+                                    ),
+                                    SizedBox(
+                                        height: 60,
+                                        child: Row(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.spaceAround,
+                                            children: _buildActionButtons(
+                                                context, true, model)))
+                                  ])
+                                : Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                        Expanded(
+                                            child: _buildAnimatedCard(
+                                                context, model)),
+                                        Expanded(
+                                            child: _buildExamplesCard(
+                                                context, model)),
+                                        SizedBox(
+                                            width: 60,
+                                            child: Column(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.start,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceEvenly,
+                                              children: _buildActionButtons(
+                                                      context, false, model)
+                                                  .reversed
+                                                  .toList(),
+                                            ))
+                                      ]))
+                        : _buildEmptyBody(context),
               ));
+
+  Widget _buildAnimatedCard(BuildContext context, PhraseExerciseModel model) =>
+      model.isOpen
+          ? _buildCard(context, model.current!.phrase, isOpen: true)
+          : model.isOpening
+              ? Rotatable(
+                  onRotated: () => _vm.setCardOpened(),
+                  child: _buildCard(context, model.current!.definition,
+                      isOpening: true))
+              : GestureDetector(
+                  onTap: () => _vm.setCardOpening(),
+                  child: _buildCard(
+                    context,
+                    model.current!.definition,
+                  ));
 
   Widget _buildCard(BuildContext context, String value,
           {bool isOpening = false, bool isOpen = false}) =>
@@ -89,53 +130,60 @@ class PhraseExercisePage
             ])),
       );
 
-  Widget _buildExamplesCard(BuildContext context, PhraseExercisePageVM vm) => Padding(
+  Widget _buildExamplesCard(BuildContext context, PhraseExerciseModel model) =>
+      Padding(
         padding: const EdgeInsets.all(16.0),
         child: Container(
             padding: const EdgeInsets.all(16.0),
             decoration: cardDecoration(context),
             child: ListView.separated(
-                itemCount: vm.current!.examples.length,
-                separatorBuilder: (context, i) => const Divider(indent: 8.0, endIndent: 8.0),
+                itemCount: model.current!.examples.length,
+                separatorBuilder: (context, i) =>
+                    const Divider(indent: 8.0, endIndent: 8.0),
                 itemBuilder: (context, i) => Padding(
                       padding: const EdgeInsets.all(8.0),
-                      child:
-                          Text(vm.current!.examples[i], style: VATheme.of(context).textBodyText2),
+                      child: Text(model.current!.examples[i],
+                          style: VATheme.of(context).textBodyText2),
                     ))),
       );
 
   List<Widget> _buildActionButtons(
-          BuildContext context, bool withDivider, PhraseExercisePageVM vm) =>
+          BuildContext context, bool withDivider, PhraseExerciseModel model) =>
       [
         IconButton(
             iconSize: 24,
             tooltip: Translations.of(context).labels.ExerciseResult.Low,
-            icon: Icon(Icons.arrow_downward, color: VATheme.of(context).colorAttention),
-            onPressed: () => vm.next(RateFeedback.lowTheshold)),
+            icon: Icon(Icons.arrow_downward,
+                color: VATheme.of(context).colorAttention),
+            onPressed: () => _vm.next(RateFeedback.lowTheshold)),
         if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
         IconButton(
             iconSize: 24,
             tooltip: Translations.of(context).labels.ExerciseResult.Negative,
-            icon: Icon(Icons.trending_down, color: VATheme.of(context).colorForeground),
-            onPressed: () => vm.next(RateFeedback.negative)),
+            icon: Icon(Icons.trending_down,
+                color: VATheme.of(context).colorForeground),
+            onPressed: () => _vm.next(RateFeedback.negative)),
         if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
         IconButton(
             iconSize: 24,
             tooltip: Translations.of(context).labels.ExerciseResult.Uncertain,
-            icon: Icon(Icons.trending_flat, color: VATheme.of(context).colorForeground),
-            onPressed: () => vm.next(RateFeedback.uncertain)),
+            icon: Icon(Icons.trending_flat,
+                color: VATheme.of(context).colorForeground),
+            onPressed: () => _vm.next(RateFeedback.uncertain)),
         if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
         IconButton(
             iconSize: 24,
             tooltip: Translations.of(context).labels.ExerciseResult.Positive,
-            icon: Icon(Icons.trending_up, color: VATheme.of(context).colorForeground),
-            onPressed: () => vm.next(RateFeedback.positive)),
+            icon: Icon(Icons.trending_up,
+                color: VATheme.of(context).colorForeground),
+            onPressed: () => _vm.next(RateFeedback.positive)),
         if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
         IconButton(
             iconSize: 24,
             tooltip: Translations.of(context).labels.ExerciseResult.High,
-            icon: Icon(Icons.arrow_upward, color: VATheme.of(context).colorAccentVariant),
-            onPressed: () => vm.next(RateFeedback.highThershold))
+            icon: Icon(Icons.arrow_upward,
+                color: VATheme.of(context).colorAccentVariant),
+            onPressed: () => _vm.next(RateFeedback.highThershold))
       ];
 
   Widget _buildEmptyBody(BuildContext context) => Padding(

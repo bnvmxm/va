@@ -1,12 +1,18 @@
-part of 'phrase_editor_page_vm.dart';
+part of 'phrase_editor_vm.dart';
 
-Route<PhraseEditorPageResult> routePhraseEditorPage(PhraseEditorPageArgument argument) =>
+Route<PhraseEditorPageResult> routePhraseEditorPage(
+        PhraseEditorPageArgument argument) =>
     MaterialPageRoute<PhraseEditorPageResult>(
-        builder: (context) => PhraseEditorPage(argument), fullscreenDialog: true);
+        builder: (context) => PhraseEditorPage(argument),
+        fullscreenDialog: true);
 
 class PhraseEditorPageArgument {
   PhraseEditorPageArgument(this.phraseGroupName,
-      {this.id, this.phrase, this.definition, this.pronunciation, this.examples});
+      {this.id,
+      this.phrase,
+      this.definition,
+      this.pronunciation,
+      this.examples});
   final String? phraseGroupName;
   final String? id;
   final String? phrase;
@@ -25,7 +31,7 @@ class PhraseEditorPageResult {
   final Phrase? phrase;
 }
 
-extension on PhraseEditorPageVM {
+extension on PhraseEditorViewModel {
   void backWithResult(PhraseEditorPageResult result) {
     svc.keys.navigationRoot.currentState?.pop(result);
   }
