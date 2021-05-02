@@ -10,7 +10,7 @@ part 'phrase_exercise_vm.nav.dart';
 class PhraseExerciseModel {
   bool isLoading = true;
   bool isOpen = false;
-  bool isOpening = false;
+  bool isAnimated = false;
   Phrase? current;
   String groupName = '';
   bool isExerciseFirst = true;
@@ -33,7 +33,7 @@ class PhraseExerciseModel {
   }) {
     this.isLoading = isLoading ?? model.isLoading;
     this.isOpen = isOpen ?? model.isOpen;
-    this.isOpening = isOpening ?? model.isOpening;
+    this.isAnimated = isOpening ?? model.isAnimated;
     this.current = current ?? model.current;
     this.groupName = groupName ?? model.groupName;
     this.isExerciseFirst = isExerciseFirst ?? model.isExerciseFirst;
@@ -46,15 +46,14 @@ class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
 
   void init() => _setNextPhrase();
 
-  void setCardOpening() {
-    state.isOpen = false;
-    state.isOpening = true;
+  void animateCard() {
+    state.isAnimated = true;
     emit(PhraseExerciseModel.from(state));
   }
 
-  void setCardOpened() {
-    state.isOpen = true;
-    state.isOpening = false;
+  void rotateCard() {
+    state.isOpen = !state.isOpen;
+    state.isAnimated = false;
     emit(PhraseExerciseModel.from(state));
   }
 
@@ -64,18 +63,15 @@ class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
     final newRate = state.current!.rate.asRate(feedback);
     final newDuration = newRate.asCooldown(feedback);
     final current = state.current!;
-    svc.log.d(
-        () => '${current.phrase}: ${current.rate} -> $newRate, $newDuration');
+    svc.log.d(() => '${current.phrase}: ${current.rate} -> $newRate, $newDuration');
 
-    svc.repPhrase
-        .updateStat(state.groupName, state.current!.id, newRate, newDuration);
+    svc.repPhrase.updateStat(state.groupName, state.current!.id, newRate, newDuration);
 
     await _setNextPhrase();
   }
 
   Future _setNextPhrase() async {
-    state.current = svc.repPhrase
-        .getForExercise(state.groupName, exceptId: state.current?.id);
+    state.current = svc.repPhrase.getForExercise(state.groupName, exceptId: state.current?.id);
 
     emit(PhraseExerciseModel.from(
       state,
