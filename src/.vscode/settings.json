@@ -6,6 +6,10 @@
         "editor.detectIndentation": false,
         "editor.suggest.insertMode": "replace",
     },
+    "dart.analysisExcludedFolders": [
+        "./lib/generated_plugin_registrant.dart",
+        "./lib/app/i18n",
+    ],
     "dart.updateImportsOnRename": true,
     "editor.codeActionsOnSave": {
         "source.organizeImports": true,

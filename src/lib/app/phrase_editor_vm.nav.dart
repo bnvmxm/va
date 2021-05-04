@@ -33,6 +33,6 @@ class PhraseEditorPageResult {
 
 extension on PhraseEditorViewModel {
   void backWithResult(PhraseEditorPageResult result) {
-    svc.keys.navigationRoot.currentState?.pop(result);
+    navigationRoot.currentState?.pop(result);
   }
 }

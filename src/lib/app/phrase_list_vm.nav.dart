@@ -7,17 +7,17 @@ Route routePhraseListPage({required String groupName}) =>
 extension on PhraseListViewModel {
   Future<PhraseEditorPageResult?> forwardToAddPhrase(String groupName) async {
     assert(groupName.isNotEmpty);
-    return svc.keys.navigationRoot.currentState
-        ?.pushNamed<PhraseEditorPageResult?>(navigationRouteAddPhrase,
-            arguments: PhraseEditorPageArgument(groupName));
+    return navigationRoot.currentState?.pushNamed<PhraseEditorPageResult?>(
+        navigationRouteAddPhrase,
+        arguments: PhraseEditorPageArgument(groupName));
   }
 
   Future<PhraseEditorPageResult?> forwardToEditPhrase(
       PhraseEditorPageArgument arg) async {
     assert(arg.phraseGroupName!.isNotEmpty);
     assert(arg.id!.isNotEmpty);
-    return svc.keys.navigationRoot.currentState
-        ?.pushNamed<PhraseEditorPageResult?>(navigationRouteEditPhrase,
-            arguments: arg);
+    return navigationRoot.currentState?.pushNamed<PhraseEditorPageResult?>(
+        navigationRouteEditPhrase,
+        arguments: arg);
   }
 }

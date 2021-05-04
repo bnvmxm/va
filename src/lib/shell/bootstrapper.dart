@@ -6,13 +6,15 @@ import 'package:vocabulary_advancer/data/repositories/locale_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_group_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_repository.dart';
 import 'package:vocabulary_advancer/data/sample_data_provider.dart';
+import 'package:vocabulary_advancer/shared/app_logger.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
 Future<Widget> bootstrapApp() async {
   WidgetsFlutterBinding.ensureInitialized();
-  ServiceProvider.withRegistry(GetIt.I);
+  svc = ServiceProvider(GetIt.I);
 
   GetIt.I
+    ..registerLazySingleton<AppLogger>(() => AppLogger.init())
     // Data Sources
     ..registerLazySingleton<SampleDataProvider>(() => SampleDataProvider())
     // Data Repositories

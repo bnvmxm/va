@@ -23,6 +23,9 @@ dependencies:
   flutter_typeahead: 3.1.1
 
 dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mockito: 5.0.7
   build_runner: any
   json_serializable: 4.1.1
 

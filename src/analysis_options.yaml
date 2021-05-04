@@ -11,8 +11,10 @@ analyzer:
     dead_code: error
 
   exclude:
+    - "lib/generated_plugin_registrant.dart"
     - "lib/app/i18n"
     - "lib/**/*.g.dart"
+    - "test/**/*.mocks.dart"
     - "**/*.freezed.dart"
 
 linter:

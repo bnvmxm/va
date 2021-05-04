@@ -19,6 +19,6 @@ class PhraseGroupEditorPageResult {
 
 extension on PhraseGroupEditorViewModel {
   void backWithResult(PhraseGroupEditorPageResult? result) {
-    svc.keys.navigationRoot.currentState?.pop(result);
+    navigationRoot.currentState?.pop(result);
   }
 }

@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:vocabulary_advancer/app/services/localization.dart';
 import 'package:vocabulary_advancer/data/repositories/locale_repository.dart';
@@ -7,18 +6,13 @@ import 'package:vocabulary_advancer/data/repositories/phrase_repository.dart';
 import 'package:vocabulary_advancer/data/sample_data_provider.dart';
 import 'package:vocabulary_advancer/shared/app_logger.dart';
 
-late ServiceProvider svc;
+late ServiceProvider svc; // Initialized in bootstrapper
 
 class ServiceProvider {
   final GetIt _registry;
-  final KeyProvider keys;
-  final AppLogger log;
+  ServiceProvider(this._registry);
 
-  ServiceProvider._internal(this._registry, this.keys, this.log);
-
-  static void withRegistry(GetIt registry) => svc = ServiceProvider._internal(
-      registry, KeyProvider._internal(), AppLogger.init());
-
+  AppLogger get log => _registry.get<AppLogger>();
   LocalizationService get localizationService =>
       _registry.get<LocalizationService>();
 
@@ -27,10 +21,4 @@ class ServiceProvider {
       _registry.get<PhraseGroupRepository>();
   PhraseRepository get repPhrase => _registry.get<PhraseRepository>();
   SampleDataProvider get dataProvider => _registry.get<SampleDataProvider>();
-}
-
-class KeyProvider {
-  KeyProvider._internal();
-
-  final GlobalKey<NavigatorState> navigationRoot = GlobalKey<NavigatorState>();
 }
