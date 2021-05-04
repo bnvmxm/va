@@ -12,6 +12,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
     
+  flutter_bloc: 7.0.0
   collection: 1.15.0
   fast_i18n: 4.1.0
   get_it: 6.1.1
@@ -20,9 +21,11 @@ dependencies:
   logging: 1.0.1
   shared_preferences: 2.0.5
   flutter_typeahead: 3.1.1
-  provider: 5.0.0
 
 dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  mockito: 5.0.7
   build_runner: any
   json_serializable: 4.1.1
 

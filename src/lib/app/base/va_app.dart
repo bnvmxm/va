@@ -3,7 +3,8 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:vocabulary_advancer/app/i18n/strings.g.dart';
 import 'package:vocabulary_advancer/app/services/navigation.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
-import 'package:vocabulary_advancer/shared/svc.dart';
+
+final GlobalKey<NavigatorState> navigationRoot = GlobalKey<NavigatorState>();
 
 class VAApp extends StatefulWidget {
   @override
@@ -23,6 +24,7 @@ class _VAAppState extends State<VAApp> {
         _themeId,
         child: TranslationProvider(
           child: MaterialApp(
+              debugShowCheckedModeBanner: false,
               theme: _themeId.getMaterialThemeData(),
               localizationsDelegates: const [
                 GlobalMaterialLocalizations.delegate,
@@ -30,7 +32,7 @@ class _VAAppState extends State<VAApp> {
                 GlobalCupertinoLocalizations.delegate
               ],
               supportedLocales: LocaleSettings.supportedLocales,
-              navigatorKey: svc.keys.navigationRoot,
+              navigatorKey: navigationRoot,
               onGenerateRoute: generateRoute),
         ),
       );

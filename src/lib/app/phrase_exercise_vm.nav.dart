@@ -1,4 +1,4 @@
-part of 'phrase_exercise_page_vm.dart';
+part of 'phrase_exercise_vm.dart';
 
 Route routePhraseExercisePage(PhraseExercisePageArgument argument) =>
     MaterialPageRoute<void>(builder: (context) => PhraseExercisePage(argument));

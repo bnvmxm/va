@@ -19,7 +19,7 @@ class _RotatableState extends State<Rotatable> with SingleTickerProviderStateMix
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(duration: const Duration(milliseconds: 350), vsync: this);
+    _controller = AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
     if (widget.onRotated != null) {
       _controller.addStatusListener((status) {
         if (status == AnimationStatus.completed || status == AnimationStatus.dismissed) {
