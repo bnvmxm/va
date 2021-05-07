@@ -31,9 +31,9 @@ class PhraseExerciseModel {
     String? groupName,
     bool? isExerciseFirst,
   }) {
-    this.isLoading = isLoading ?? model.isLoading;
+    isAnimated = isOpening ?? model.isAnimated;
     this.isOpen = isOpen ?? model.isOpen;
-    this.isAnimated = isOpening ?? model.isAnimated;
+    this.isLoading = isLoading ?? model.isLoading;
     this.current = current ?? model.current;
     this.groupName = groupName ?? model.groupName;
     this.isExerciseFirst = isExerciseFirst ?? model.isExerciseFirst;
