@@ -5,12 +5,16 @@
         "editor.insertSpaces": true,
         "editor.detectIndentation": false,
         "editor.suggest.insertMode": "replace",
+        "editor.rulers": [
+            100
+        ],
     },
     "dart.analysisExcludedFolders": [
         "./lib/generated_plugin_registrant.dart",
         "./lib/app/i18n",
     ],
     "dart.updateImportsOnRename": true,
+    "dart.lineLength": 100,
     "editor.codeActionsOnSave": {
         "source.organizeImports": true,
         "source.fixAll": true
