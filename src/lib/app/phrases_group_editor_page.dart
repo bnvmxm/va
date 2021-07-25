@@ -6,10 +6,9 @@ import 'package:vocabulary_advancer/app/services/dialogs.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 
 class PhraseGroupEditorPage extends StatefulWidget {
-  PhraseGroupEditorPage({String initialGroupName = ''})
-      : initialGroupName = initialGroupName;
+  PhraseGroupEditorPage([int? groupId]) : groupId = groupId;
 
-  final String initialGroupName;
+  final int? groupId;
 
   @override
   _PhraseGroupEditorPageState createState() => _PhraseGroupEditorPageState();
@@ -22,7 +21,7 @@ class _PhraseGroupEditorPageState extends State<PhraseGroupEditorPage> {
   @override
   void initState() {
     super.initState();
-    _vm = PhraseGroupEditorViewModel(widget.initialGroupName);
+    _vm = PhraseGroupEditorViewModel(widget.groupId);
     _focusNode = FocusNode(debugLabel: 'Group Name')..requestFocus();
   }
 
@@ -53,12 +52,7 @@ class _PhraseGroupEditorPageState extends State<PhraseGroupEditorPage> {
                           final confirmed = await dialog.showModal(
                               context: context,
                               title: Translations.of(context).titles.Confirm,
-                              messages: [
-                                Translations.of(context)
-                                    .text
-                                    .Confirmation
-                                    .DeleteGroup
-                              ],
+                              messages: [Translations.of(context).text.Confirmation.DeleteGroup],
                               confirmText: Translations.of(context).labels.Yes,
                               declineText: Translations.of(context).labels.No,
                               isDestructive: true);
@@ -81,18 +75,13 @@ class _PhraseGroupEditorPageState extends State<PhraseGroupEditorPage> {
                   child: Column(
                     children: [
                       TextFormField(
-                          decoration: InputDecoration(
-                              labelText:
-                                  Translations.of(context).labels.GroupName),
+                          decoration:
+                              InputDecoration(labelText: Translations.of(context).labels.GroupName),
                           initialValue: model.initialGroupName,
                           validator: (v) => _vm.validatorForName(
                               v,
-                              Translations.of(context)
-                                  .validationMessages
-                                  .GroupNameRequired,
-                              Translations.of(context)
-                                  .validationMessages
-                                  .GroupExists),
+                              Translations.of(context).validationMessages.GroupNameRequired,
+                              Translations.of(context).validationMessages.GroupExists),
                           onChanged: _vm.updateName,
                           focusNode: _focusNode,
                           style: VATheme.of(context).textBodyText1)

@@ -15,7 +15,7 @@ void main() {
     test('findMany() finds nothing', () async {
       // Act
       final target = PhraseRepository();
-      final result = target.findMany('Unknown');
+      final result = target.findManyByGroup(0);
 
       // Assert
       expect(result.length, equals(0));
@@ -24,7 +24,7 @@ void main() {
     test('findMany() successfully lists phrases within', () async {
       // Act
       final target = PhraseRepository();
-      final result = target.findMany('Dummy Collection');
+      final result = target.findManyByGroup(1);
 
       // Assert
       expect(result.length, equals(2));
@@ -35,7 +35,7 @@ void main() {
     test('getForExercise() finds nothing', () async {
       // Act
       final target = PhraseRepository();
-      final result = target.getForExercise('Unknown');
+      final result = target.getExerciseByGroup(0);
 
       // Assert
       expect(result, isNull);
@@ -44,7 +44,7 @@ void main() {
     test('getForExercise() successfully shows a phrase', () async {
       // Act
       final target = PhraseRepository();
-      final result = target.getForExercise('Dummy Collection');
+      final result = target.getExerciseByGroup(1);
 
       // Assert
       expect(result, isNotNull);

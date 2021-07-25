@@ -49,9 +49,7 @@ class _PhraseGroupGridPageState extends State<PhraseGroupGridPage> {
                     foregroundColor: model.anySelectedAndNotEmpty
                         ? VATheme.of(context).colorPrimaryDark
                         : VATheme.of(context).colorPrimaryLight,
-                    onPressed: () async {
-                      await _vm.navigateToExercise();
-                    },
+                    onPressed: () => _vm.navigateToExercise(),
                     child: Icon(Icons.view_carousel))
                 : null,
           ));
@@ -61,23 +59,17 @@ class _PhraseGroupGridPageState extends State<PhraseGroupGridPage> {
           IconButton(
               icon: Icon(Icons.view_list, color: VATheme.of(context).colorAccentVariant),
               tooltip: Translations.of(context).labels.View,
-              onPressed: () async {
-                await _vm.navigateToGroup();
-              }),
+              onPressed: () => _vm.navigateToGroup()),
         if (model.anySelected)
           IconButton(
               icon: Icon(Icons.edit, color: VATheme.of(context).colorAccentVariant),
               tooltip: Translations.of(context).labels.Edit,
-              onPressed: () async {
-                await _vm.navigateToEditGroup();
-              }),
+              onPressed: () => _vm.navigateToEditor()),
         if (!model.anySelected)
           IconButton(
               icon: Icon(Icons.plus_one),
               tooltip: Translations.of(context).labels.Add,
-              onPressed: () async {
-                await _vm.navigateToAddGroup();
-              }),
+              onPressed: () => _vm.navigateToEditor()),
         PopupMenuButton<int>(
           onSelected: (index) async => _onActionSelected(index),
           itemBuilder: (context) => [

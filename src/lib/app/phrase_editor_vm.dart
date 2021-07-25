@@ -1,55 +1,41 @@
 // ignore_for_file: use_setters_to_change_properties
 
-import 'dart:collection';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vocabulary_advancer/app/base/form_validation.dart';
-import 'package:vocabulary_advancer/app/base/va_app.dart';
-import 'package:vocabulary_advancer/app/phrase_editor_page.dart';
+import 'package:vocabulary_advancer/app/common/form_validation.dart';
+import 'package:vocabulary_advancer/app/navigation/va_router.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
-part 'phrase_editor_vm.nav.dart';
-
 class PhraseEditorModel {
-  bool isLoading = false;
+  bool isLoading = true;
+  Phrase? initial;
 
-  PhraseEditorPageArgument? initialValues;
-  String phraseGroupName = '';
-  String id = '';
+  int phraseGroupId = 0;
+  String? phraseUid;
   String phrase = '';
   String definition = '';
   String pronunciation = '';
   List<String> examples = [];
-  List<String> phraseGroupsKnown = [];
+  Map<int, String> phraseGroupsKnown = {};
 
-  PhraseEditorModel.fromArgument(PhraseEditorPageArgument? arg) {
-    initialValues = arg;
-    phraseGroupName = arg?.phraseGroupName ?? '';
-    id = arg?.id ?? '';
-    phrase = arg?.phrase ?? '';
-    pronunciation = arg?.pronunciation ?? '';
-    definition = arg?.definition ?? '';
-    examples = List.from(arg?.examples ?? <String>[]);
-
-    phraseGroupsKnown = svc.repPhraseGroup.findKnownNames().toList();
-  }
+  PhraseEditorModel(this.phraseGroupId, this.phraseUid);
 
   PhraseEditorModel.from(
     PhraseEditorModel model, {
     bool? isLoading,
-    String? phraseGroupName,
-    String? id,
+    Phrase? initial,
+    int? phraseGroupId,
+    String? phraseUid,
     String? phrase,
     String? definition,
     String? pronunciation,
     List<String>? examples,
-    List<String>? phraseGroupsKnown,
+    Map<int, String>? phraseGroupsKnown,
   }) {
     this.isLoading = isLoading ?? model.isLoading;
-    this.phraseGroupName = phraseGroupName ?? model.phraseGroupName;
-    this.id = id ?? model.id;
+    this.initial = initial ?? model.initial;
+    this.phraseGroupId = phraseGroupId ?? model.phraseGroupId;
+    this.phraseUid = phraseUid ?? model.phraseUid;
     this.phrase = phrase ?? model.phrase;
     this.definition = definition ?? model.definition;
     this.pronunciation = pronunciation ?? model.pronunciation;
@@ -57,19 +43,55 @@ class PhraseEditorModel {
     this.phraseGroupsKnown = phraseGroupsKnown ?? model.phraseGroupsKnown;
   }
 
-  List<String> get phraseGroupsKnownExceptSelected =>
-      phraseGroupsKnown.where((x) => x != phraseGroupName).toList();
+  String get phraseGroupName => phraseGroupsKnown[phraseGroupId] ?? '';
 
-  bool get isNewPhrase => id.isEmpty;
+  List<int> get phraseGroupsExceptSelected =>
+      phraseGroupsKnown.keys.where((groupId) => groupId != phraseGroupId).toList();
+
+  bool get isNewPhrase => phraseUid == null;
 }
 
-class PhraseEditorViewModel extends Cubit<PhraseEditorModel>
-    with FormValidation {
-  PhraseEditorViewModel(PhraseEditorPageArgument? arg)
-      : super(PhraseEditorModel.fromArgument(arg));
+class PhraseEditorPageResult {
+  PhraseEditorPageResult.deleted()
+      : isDeleted = true,
+        phrase = null;
+  PhraseEditorPageResult.completed(this.phrase) : isDeleted = false;
 
-  void updateGroupName(String value) {
-    emit(PhraseEditorModel.from(state, phraseGroupName: value));
+  final bool isDeleted;
+  final Phrase? phrase;
+}
+
+class PhraseEditorViewModel extends Cubit<PhraseEditorModel> with FormValidation {
+  PhraseEditorViewModel(int groupId, [String? phraseUid])
+      : super(PhraseEditorModel(groupId, phraseUid));
+
+  void init() {
+    final groups = svc.repPhraseGroup.findKnownNames();
+    final initial = svc.repPhrase.find(state.phraseGroupId, state.phraseUid!);
+
+    if (initial != null) {
+      emit(PhraseEditorModel.from(
+        state,
+        isLoading: false,
+        initial: initial,
+        phraseGroupsKnown: groups,
+        phrase: initial.phrase,
+        definition: initial.definition,
+        examples: initial.examples,
+        pronunciation: initial.pronunciation,
+      ));
+    } else {
+      emit(PhraseEditorModel.from(
+        state,
+        isLoading: false,
+        phraseGroupsKnown: groups,
+      ));
+    }
+  }
+
+  void updateGroup(String value) {
+    final groupId = state.phraseGroupsKnown.entries.singleWhere((x) => x.value == value).key;
+    emit(PhraseEditorModel.from(state, phraseGroupId: groupId));
   }
 
   void updatePhrase(String value) {
@@ -88,60 +110,54 @@ class PhraseEditorViewModel extends Cubit<PhraseEditorModel>
 
   void addExample(String? value) {
     if (value?.isNotEmpty ?? false) {
-      emit(
-          PhraseEditorModel.from(state, examples: state.examples..add(value!)));
+      emit(PhraseEditorModel.from(state, examples: state.examples..add(value!)));
       validateInlineIfNeeded();
     }
   }
 
   void removeExample(int index) {
     state.examples.removeAt(index);
-    emit(PhraseEditorModel.from(state,
-        examples: state.examples..removeAt(index)));
+    emit(PhraseEditorModel.from(state, examples: state.examples..removeAt(index)));
   }
 
   String? validatorForPhrase(String? value, String validationMessage) =>
-      validationMessageWhenEmpty(
-          value: value, messageWhenEmpty: () => validationMessage);
+      validationMessageWhenEmpty(value: value, messageWhenEmpty: () => validationMessage);
 
   String? validatorForDefinition(String? value, String validationMessage) =>
-      validationMessageWhenEmpty(
-          value: value, messageWhenEmpty: () => validationMessage);
+      validationMessageWhenEmpty(value: value, messageWhenEmpty: () => validationMessage);
 
   String? validatorForExamples(String validationMessage) =>
       state.examples.isEmpty ? validationMessage : null;
 
   void deletePhraseAndClose() {
     if (!state.isNewPhrase) {
-      svc.repPhrase.delete(state.phraseGroupName, state.id);
+      svc.repPhrase.delete(state.phraseGroupId, state.phraseUid!);
     }
 
-    backWithResult(PhraseEditorPageResult.deleted());
+    VARoute.i.popWithResult(PhraseEditorPageResult.deleted());
   }
 
   void tryApplyAndClose() {
     if (validate()) {
-      assert(state.phraseGroupName.isNotEmpty);
-
       final result = state.isNewPhrase
           ? svc.repPhrase.create(
-              state.phraseGroupName,
+              state.phraseGroupId,
               state.phrase,
               state.pronunciation,
               state.definition,
               state.examples,
             )
           : svc.repPhrase.update(
-              state.initialValues?.phraseGroupName,
-              state.phraseGroupName,
-              state.id,
+              state.initial?.groupId,
+              state.phraseGroupId,
+              state.phraseUid!,
               state.phrase,
               state.pronunciation,
               state.definition,
               state.examples,
             );
 
-      backWithResult(PhraseEditorPageResult.completed(result));
+      VARoute.i.popWithResult(PhraseEditorPageResult.completed(result));
     }
   }
 }

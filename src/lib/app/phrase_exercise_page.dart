@@ -8,9 +8,9 @@ import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 
 class PhraseExercisePage extends StatefulWidget {
-  final PhraseExercisePageArgument arg;
+  final int groupId;
 
-  PhraseExercisePage(this.arg);
+  PhraseExercisePage(this.groupId);
 
   @override
   _PhraseExercisePageState createState() => _PhraseExercisePageState();
@@ -22,7 +22,7 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
   @override
   void initState() {
     super.initState();
-    _vm = PhraseExerciseViewModel(widget.arg)..init();
+    _vm = PhraseExerciseViewModel(widget.groupId)..init();
   }
 
   @override

@@ -12,8 +12,13 @@ extension on DataGroup {
     if (stat.closeTargetUtc == settings.minDateTimeUtc) {
       stat.closeTargetUtc = DateTime.now().toUtc();
     }
-    return PhraseGroup(name,
-        phraseCount: stat.phraseCount, minRate: stat.minRate, closeTargetUtc: stat.closeTargetUtc);
+    return PhraseGroup(
+      groupId,
+      name,
+      phraseCount: stat.phraseCount,
+      minRate: stat.minRate,
+      closeTargetUtc: stat.closeTargetUtc,
+    );
   }
 
   _Stat reduce(_Stat current, DataPhrase item) {

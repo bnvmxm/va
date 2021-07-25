@@ -1,9 +1,10 @@
 import 'package:vocabulary_advancer/shared/settings.dart';
 
 class PhraseGroup {
-  PhraseGroup(this.name,
+  PhraseGroup(this.groupId, this.name,
       {required this.phraseCount, required this.minRate, required this.closeTargetUtc});
 
+  final int groupId;
   final String name;
   int phraseCount;
   int minRate;
@@ -11,13 +12,13 @@ class PhraseGroup {
 }
 
 class Phrase {
-  Phrase(this.groupName, this.id, this.phrase, this.pronunciation, this.definition, this.examples,
+  Phrase(this.groupId, this.id, this.phrase, this.pronunciation, this.definition, this.examples,
       this.createdUtc,
       {int? rate, DateTime? targetUtc, this.updatedUtc})
       : rate = rate ?? 0,
         targetUtc = targetUtc ?? settings.minDateTimeUtc;
 
-  final String groupName;
+  final int groupId;
   final String id;
   final String phrase;
   final String pronunciation;

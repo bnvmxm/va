@@ -1,26 +1,20 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vocabulary_advancer/app/phrase_exercise_page.dart';
 import 'package:vocabulary_advancer/core/extensions.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
-
-part 'phrase_exercise_vm.nav.dart';
 
 class PhraseExerciseModel {
   bool isLoading = true;
   bool isOpen = false;
   bool isAnimated = false;
   Phrase? current;
+  int groupId = 0;
   String groupName = '';
   bool isExerciseFirst = true;
 
   bool get isAny => current != null;
 
-  PhraseExerciseModel.fromArgument(PhraseExercisePageArgument arg) {
-    groupName = arg.groupName;
-    isExerciseFirst = arg.isExerciseFirst;
-  }
+  PhraseExerciseModel(this.groupId);
 
   PhraseExerciseModel.from(
     PhraseExerciseModel model, {
@@ -28,6 +22,7 @@ class PhraseExerciseModel {
     bool? isOpen,
     bool? isOpening,
     Phrase? current,
+    int? groupId,
     String? groupName,
     bool? isExerciseFirst,
   }) {
@@ -35,14 +30,14 @@ class PhraseExerciseModel {
     this.isOpen = isOpen ?? model.isOpen;
     this.isLoading = isLoading ?? model.isLoading;
     this.current = current ?? model.current;
+    this.groupId = groupId ?? model.groupId;
     this.groupName = groupName ?? model.groupName;
     this.isExerciseFirst = isExerciseFirst ?? model.isExerciseFirst;
   }
 }
 
 class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
-  PhraseExerciseViewModel(PhraseExercisePageArgument arg)
-      : super(PhraseExerciseModel.fromArgument(arg));
+  PhraseExerciseViewModel(int groupId) : super(PhraseExerciseModel(groupId));
 
   void init() => _setNextPhrase();
 
@@ -65,13 +60,13 @@ class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
     final current = state.current!;
     svc.log.d(() => '${current.phrase}: ${current.rate} -> $newRate, $newDuration');
 
-    svc.repPhrase.updateStat(state.groupName, state.current!.id, newRate, newDuration);
-
+    svc.repPhrase.updateStat(state.groupId, state.current!.id, newRate, newDuration);
     await _setNextPhrase();
   }
 
   Future _setNextPhrase() async {
-    state.current = svc.repPhrase.getForExercise(state.groupName, exceptId: state.current?.id);
+    state.current =
+        svc.repPhrase.getExerciseByGroup(state.groupId, exceptPhraseId: state.current?.id);
 
     emit(PhraseExerciseModel.from(
       state,

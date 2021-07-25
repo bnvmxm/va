@@ -33,8 +33,9 @@ class DataRate {
 }
 
 class DataGroup {
-  DataGroup({required this.name, required this.phrases});
+  DataGroup({required this.groupId, required this.name, required this.phrases});
 
+  int groupId;
   String name;
   Set<DataPhrase> phrases;
 }
@@ -47,9 +48,9 @@ class SampleDataProvider {
 final Map<String, List<DataRate>> _stat = {};
 
 final Set<DataGroup> _groups = <DataGroup>{
-  DataGroup(name: 'Phrasal Verbs', phrases: <DataPhrase>{
+  DataGroup(groupId: 100, name: 'Phrasal Verbs', phrases: <DataPhrase>{
     DataPhrase(
-        id: '1',
+        id: '759c2c18-2a58-495f-9f18-f03dbf4c9bb0',
         phrase: 'pick up',
         pronunciation: '[ pik ʌp ]',
         definition: 'To rise / To take smn on / To take something up by hand / To improve',
@@ -59,7 +60,7 @@ final Set<DataGroup> _groups = <DataGroup>{
         updatedUtc: DateTime.now().toUtc(),
         targetUtc: DateTime.now().toUtc().add(const Duration(minutes: 3))),
     DataPhrase(
-        id: '2',
+        id: '9b37ea6c-31fb-439d-93b0-0323aa788e48',
         phrase: 'stand up to',
         pronunciation: '[ stænd ʌp tu: ]',
         definition:
@@ -73,7 +74,7 @@ final Set<DataGroup> _groups = <DataGroup>{
         updatedUtc: DateTime.now().toUtc(),
         targetUtc: DateTime.now().toUtc().add(const Duration(minutes: 4))),
     DataPhrase(
-        id: '3',
+        id: '86d801f0-7d59-4cc5-a10f-8c49caa83cb5',
         phrase: 'stand up for',
         pronunciation: '[ stænd ʌp fɔ: ]',
         definition: 'To defend what you believe in',
@@ -83,7 +84,7 @@ final Set<DataGroup> _groups = <DataGroup>{
         updatedUtc: DateTime.now().toUtc(),
         targetUtc: DateTime.now().toUtc().add(const Duration(minutes: 5))),
     DataPhrase(
-        id: '4',
+        id: 'af8b1f2c-c465-43f3-b617-58bbff76a226',
         phrase: 'turn up',
         pronunciation: '[ tə:n ʌp ]',
         definition: 'To find, reveal something / Put in an appearance; arrive',
@@ -93,7 +94,7 @@ final Set<DataGroup> _groups = <DataGroup>{
         updatedUtc: DateTime.now().toUtc(),
         targetUtc: DateTime.now().toUtc().add(const Duration(minutes: 7))),
     DataPhrase(
-        id: '5',
+        id: '19eab1a9-edb4-4ef7-9292-150288bb67ea',
         phrase: 'put up',
         pronunciation: '[ put ʌp ]',
         definition: 'To lift to a higher position / To provide lodgings for / To nominate',
@@ -103,7 +104,7 @@ final Set<DataGroup> _groups = <DataGroup>{
         updatedUtc: DateTime.now().toUtc(),
         targetUtc: DateTime.now().toUtc().add(const Duration(days: 3))),
     DataPhrase(
-        id: '6',
+        id: '9b106ce9-12b8-403b-8944-55d6d46ca767',
         phrase: 'take up',
         pronunciation: '[ teik ʌp ]',
         definition: 'Become involved in / Occupy time, space, or attention',
@@ -113,5 +114,5 @@ final Set<DataGroup> _groups = <DataGroup>{
         updatedUtc: DateTime.now().toUtc(),
         targetUtc: DateTime.now().toUtc().add(const Duration(days: 1))),
   }),
-  DataGroup(name: 'Phrasal Verbs vol. 2', phrases: <DataPhrase>{})
+  DataGroup(groupId: 101, name: 'Phrasal Verbs vol. 2', phrases: <DataPhrase>{})
 };

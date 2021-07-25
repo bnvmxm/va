@@ -22,7 +22,7 @@ class FakeServiceProvider extends Fake implements ServiceProvider {
   @override
   AppLogger get log => MockAppLogger();
   @override
-  LocalizationService get localizationService => MockLocalizationService();
+  LocalizationService get localization => MockLocalizationService();
   @override
   LocaleRepository get repLocale => MockLocaleRepository();
   @override
@@ -38,7 +38,7 @@ class FakeSampleDataProvider extends Fake implements SampleDataProvider {
 
   @override
   Set<DataGroup> get dataGroups => <DataGroup>{
-        DataGroup(name: 'Dummy Collection', phrases: <DataPhrase>{
+        DataGroup(groupId: 1, name: 'Dummy Collection', phrases: <DataPhrase>{
           DataPhrase(
               id: 'id0',
               phrase: 'phrase0',

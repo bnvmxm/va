@@ -13,12 +13,10 @@ class ServiceProvider {
   ServiceProvider(this._registry);
 
   AppLogger get log => _registry.get<AppLogger>();
-  LocalizationService get localizationService =>
-      _registry.get<LocalizationService>();
+  LocalizationService get localization => _registry.get<LocalizationService>();
 
   LocaleRepository get repLocale => _registry.get<LocaleRepository>();
-  PhraseGroupRepository get repPhraseGroup =>
-      _registry.get<PhraseGroupRepository>();
+  PhraseGroupRepository get repPhraseGroup => _registry.get<PhraseGroupRepository>();
   PhraseRepository get repPhrase => _registry.get<PhraseRepository>();
   SampleDataProvider get dataProvider => _registry.get<SampleDataProvider>();
 }

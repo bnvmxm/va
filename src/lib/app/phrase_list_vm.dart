@@ -1,18 +1,12 @@
-import 'dart:collection';
-
-import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vocabulary_advancer/app/base/va_app.dart';
-import 'package:vocabulary_advancer/app/phrase_editor_vm.dart';
-import 'package:vocabulary_advancer/app/phrase_list_page.dart';
-import 'package:vocabulary_advancer/app/services/navigation.dart';
+import 'package:vocabulary_advancer/app/navigation/va_route_info.dart';
+import 'package:vocabulary_advancer/app/navigation/va_router.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
-part 'phrase_list_vm.nav.dart';
-
 class PhraseListModel {
   bool isLoading = true;
+  int groupId = 0;
   String phraseGroupName = '';
   List<Phrase> phrases = [];
   int? selectedIndex;
@@ -21,16 +15,18 @@ class PhraseListModel {
   bool get anySelected => selectedIndex != null;
   bool isSelected(int index) => selectedIndex == index;
 
-  PhraseListModel(this.phraseGroupName);
+  PhraseListModel(this.groupId);
 
   PhraseListModel.from(
     PhraseListModel model, {
     bool? isLoading,
+    int? groupId,
     String? phraseGroupName,
     List<Phrase>? phrases,
     int? selectedIndex,
   }) {
     this.isLoading = isLoading ?? model.isLoading;
+    this.groupId = groupId ?? model.groupId;
     this.phraseGroupName = phraseGroupName ?? model.phraseGroupName;
     this.phrases = phrases ?? model.phrases;
     this.selectedIndex = selectedIndex ?? model.selectedIndex;
@@ -38,13 +34,13 @@ class PhraseListModel {
 }
 
 class PhraseListViewModel extends Cubit<PhraseListModel> {
-  PhraseListViewModel(String phraseGroupName)
-      : super(PhraseListModel(phraseGroupName));
+  PhraseListViewModel(int groupId) : super(PhraseListModel(groupId));
 
   void init() {
     emit(PhraseListModel.from(state,
         isLoading: false,
-        phrases: svc.repPhrase.findMany(state.phraseGroupName).toList()));
+        phraseGroupName: svc.repPhraseGroup.findSingle(state.groupId)?.name,
+        phrases: svc.repPhrase.findManyByGroup(state.groupId).toList()));
   }
 
   void select(int index) {
@@ -56,37 +52,14 @@ class PhraseListViewModel extends Cubit<PhraseListModel> {
     emit(PhraseListModel.from(state));
   }
 
-  Future navigateToAddPhrase() async {
-    final result = await forwardToAddPhrase(state.phraseGroupName);
-
-    if (result?.phrase?.groupName == state.phraseGroupName) {
-      emit(PhraseListModel.from(state,
-          phrases: state.phrases..add(result!.phrase!)));
-    }
+  void navigateToAddPhrase() {
+    VARoute.i.push(VARouteAddPhrase(state.groupId));
   }
 
   Future navigateToEditPhrase() async {
     assert(state.selectedIndex != null);
     final selectedPhrase = state.phrases[state.selectedIndex!];
 
-    final result = await forwardToEditPhrase(PhraseEditorPageArgument(
-        state.phraseGroupName,
-        id: selectedPhrase.id,
-        phrase: selectedPhrase.phrase,
-        pronunciation: selectedPhrase.pronunciation,
-        definition: selectedPhrase.definition,
-        examples: UnmodifiableListView(selectedPhrase.examples)));
-
-    if (result == null) return;
-
-    if (!result.isDeleted &&
-        result.phrase?.groupName == state.phraseGroupName) {
-      state.phrases[state.selectedIndex!] = result.phrase!;
-    } else {
-      // Deleted or moved to another collection
-      state.phrases.removeAt(state.selectedIndex!);
-    }
-
-    emit(PhraseListModel.from(state));
+    VARoute.i.push(VARouteEditPhrase(state.groupId, selectedPhrase.id));
   }
 }
