@@ -10,7 +10,8 @@ class StatTarget extends StatelessWidget {
   final TextStyle? textStyle;
 
   Icon getIcon(BuildContext context) => diff.isTargetFar()
-      ? Icon(Icons.assignment_turned_in, color: VATheme.of(context).colorAccentVariant, size: size)
+      ? Icon(Icons.assignment_turned_in,
+          color: VATheme.of(context).colorBackgroundIconSelected, size: size)
       : diff.isTargetClose()
           ? Icon(Icons.assignment_late, color: VATheme.of(context).colorAttention, size: size)
           : Icon(Icons.assignment, size: size);

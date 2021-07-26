@@ -24,9 +24,9 @@ class PhraseGroupGridCard extends StatelessWidget {
       Stack(alignment: AlignmentDirectional.topEnd, children: [
         _buildCardView(context),
         CircleAvatar(
-            backgroundColor: VATheme.of(context).colorAccentVariant,
+            backgroundColor: VATheme.of(context).colorBackgroundIconSelected,
             radius: 16,
-            child: Icon(Icons.check, color: VATheme.of(context).colorPrimaryDark)),
+            child: Icon(Icons.check, color: VATheme.of(context).colorForegroundIconSelected)),
       ]);
 
   Widget _buildCardView(BuildContext context) => Padding(
@@ -37,8 +37,8 @@ class PhraseGroupGridCard extends StatelessWidget {
           shape: RoundedRectangleBorder(
             side: BorderSide(
                 color: isSelected
-                    ? VATheme.of(context).colorAccentVariant
-                    : VATheme.of(context).colorPrimary,
+                    ? VATheme.of(context).colorBackgroundIconSelected
+                    : VATheme.of(context).colorBackgroundIconUnselected,
                 width: isSelected ? 1.0 : 0.0),
             borderRadius: BorderRadius.circular(16.0),
           ),
@@ -59,7 +59,7 @@ class PhraseGroupGridCard extends StatelessWidget {
                         begin: Alignment.topCenter,
                         end: Alignment.bottomCenter,
                         colors: [
-                      VATheme.of(context).colorPrimary,
+                      VATheme.of(context).colorBackgroundCard,
                       VATheme.of(context).colorPrimary600
                     ])),
                 child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [

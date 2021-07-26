@@ -19,6 +19,7 @@ class PhraseGroupRepository {
 
   PhraseGroup? findSingleBy(String? name) {
     final dto = svc.dataProvider.dataGroups.firstWhereOrNull((x) => x.name == name);
+
     return dto?.toModel();
   }
 
@@ -33,6 +34,7 @@ class PhraseGroupRepository {
 
   PhraseGroup? rename(int id, String toName) {
     final dto = svc.dataProvider.dataGroups.firstWhereOrNull((x) => x.groupId == id);
+
     if (dto == null) return null;
     dto.name = toName;
     return dto.toModel();

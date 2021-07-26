@@ -40,7 +40,7 @@ Widget raisedButtonDefault(
         text: text,
         color: isDestructive
             ? VATheme.of(context).colorAttention
-            : VATheme.of(context).colorAccentVariant,
+            : VATheme.of(context).colorTextAccent,
         width: width,
         height: height,
         padding: padding,

@@ -58,7 +58,7 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
                   actions: [
                     IconButton(
                         icon: Icon(Icons.save),
-                        color: VATheme.of(context).colorAccentVariant,
+                        color: VATheme.of(context).colorTextAccent,
                         onPressed: _vm.tryApplyAndClose),
                     if (!model.isNewPhrase)
                       IconButton(
@@ -82,7 +82,7 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
           body: model.isLoading
               ? CircularProgressIndicator()
               : WillPopScope(
-                  onWillPop: () => _onWillPop(_vm),
+                  onWillPop: () => _onWillPop(_vm, context),
                   child: SingleChildScrollView(
                       padding: const EdgeInsets.all(16.0),
                       scrollDirection: Axis.vertical,
@@ -226,11 +226,12 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
                                                     Transform.scale(
                                                         scale: 0.8,
                                                         child: CircleAvatar(
-                                                          backgroundColor:
-                                                              VATheme.of(context).colorAccent,
+                                                          backgroundColor: VATheme.of(context)
+                                                              .colorBackgroundIconSelected,
                                                           child: IconButton(
                                                               icon: Icon(Icons.delete_outline),
-                                                              color: Colors.white,
+                                                              color: VATheme.of(context)
+                                                                  .colorForegroundIconSelected,
                                                               onPressed: () {
                                                                 _vm.removeExample(i);
                                                               }),
@@ -251,9 +252,9 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
     }
   }
 
-  Future<bool> _onWillPop(PhraseEditorViewModel vm) async {
+  Future<bool> _onWillPop(PhraseEditorViewModel vm, BuildContext context) async {
     for (final n in _focusNodes) {
-      if (n.hasFocus) {
+      if (n.hasFocus && MediaQuery.of(context).viewInsets.bottom > 0 /* Keyboard on mobile */) {
         n.unfocus();
         return false;
       }

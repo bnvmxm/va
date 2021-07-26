@@ -15,13 +15,16 @@ class FormValidation {
 
   @protected
   void validateInlineIfNeeded() {
-    if (needInlineValidation && formKey.currentState != null && formKey.currentState!.validate()) {
+    if (needInlineValidation &&
+        formKey.currentState != null &&
+        formKey.currentState!.validate()) {
       needInlineValidation = false;
     }
   }
 
   @protected
-  String? validationMessageWhenEmpty({String? value, required String Function() messageWhenEmpty}) {
+  String? validationMessageWhenEmpty(
+      {String? value, required String Function() messageWhenEmpty}) {
     final val = value?.trim() ?? '';
 
     if (val.isEmpty) return messageWhenEmpty();

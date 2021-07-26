@@ -3,8 +3,10 @@ import 'package:vocabulary_advancer/core/services/rate_calculator.dart';
 import 'package:vocabulary_advancer/shared/settings.dart';
 
 extension DurationExt on Duration {
-  bool isTargetClose() => isNegative || inMinutes < settings.targetMinutesLowThreshold;
-  bool isTargetFar() => !isNegative && inHours > settings.targetHoursHighThreshold;
+  bool isTargetClose() =>
+      isNegative || inMinutes < settings.targetMinutesLowThreshold;
+  bool isTargetFar() =>
+      !isNegative && inHours > settings.targetHoursHighThreshold;
 
   String toStringAsTarget() {
     if (isNegative || inSeconds < 60) return '';
@@ -32,5 +34,6 @@ extension IntExt on int {
   bool isRateHigh() => this > settings.rateHighThreshold;
 
   int asRate(RateFeedback feedback) => calculateNextRate(this, feedback);
-  Duration asCooldown(RateFeedback feedback) => calculateCooldown(this, feedback);
+  Duration asCooldown(RateFeedback feedback) =>
+      calculateCooldown(this, feedback);
 }

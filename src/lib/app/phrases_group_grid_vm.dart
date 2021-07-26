@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/navigation/va_route_info.dart';
 import 'package:vocabulary_advancer/app/navigation/va_router.dart';
+import 'package:vocabulary_advancer/app/services/navigation.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
@@ -78,5 +79,5 @@ class PhraseGroupGridViewModel extends Cubit<PhraseGroupGridModel> {
     emit(PhraseGroupGridModel.from(state, phraseGroups: svc.repPhraseGroup.findMany().toList()));
   }
 
-  Future<void> nextLanguage() => svc.localization.switchLocale();
+  Future<void> switchLanguage() => svc.localizationService.switchLocale();
 }

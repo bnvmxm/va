@@ -93,8 +93,8 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
                   visible: !isAnimated,
                   child: Icon(Icons.mode_comment,
                       color: isOpen
-                          ? VATheme.of(context).colorAccentVariant
-                          : VATheme.of(context).colorForeground)),
+                          ? VATheme.of(context).colorForegroundIconSelected
+                          : VATheme.of(context).colorForegroundIconUnselected)),
               Expanded(
                   child: Padding(
                       padding: const EdgeInsets.only(left: 16.0),
@@ -136,25 +136,27 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
         IconButton(
             iconSize: 48,
             tooltip: Translations.of(context).labels.ExerciseResult.Negative,
-            icon: Icon(Icons.trending_down, color: VATheme.of(context).colorForeground),
+            icon:
+                Icon(Icons.trending_down, color: VATheme.of(context).colorForegroundIconUnselected),
             onPressed: () => _vm.next(RateFeedback.negative)),
         if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
         IconButton(
             iconSize: 48,
             tooltip: Translations.of(context).labels.ExerciseResult.Uncertain,
-            icon: Icon(Icons.trending_flat, color: VATheme.of(context).colorForeground),
+            icon:
+                Icon(Icons.trending_flat, color: VATheme.of(context).colorForegroundIconUnselected),
             onPressed: () => _vm.next(RateFeedback.uncertain)),
         if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
         IconButton(
             iconSize: 48,
             tooltip: Translations.of(context).labels.ExerciseResult.Positive,
-            icon: Icon(Icons.trending_up, color: VATheme.of(context).colorForeground),
+            icon: Icon(Icons.trending_up, color: VATheme.of(context).colorForegroundIconUnselected),
             onPressed: () => _vm.next(RateFeedback.positive)),
         if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
         IconButton(
             iconSize: 48,
             tooltip: Translations.of(context).labels.ExerciseResult.High,
-            icon: Icon(Icons.arrow_upward, color: VATheme.of(context).colorAccentVariant),
+            icon: Icon(Icons.arrow_upward, color: VATheme.of(context).colorForegroundIconSelected),
             onPressed: () => _vm.next(RateFeedback.highThershold)),
         if (withDivider) SizedBox(width: 8.0),
       ];
@@ -166,7 +168,7 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Icon(Icons.check_circle_outline,
-                size: 32, color: VATheme.of(context).colorAccentVariant),
+                size: 32, color: VATheme.of(context).colorForegroundIconSelected),
             const SizedBox(height: 16.0),
             Text(Translations.of(context).text.NoPhrase),
           ]));

@@ -61,6 +61,7 @@ class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
     svc.log.d(() => '${current.phrase}: ${current.rate} -> $newRate, $newDuration');
 
     svc.repPhrase.updateStat(state.groupId, state.current!.id, newRate, newDuration);
+
     await _setNextPhrase();
   }
 
