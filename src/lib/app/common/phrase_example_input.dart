@@ -48,7 +48,7 @@ class _PhraseExampleTextFormFieldState extends State<PhraseExampleTextFormField>
           IconButton(
               icon: Icon(Icons.add_circle_outline),
               iconSize: widget.iconSize,
-              color: VATheme.of(context).colorAccent,
+              color: VATheme.of(context).colorBackgroundIconSelected,
               padding: const EdgeInsets.all(16.0),
               onPressed: () {
                 widget.onSaved(_exampleController.text);

@@ -43,8 +43,7 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<PhraseEditorViewModel, PhraseEditorModel>(
+  Widget build(BuildContext context) => BlocBuilder<PhraseEditorViewModel, PhraseEditorModel>(
         bloc: _vm,
         builder: (context, model) => Scaffold(
           appBar: model.isLoading
@@ -58,7 +57,7 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
                   actions: [
                     IconButton(
                         icon: Icon(Icons.save),
-                        color: VATheme.of(context).colorAccentVariant,
+                        color: VATheme.of(context).colorTextAccent,
                         onPressed: _vm.tryApplyAndClose),
                     if (!model.isNewPhrase)
                       IconButton(
@@ -69,14 +68,8 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
                             final confirmed = await dialog.showModal(
                                 context: context,
                                 title: Translations.of(context).titles.Confirm,
-                                messages: [
-                                  Translations.of(context)
-                                      .text
-                                      .Confirmation
-                                      .DeletePhrase
-                                ],
-                                confirmText:
-                                    Translations.of(context).labels.Yes,
+                                messages: [Translations.of(context).text.Confirmation.DeletePhrase],
+                                confirmText: Translations.of(context).labels.Yes,
                                 declineText: Translations.of(context).labels.No,
                                 isDestructive: true);
                             if (confirmed) {
@@ -88,64 +81,51 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
           body: model.isLoading
               ? CircularProgressIndicator()
               : WillPopScope(
-                  onWillPop: () => _onWillPop(_vm),
+                  onWillPop: () => _onWillPop(_vm, context),
                   child: SingleChildScrollView(
                       padding: const EdgeInsets.all(16.0),
                       scrollDirection: Axis.vertical,
                       child: Form(
                           key: _vm.formKey,
-                          child:
-                              Column(mainAxisSize: MainAxisSize.min, children: [
+                          child: Column(mainAxisSize: MainAxisSize.min, children: [
                             Container(
                                 alignment: Alignment.topLeft,
                                 decoration: cardDecoration(context),
                                 padding: const EdgeInsets.all(16.0),
                                 child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       Chip(
                                           label: Text(model.phraseGroupName,
-                                              style: VATheme.of(context)
-                                                  .textBodyText2),
-                                          backgroundColor: VATheme.of(context)
-                                              .colorBackgroundMain),
+                                              style: VATheme.of(context).textBodyText2),
+                                          backgroundColor: VATheme.of(context).colorBackgroundMain),
                                       TypeAheadFormField<String>(
-                                        textFieldConfiguration:
-                                            TextFieldConfiguration(
-                                                focusNode: _focusNodes[0],
-                                                controller:
-                                                    _typeAheadController,
-                                                decoration: InputDecoration(
-                                                    labelText:
-                                                        Translations.of(context)
-                                                            .labels
-                                                            .EditorChangeGroup),
-                                                style: VATheme.of(context)
-                                                    .textBodyText1,
-                                                onEditingComplete: () {
-                                                  _selectGroup(_vm,
-                                                      _typeAheadController.text,
-                                                      andCleanInput: true);
-                                                }),
-                                        suggestionsCallback: (value) => model
-                                            .phraseGroupsKnownExceptSelected,
-                                        itemBuilder: (context, suggestion) =>
-                                            ListTile(
+                                        textFieldConfiguration: TextFieldConfiguration(
+                                            focusNode: _focusNodes[0],
+                                            controller: _typeAheadController,
+                                            decoration: InputDecoration(
+                                                labelText: Translations.of(context)
+                                                    .labels
+                                                    .EditorChangeGroup),
+                                            style: VATheme.of(context).textBodyText1,
+                                            onEditingComplete: () {
+                                              _selectGroup(_vm, _typeAheadController.text,
+                                                  andCleanInput: true);
+                                            }),
+                                        suggestionsCallback: (value) =>
+                                            model.phraseGroupsKnownExceptSelected,
+                                        itemBuilder: (context, suggestion) => ListTile(
                                           title: Text(suggestion),
                                         ),
-                                        transitionBuilder: (context,
-                                                suggestionsBox, controller) =>
+                                        transitionBuilder: (context, suggestionsBox, controller) =>
                                             suggestionsBox,
                                         onSuggestionSelected: (suggestion) {
-                                          _selectGroup(_vm, suggestion,
-                                              andCleanInput: true);
+                                          _selectGroup(_vm, suggestion, andCleanInput: true);
                                         },
                                         onSaved: (value) {
                                           if (value != null) {
-                                            _selectGroup(_vm, value,
-                                                andCleanInput: true);
+                                            _selectGroup(_vm, value, andCleanInput: true);
                                           }
                                         },
                                         hideOnEmpty: true,
@@ -157,60 +137,49 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
                                 decoration: cardDecoration(context),
                                 padding: const EdgeInsets.all(16.0),
                                 child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       TextFormField(
                                           decoration: InputDecoration(
                                               labelText:
-                                                  Translations.of(context)
-                                                      .labels
-                                                      .EditorPhrase,
+                                                  Translations.of(context).labels.EditorPhrase,
                                               icon: Icon(Icons.mode_comment)),
                                           initialValue: model.phrase,
-                                          validator: (v) =>
-                                              _vm.validatorForPhrase(
-                                                  v,
-                                                  Translations.of(context)
-                                                      .validationMessages
-                                                      .PhraseRequired),
+                                          validator: (v) => _vm.validatorForPhrase(
+                                              v,
+                                              Translations.of(context)
+                                                  .validationMessages
+                                                  .PhraseRequired),
                                           onChanged: _vm.updatePhrase,
                                           focusNode: _focusNodes[1],
-                                          style: VATheme.of(context)
-                                              .textBodyText1),
+                                          style: VATheme.of(context).textBodyText1),
                                       const SizedBox(height: 16.0),
                                       TextFormField(
                                           decoration: InputDecoration(
-                                              labelText:
-                                                  Translations.of(context)
-                                                      .labels
-                                                      .EditorPronunciation),
+                                              labelText: Translations.of(context)
+                                                  .labels
+                                                  .EditorPronunciation),
                                           initialValue: model.pronunciation,
                                           onChanged: _vm.updatePronunciation,
                                           focusNode: _focusNodes[2],
-                                          style: VATheme.of(context)
-                                              .textBodyText1),
+                                          style: VATheme.of(context).textBodyText1),
                                       const SizedBox(height: 16.0),
                                       TextFormField(
                                           decoration: InputDecoration(
                                               labelText:
-                                                  Translations.of(context)
-                                                      .labels
-                                                      .EditorDefinition),
+                                                  Translations.of(context).labels.EditorDefinition),
                                           minLines: 3,
                                           maxLines: 3,
                                           initialValue: model.definition,
-                                          validator: (v) =>
-                                              _vm.validatorForDefinition(
-                                                  v,
-                                                  Translations.of(context)
-                                                      .validationMessages
-                                                      .DefinitionRequired),
+                                          validator: (v) => _vm.validatorForDefinition(
+                                              v,
+                                              Translations.of(context)
+                                                  .validationMessages
+                                                  .DefinitionRequired),
                                           onChanged: _vm.updateDefinition,
                                           focusNode: _focusNodes[3],
-                                          style: VATheme.of(context)
-                                              .textBodyText1),
+                                          style: VATheme.of(context).textBodyText1),
                                     ])),
                             const SizedBox(height: 16.0),
                             Container(
@@ -218,83 +187,55 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
                                 decoration: cardDecoration(context),
                                 padding: const EdgeInsets.all(16.0),
                                 child: Column(
-                                    crossAxisAlignment:
-                                        CrossAxisAlignment.center,
+                                    crossAxisAlignment: CrossAxisAlignment.center,
                                     mainAxisSize: MainAxisSize.min,
                                     children: [
                                       PhraseExampleTextFormField(
                                           focusNode: _focusNodes[4],
-                                          onValidate: (v) =>
-                                              _vm.validatorForExamples(
-                                                  Translations.of(context)
-                                                      .validationMessages
-                                                      .ExampleRequired),
+                                          onValidate: (v) => _vm.validatorForExamples(
+                                              Translations.of(context)
+                                                  .validationMessages
+                                                  .ExampleRequired),
                                           onSaved: _vm.addExample),
                                       SizedBox(
-                                          height: model.examples.isNotEmpty
-                                              ? 120
-                                              : 0,
+                                          height: model.examples.isNotEmpty ? 120 : 0,
                                           child: ListView.builder(
                                               itemCount: model.examples.length,
                                               scrollDirection: Axis.horizontal,
-                                              padding:
-                                                  const EdgeInsets.all(8.0),
-                                              itemBuilder:
-                                                  (context, i) => Stack(
-                                                          alignment: Alignment
-                                                              .topRight,
-                                                          children: [
-                                                            Container(
-                                                              alignment:
-                                                                  Alignment
-                                                                      .topLeft,
-                                                              width: 240,
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      top: 8.0,
-                                                                      left: 8.0,
-                                                                      right:
-                                                                          16.0,
-                                                                      bottom:
-                                                                          16.0),
-                                                              margin:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      top: 16.0,
-                                                                      right:
-                                                                          16.0),
-                                                              decoration:
-                                                                  cardDecoration(
-                                                                      context,
-                                                                      mainBackgroundColor:
-                                                                          true),
-                                                              child: Wrap(
-                                                                  children: [
-                                                                    Text(
-                                                                        model.examples[
-                                                                            i],
-                                                                        overflow:
-                                                                            TextOverflow.fade)
-                                                                  ]),
-                                                            ),
-                                                            Transform.scale(
-                                                                scale: 0.8,
-                                                                child:
-                                                                    CircleAvatar(
-                                                                  backgroundColor:
-                                                                      VATheme.of(
-                                                                              context)
-                                                                          .colorAccent,
-                                                                  child: IconButton(
-                                                                      icon: Icon(Icons.delete_outline),
-                                                                      color: Colors.white,
-                                                                      onPressed: () {
-                                                                        _vm.removeExample(
-                                                                            i);
-                                                                      }),
-                                                                ))
-                                                          ])))
+                                              padding: const EdgeInsets.all(8.0),
+                                              itemBuilder: (context, i) =>
+                                                  Stack(alignment: Alignment.topRight, children: [
+                                                    Container(
+                                                      alignment: Alignment.topLeft,
+                                                      width: 240,
+                                                      padding: const EdgeInsets.only(
+                                                          top: 8.0,
+                                                          left: 8.0,
+                                                          right: 16.0,
+                                                          bottom: 16.0),
+                                                      margin: const EdgeInsets.only(
+                                                          top: 16.0, right: 16.0),
+                                                      decoration: cardDecoration(context,
+                                                          mainBackgroundColor: true),
+                                                      child: Wrap(children: [
+                                                        Text(model.examples[i],
+                                                            overflow: TextOverflow.fade)
+                                                      ]),
+                                                    ),
+                                                    Transform.scale(
+                                                        scale: 0.8,
+                                                        child: CircleAvatar(
+                                                          backgroundColor: VATheme.of(context)
+                                                              .colorBackgroundIconSelected,
+                                                          child: IconButton(
+                                                              icon: Icon(Icons.delete_outline),
+                                                              color: VATheme.of(context)
+                                                                  .colorForegroundIconSelected,
+                                                              onPressed: () {
+                                                                _vm.removeExample(i);
+                                                              }),
+                                                        ))
+                                                  ])))
                                     ])),
                           ])))),
         ),
@@ -310,9 +251,9 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
     }
   }
 
-  Future<bool> _onWillPop(PhraseEditorViewModel vm) async {
+  Future<bool> _onWillPop(PhraseEditorViewModel vm, BuildContext context) async {
     for (final n in _focusNodes) {
-      if (n.hasFocus) {
+      if (n.hasFocus && MediaQuery.of(context).viewInsets.bottom > 0 /* Keyboard on mobile */) {
         n.unfocus();
         return false;
       }

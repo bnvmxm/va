@@ -12,17 +12,20 @@ class Rotatable extends StatefulWidget {
   _RotatableState createState() => _RotatableState();
 }
 
-class _RotatableState extends State<Rotatable> with SingleTickerProviderStateMixin {
+class _RotatableState extends State<Rotatable>
+    with SingleTickerProviderStateMixin {
   late Animation<double> _rotation;
   late AnimationController _controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = AnimationController(duration: const Duration(milliseconds: 200), vsync: this);
+    _controller = AnimationController(
+        duration: const Duration(milliseconds: 200), vsync: this);
     if (widget.onRotated != null) {
       _controller.addStatusListener((status) {
-        if (status == AnimationStatus.completed || status == AnimationStatus.dismissed) {
+        if (status == AnimationStatus.completed ||
+            status == AnimationStatus.dismissed) {
           widget.onRotated!();
         }
       });

@@ -7,12 +7,15 @@ import 'package:vocabulary_advancer/shared/svc.dart';
 part 'phrase_group_repository.m.dart';
 
 class PhraseGroupRepository {
-  Iterable<String> findKnownNames() => svc.dataProvider.dataGroups.map((x) => x.name);
+  Iterable<String> findKnownNames() =>
+      svc.dataProvider.dataGroups.map((x) => x.name);
 
-  Iterable<PhraseGroup> findMany() => svc.dataProvider.dataGroups.map((x) => x.toModel());
+  Iterable<PhraseGroup> findMany() =>
+      svc.dataProvider.dataGroups.map((x) => x.toModel());
 
   PhraseGroup? findSingle(String? name) {
-    final dto = svc.dataProvider.dataGroups.firstWhereOrNull((x) => x.name == name);
+    final dto =
+        svc.dataProvider.dataGroups.firstWhereOrNull((x) => x.name == name);
     return dto?.toModel();
   }
 
@@ -23,7 +26,8 @@ class PhraseGroupRepository {
   }
 
   PhraseGroup? rename(String fromName, String toName) {
-    final dto = svc.dataProvider.dataGroups.firstWhereOrNull((x) => x.name == fromName);
+    final dto =
+        svc.dataProvider.dataGroups.firstWhereOrNull((x) => x.name == fromName);
     if (dto == null) return null;
     dto.name = toName;
     return dto.toModel();

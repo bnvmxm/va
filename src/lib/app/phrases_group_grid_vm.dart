@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:vocabulary_advancer/app/base/va_app.dart';
+import 'package:vocabulary_advancer/app/va_app.dart';
 import 'package:vocabulary_advancer/app/phrase_exercise_vm.dart';
 import 'package:vocabulary_advancer/app/phrases_group_editor_vm.dart';
 import 'package:vocabulary_advancer/app/phrases_group_grid_page.dart';
@@ -105,5 +105,5 @@ class PhraseGroupGridViewModel extends Cubit<PhraseGroupGridModel> {
         phraseGroups: svc.repPhraseGroup.findMany().toList()));
   }
 
-  Future<void> nextLanguage() => svc.localizationService.switchLocale();
+  Future<void> switchLanguage() => svc.localizationService.switchLocale();
 }

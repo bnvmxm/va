@@ -3,7 +3,8 @@ import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 
 BorderRadiusGeometry get borderRadius => BorderRadius.circular(8.0);
 
-Decoration cardDecoration(BuildContext context, {bool mainBackgroundColor = false}) =>
+Decoration cardDecoration(BuildContext context,
+        {bool mainBackgroundColor = false}) =>
     BoxDecoration(
         color: mainBackgroundColor
             ? VATheme.of(context).colorBackgroundMain

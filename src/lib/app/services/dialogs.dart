@@ -41,7 +41,8 @@ abstract class DialogWithResult<T> {
     return _completer!.future;
   }
 
-  Future<T> _showModal(BuildContext context, Widget body) => _show(context, body);
+  Future<T> _showModal(BuildContext context, Widget body) =>
+      _show(context, body);
 
   void _trySetResult(T result) {
     if (_completer != null) {
@@ -74,8 +75,9 @@ class ConfirmDialog extends DialogWithResult<bool> {
             content: SingleChildScrollView(
                 child: ListBody(
               children: messages
-                  .map((s) =>
-                      Text(s, style: VATheme.of(context).textBodyText1, textAlign: TextAlign.start))
+                  .map((s) => Text(s,
+                      style: VATheme.of(context).textBodyText1,
+                      textAlign: TextAlign.start))
                   .toList(),
             )),
             actionsPadding: const EdgeInsets.all(16.0),

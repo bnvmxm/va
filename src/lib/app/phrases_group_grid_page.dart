@@ -5,6 +5,7 @@ import 'package:vocabulary_advancer/app/common/phrase_group_grid_card.dart';
 import 'package:vocabulary_advancer/app/i18n/strings.g.dart';
 import 'package:vocabulary_advancer/app/phrases_group_grid_vm.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
+import 'package:vocabulary_advancer/app/va_app_vm.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 
 class PhraseGroupGridPage extends StatefulWidget {
@@ -28,98 +29,108 @@ class _PhraseGroupGridPageState extends State<PhraseGroupGridPage> {
   }
 
   @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<PhraseGroupGridViewModel, PhraseGroupGridModel>(
-          bloc: _vm,
-          builder: (context, model) => Scaffold(
-                appBar: AppBar(
-                  title: Text(Translations.of(context).titles.Collections,
-                      style: VATheme.of(context).textHeadline5),
-                  actions: _buildAppBarActions(context, model),
-                ),
-                body: model.isNotEmpty
-                    ? PhraseGroupsGrid(model, (item) {
-                        _vm.state.isSelected(item)
-                            ? _vm.unselect()
-                            : _vm.select(item);
-                      })
-                    : Empty(),
-                floatingActionButton: model.anySelected
-                    ? FloatingActionButton(
-                        tooltip: Translations.of(context).labels.Exercise,
-                        backgroundColor: model.anySelectedAndNotEmpty
-                            ? VATheme.of(context).colorAccentVariant
-                            : VATheme.of(context).colorBackgroundCard,
-                        foregroundColor: model.anySelectedAndNotEmpty
-                            ? VATheme.of(context).colorPrimaryDark
-                            : VATheme.of(context).colorPrimaryLight,
-                        onPressed: () async {
-                          await _vm.navigateToExercise();
-                        },
-                        child: Icon(Icons.view_carousel))
-                    : null,
-              ));
+  Widget build(BuildContext context) => BlocBuilder<PhraseGroupGridViewModel, PhraseGroupGridModel>(
+      bloc: _vm,
+      builder: (context, model) => Scaffold(
+            appBar: AppBar(
+              title: Text(Translations.of(context).titles.Collections,
+                  style: VATheme.of(context).textHeadline5),
+              actions: [
+                if (model.anySelected)
+                  IconButton(
+                      icon: Icon(Icons.view_list, color: VATheme.of(context).colorTextAccent),
+                      tooltip: Translations.of(context).labels.View,
+                      onPressed: () async {
+                        await _vm.navigateToGroup();
+                      }),
+                if (model.anySelected)
+                  IconButton(
+                      icon: Icon(Icons.edit, color: VATheme.of(context).colorTextAccent),
+                      tooltip: Translations.of(context).labels.Edit,
+                      onPressed: () async {
+                        await _vm.navigateToEditGroup();
+                      }),
+                if (!model.anySelected)
+                  IconButton(
+                      icon: Icon(Icons.plus_one,
+                          color: VATheme.of(context).colorForegroundIconUnselected),
+                      tooltip: Translations.of(context).labels.Add,
+                      onPressed: () async {
+                        await _vm.navigateToAddGroup();
+                      }),
+                HomeMenu(_vm),
+              ],
+            ),
+            body: model.isNotEmpty
+                ? PhraseGroupsGrid(model, (item) {
+                    _vm.state.isSelected(item) ? _vm.unselect() : _vm.select(item);
+                  })
+                : Empty(),
+            floatingActionButton: model.anySelected
+                ? FloatingActionButton(
+                    tooltip: Translations.of(context).labels.Exercise,
+                    backgroundColor: model.anySelectedAndNotEmpty
+                        ? VATheme.of(context).colorBackgroundIconSelected
+                        : VATheme.of(context).colorBackgroundIconUnselected,
+                    foregroundColor: model.anySelectedAndNotEmpty
+                        ? VATheme.of(context).colorForegroundIconSelected
+                        : VATheme.of(context).colorForegroundIconUnselected,
+                    onPressed: () async {
+                      await _vm.navigateToExercise();
+                    },
+                    child: Icon(Icons.view_carousel))
+                : null,
+          ));
+}
 
-  List<Widget> _buildAppBarActions(
-          BuildContext context, PhraseGroupGridModel model) =>
-      [
-        if (model.anySelected)
-          IconButton(
-              icon: Icon(Icons.view_list,
-                  color: VATheme.of(context).colorAccentVariant),
-              tooltip: Translations.of(context).labels.View,
-              onPressed: () async {
-                await _vm.navigateToGroup();
-              }),
-        if (model.anySelected)
-          IconButton(
-              icon: Icon(Icons.edit,
-                  color: VATheme.of(context).colorAccentVariant),
-              tooltip: Translations.of(context).labels.Edit,
-              onPressed: () async {
-                await _vm.navigateToEditGroup();
-              }),
-        if (!model.anySelected)
-          IconButton(
-              icon: Icon(Icons.plus_one),
-              tooltip: Translations.of(context).labels.Add,
-              onPressed: () async {
-                await _vm.navigateToAddGroup();
-              }),
-        PopupMenuButton<int>(
-          onSelected: (index) async => _onActionSelected(index),
-          itemBuilder: (context) => [
-            PopupMenuItem<int>(
-                value: 1,
-                child: Row(
-                  children: [
+class HomeMenu extends StatelessWidget {
+  final PhraseGroupGridViewModel _vm;
+  HomeMenu(this._vm) : super();
+
+  @override
+  Widget build(BuildContext context) => BlocBuilder<VAAppViewModel, VAAppModel>(
+      builder: (context, appModel) => PopupMenuButton<int>(
+            onSelected: (index) async => _onActionSelected(context, index),
+            itemBuilder: (context) => [
+              PopupMenuItem<int>(
+                  value: 1,
+                  child: Row(children: [
                     Icon(Icons.language),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(Translations.of(context).labels.Language),
-                    )
-                  ],
-                )),
-            PopupMenuItem(
-                value: 2,
-                child: Row(
-                  children: [
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(Translations.of(context).labels.Language))
+                  ])),
+              PopupMenuItem<int>(
+                  value: 2,
+                  child: Row(children: [
+                    Icon(appModel.themeId == VAThemeId.darkCold
+                        ? Icons.dark_mode_outlined
+                        : Icons.dark_mode),
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(appModel.themeId == VAThemeId.darkCold
+                            ? Translations.of(context).labels.LightTheme
+                            : Translations.of(context).labels.DarkTheme))
+                  ])),
+              PopupMenuItem(
+                  value: 3,
+                  child: Row(children: [
                     Icon(Icons.info),
                     Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 8.0),
-                      child: Text(Translations.of(context).labels.About),
-                    )
-                  ],
-                ))
-          ],
-        ),
-      ];
+                        padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                        child: Text(Translations.of(context).labels.About))
+                  ]))
+            ],
+          ));
 
-  Future _onActionSelected(int index) async {
+  Future<void> _onActionSelected(BuildContext context, int index) async {
     switch (index) {
       case 1:
-        return _vm.nextLanguage();
+        return _vm.switchLanguage();
       case 2:
+        BlocProvider.of<VAAppViewModel>(context).switchTheme();
+        break;
+      case 3:
         return _vm.navigateToAbout();
     }
   }
@@ -129,8 +140,7 @@ class PhraseGroupsGrid extends StatelessWidget {
   final PhraseGroupGridModel _model;
   final void Function(PhraseGroup) onPhraseGroupTap;
 
-  PhraseGroupsGrid(this._model, this.onPhraseGroupTap, {Key? key})
-      : super(key: key);
+  PhraseGroupsGrid(this._model, this.onPhraseGroupTap, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) => OrientationBuilder(
