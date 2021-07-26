@@ -11,15 +11,13 @@ import 'package:vocabulary_advancer/app/phrases_group_grid_page.dart';
 
 class VARoute extends ChangeNotifier {
   static VARoute i = VARoute._();
-
   VARoute._();
 
-  final List<VARouteInfo> _stack = [VARouteRoot()];
-  dynamic _popResult;
-
-  VARouteInfo get current => _stack.last;
+  final List<VARouteInfo> _stack = [];
   UnmodifiableListView<VARouteInfo> get stack => UnmodifiableListView<VARouteInfo>(_stack);
+  VARouteInfo? get current => _stack.lastOrNull;
 
+  dynamic _popResult;
   dynamic get popResult => _popResult;
 
   void push(VARouteInfo info) {
@@ -61,7 +59,7 @@ class VARouter extends RouterDelegate<VARouteInfo>
   final _route = VARoute.i;
 
   @override
-  VARouteInfo get currentConfiguration => _route.current;
+  VARouteInfo? get currentConfiguration => _route.current;
 
   @override
   GlobalKey<NavigatorState>? get navigatorKey => _nav;

@@ -1,18 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:uuid/uuid.dart';
 import 'package:vocabulary_advancer/app/navigation/va_route_info.dart';
+import 'package:vocabulary_advancer/shared/svc.dart';
 
 class VARouteParser extends RouteInformationParser<VARouteInfo> {
   @override
   Future<VARouteInfo> parseRouteInformation(RouteInformation routeInformation) async {
-    final uri = Uri.tryParse(routeInformation.location ?? '');
-    if (uri == null) {
+    final path = Uri.tryParse(routeInformation.location ?? '');
+    if (path == null) {
       return VARouteInfo.root();
     }
 
-    var routeSegment = uri.pathSegments[0];
-    var groupId = _extractGroupId(uri);
-    var phraseUid = _extractPhraseUid(uri);
+    var routeSegment = path.pathSegments.isNotEmpty ? path.pathSegments.first : '';
+    var groupId = _extractGroupId(path);
+    var phraseUid = _extractPhraseUid(path);
 
     switch (routeSegment) {
       case VARouteAbout.key:
@@ -37,8 +38,11 @@ class VARouteParser extends RouteInformationParser<VARouteInfo> {
   }
 
   @override
-  RouteInformation restoreRouteInformation(VARouteInfo path) =>
-      RouteInformation(location: path.toString());
+  RouteInformation restoreRouteInformation(VARouteInfo path) {
+    svc.log.d(() => 'restoreRouteInformation: $path');
+
+    return RouteInformation(location: path.toString());
+  }
 
   int _extractGroupId(Uri uri) {
     if (uri.pathSegments.length == 2) {

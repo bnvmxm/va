@@ -24,65 +24,65 @@ abstract class VARouteInfo {
   const factory VARouteInfo.editPhrase(int groupId, String phraseUid) = VARouteEditPhrase;
 
   @override
-  String toString() => path;
+  String toString() => '/$path';
 }
 
 class VARouteRoot extends VARouteInfo {
   const VARouteRoot() : super(key);
 
-  static const String key = '/';
+  static const String key = '';
 }
 
 class VARouteAbout extends VARouteInfo {
   const VARouteAbout() : super(key);
 
-  static const String key = '/about';
+  static const String key = 'about';
 }
 
 class VARouteAddPhraseGroup extends VARouteInfo {
   const VARouteAddPhraseGroup() : super(key);
 
-  static const String key = '/add_group';
+  static const String key = 'add_group';
 }
 
 class VARouteEditPhraseGroup extends VARouteInfo {
   const VARouteEditPhraseGroup(this.groupId) : super(key);
   final int groupId;
 
-  static const String key = '/edit_group';
+  static const String key = 'edit_group';
 
   @override
-  String toString() => '$key/$groupId';
+  String toString() => '/$key/$groupId';
 }
 
 class VARoutePhraseGroup extends VARouteInfo {
   const VARoutePhraseGroup(this.groupId) : super(key);
   final int groupId;
 
-  static const String key = '/group';
+  static const String key = 'group';
 
   @override
-  String toString() => '$key/$groupId';
+  String toString() => '/$key/$groupId';
 }
 
 class VARouteExercise extends VARouteInfo {
   const VARouteExercise(this.groupId) : super(key);
   final int groupId;
 
-  static const String key = '/exercise';
+  static const String key = 'exercise';
 
   @override
-  String toString() => '$key/$groupId';
+  String toString() => '/$key/$groupId';
 }
 
 class VARouteAddPhrase extends VARouteInfo {
   const VARouteAddPhrase(this.groupId) : super(key);
   final int groupId;
 
-  static const String key = '/add_phrase';
+  static const String key = 'add_phrase';
 
   @override
-  String toString() => '$key/$groupId';
+  String toString() => '/$key/$groupId';
 }
 
 class VARouteEditPhrase extends VARouteInfo {
@@ -90,8 +90,8 @@ class VARouteEditPhrase extends VARouteInfo {
   final int groupId;
   final String phraseUid;
 
-  static const String key = '/edit_phrase';
+  static const String key = 'edit_phrase';
 
   @override
-  String toString() => '$key/$groupId/$phraseUid';
+  String toString() => '/$key/$groupId/$phraseUid';
 }
