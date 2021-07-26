@@ -1,7 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:vocabulary_advancer/app/about_page.dart';
-import 'package:vocabulary_advancer/app/base/va_page.dart';
+import 'package:vocabulary_advancer/app/navigation/va_page.dart';
 import 'package:vocabulary_advancer/app/navigation/va_route_info.dart';
 import 'package:vocabulary_advancer/app/phrase_editor_page.dart';
 import 'package:vocabulary_advancer/app/phrase_exercise_page.dart';
