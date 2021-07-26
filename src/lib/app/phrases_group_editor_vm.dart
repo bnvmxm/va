@@ -33,16 +33,20 @@ class PhraseGroupEditorPageResult {
   final PhraseGroup? group;
 }
 
-class PhraseGroupEditorViewModel extends Cubit<PhraseGroupEditorModel> with FormValidation {
-  PhraseGroupEditorViewModel(int? groupId) : super(PhraseGroupEditorModel(groupId));
+class PhraseGroupEditorViewModel extends Cubit<PhraseGroupEditorModel>
+    with FormValidation {
+  PhraseGroupEditorViewModel(int? groupId)
+      : super(PhraseGroupEditorModel(groupId));
 
   void init() {
     final item = svc.repPhraseGroup.findSingle(state.groupId);
     emit(PhraseGroupEditorModel.from(state, initialGroupName: item?.name));
   }
 
-  String? validatorForName(String? name, String messageWhenEmpty, String messageWhenAlreadyExists) {
-    final empty = validationMessageWhenEmpty(value: name, messageWhenEmpty: () => messageWhenEmpty);
+  String? validatorForName(
+      String? name, String messageWhenEmpty, String messageWhenAlreadyExists) {
+    final empty = validationMessageWhenEmpty(
+        value: name, messageWhenEmpty: () => messageWhenEmpty);
 
     if (empty != null) return empty;
     if (svc.repPhraseGroup.findSingleBy(name) != null) {

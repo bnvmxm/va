@@ -30,50 +30,56 @@ class _PhraseGroupGridPageState extends State<PhraseGroupGridPage> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<PhraseGroupGridViewModel, PhraseGroupGridModel>(
-      bloc: _vm,
-      builder: (context, model) => Scaffold(
-            appBar: AppBar(
-              title: Text(Translations.of(context).titles.Collections,
-                  style: VATheme.of(context).textHeadline5),
-              actions: [
-                if (model.anySelected)
-                  IconButton(
-                      icon: Icon(Icons.view_list, color: VATheme.of(context).colorTextAccent),
-                      tooltip: Translations.of(context).labels.View,
-                      onPressed: () => _vm.navigateToGroup()),
-                if (model.anySelected)
-                  IconButton(
-                      icon: Icon(Icons.edit, color: VATheme.of(context).colorTextAccent),
-                      tooltip: Translations.of(context).labels.Edit,
-                      onPressed: () => _vm.navigateToEditor()),
-                if (!model.anySelected)
-                  IconButton(
-                      icon: Icon(Icons.plus_one,
-                          color: VATheme.of(context).colorForegroundIconUnselected),
-                      tooltip: Translations.of(context).labels.Add,
-                      onPressed: () => _vm.navigateToEditor()),
-                HomeMenu(_vm),
-              ],
-            ),
-            body: model.isNotEmpty
-                ? PhraseGroupsGrid(model, (item) {
-                    _vm.state.isSelected(item) ? _vm.unselect() : _vm.select(item);
-                  })
-                : Empty(),
-            floatingActionButton: model.anySelected
-                ? FloatingActionButton(
-                    tooltip: Translations.of(context).labels.Exercise,
-                    backgroundColor: model.anySelectedAndNotEmpty
-                        ? VATheme.of(context).colorBackgroundIconSelected
-                        : VATheme.of(context).colorBackgroundIconUnselected,
-                    foregroundColor: model.anySelectedAndNotEmpty
-                        ? VATheme.of(context).colorForegroundIconSelected
-                        : VATheme.of(context).colorForegroundIconUnselected,
-                    onPressed: () => _vm.navigateToExercise(),
-                    child: Icon(Icons.view_carousel))
-                : null,
-          ));
+  Widget build(BuildContext context) =>
+      BlocBuilder<PhraseGroupGridViewModel, PhraseGroupGridModel>(
+          bloc: _vm,
+          builder: (context, model) => Scaffold(
+                appBar: AppBar(
+                  title: Text(Translations.of(context).titles.Collections,
+                      style: VATheme.of(context).textHeadline5),
+                  actions: [
+                    if (model.anySelected)
+                      IconButton(
+                          icon: Icon(Icons.view_list,
+                              color: VATheme.of(context).colorTextAccent),
+                          tooltip: Translations.of(context).labels.View,
+                          onPressed: () => _vm.navigateToGroup()),
+                    if (model.anySelected)
+                      IconButton(
+                          icon: Icon(Icons.edit,
+                              color: VATheme.of(context).colorTextAccent),
+                          tooltip: Translations.of(context).labels.Edit,
+                          onPressed: () => _vm.navigateToEditor()),
+                    if (!model.anySelected)
+                      IconButton(
+                          icon: Icon(Icons.plus_one,
+                              color: VATheme.of(context)
+                                  .colorForegroundIconUnselected),
+                          tooltip: Translations.of(context).labels.Add,
+                          onPressed: () => _vm.navigateToEditor()),
+                    HomeMenu(_vm),
+                  ],
+                ),
+                body: model.isNotEmpty
+                    ? PhraseGroupsGrid(model, (item) {
+                        _vm.state.isSelected(item)
+                            ? _vm.unselect()
+                            : _vm.select(item);
+                      })
+                    : Empty(),
+                floatingActionButton: model.anySelected
+                    ? FloatingActionButton(
+                        tooltip: Translations.of(context).labels.Exercise,
+                        backgroundColor: model.anySelectedAndNotEmpty
+                            ? VATheme.of(context).colorBackgroundIconSelected
+                            : VATheme.of(context).colorBackgroundIconUnselected,
+                        foregroundColor: model.anySelectedAndNotEmpty
+                            ? VATheme.of(context).colorForegroundIconSelected
+                            : VATheme.of(context).colorForegroundIconUnselected,
+                        onPressed: () => _vm.navigateToExercise(),
+                        child: Icon(Icons.view_carousel))
+                    : null,
+              ));
 }
 
 class HomeMenu extends StatelessWidget {
@@ -133,7 +139,8 @@ class PhraseGroupsGrid extends StatelessWidget {
   final PhraseGroupGridModel _model;
   final void Function(PhraseGroup) onPhraseGroupTap;
 
-  PhraseGroupsGrid(this._model, this.onPhraseGroupTap, {Key? key}) : super(key: key);
+  PhraseGroupsGrid(this._model, this.onPhraseGroupTap, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) => OrientationBuilder(

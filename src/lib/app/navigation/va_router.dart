@@ -14,7 +14,8 @@ class VARoute extends ChangeNotifier {
   VARoute._();
 
   final List<VARouteInfo> _stack = [];
-  UnmodifiableListView<VARouteInfo> get stack => UnmodifiableListView<VARouteInfo>(_stack);
+  UnmodifiableListView<VARouteInfo> get stack =>
+      UnmodifiableListView<VARouteInfo>(_stack);
   VARouteInfo? get current => _stack.lastOrNull;
 
   dynamic _popResult;
@@ -79,7 +80,8 @@ class VARouter extends RouterDelegate<VARouteInfo>
       return VAPage(info.toString(), child: PhraseGroupEditorPage());
     }
     if (info is VARouteEditPhraseGroup) {
-      return VAPage(info.toString(), child: PhraseGroupEditorPage(info.groupId));
+      return VAPage(info.toString(),
+          child: PhraseGroupEditorPage(info.groupId));
     }
     if (info is VARoutePhraseGroup) {
       return VAPage(info.toString(), child: PhraseListPage(info.groupId));
@@ -91,7 +93,8 @@ class VARouter extends RouterDelegate<VARouteInfo>
       return VAPage(info.toString(), child: PhraseEditorPage(info.groupId));
     }
     if (info is VARouteEditPhrase) {
-      return VAPage(info.toString(), child: PhraseEditorPage(info.groupId, info.phraseUid));
+      return VAPage(info.toString(),
+          child: PhraseEditorPage(info.groupId, info.phraseUid));
     }
 
     return VAPage(info.toString(), child: PhraseGroupGridPage());

@@ -58,16 +58,18 @@ class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
     final newRate = state.current!.rate.asRate(feedback);
     final newDuration = newRate.asCooldown(feedback);
     final current = state.current!;
-    svc.log.d(() => '${current.phrase}: ${current.rate} -> $newRate, $newDuration');
+    svc.log.d(
+        () => '${current.phrase}: ${current.rate} -> $newRate, $newDuration');
 
-    svc.repPhrase.updateStat(state.groupId, state.current!.id, newRate, newDuration);
+    svc.repPhrase
+        .updateStat(state.groupId, state.current!.id, newRate, newDuration);
 
     await _setNextPhrase();
   }
 
   Future _setNextPhrase() async {
-    state.current =
-        svc.repPhrase.getExerciseByGroup(state.groupId, exceptPhraseId: state.current?.id);
+    state.current = svc.repPhrase
+        .getExerciseByGroup(state.groupId, exceptPhraseId: state.current?.id);
 
     emit(PhraseExerciseModel.from(
       state,

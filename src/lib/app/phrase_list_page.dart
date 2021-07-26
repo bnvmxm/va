@@ -32,52 +32,70 @@ class _PhraseListPageState extends State<PhraseListPage> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<PhraseListViewModel, PhraseListModel>(
-      bloc: _vm,
-      builder: (context, model) => Scaffold(
-          appBar: model.isLoading
-              ? null
-              : AppBar(
-                  title: Text(model.phraseGroupName, style: VATheme.of(context).textHeadline5),
-                  actions: _buildAppBarActions(context, model),
-                ),
-          body: model.isLoading
-              ? CircularProgressIndicator()
-              : model.phrases.isNotEmpty
-                  ? ListView.separated(
-                      itemCount: model.phrases.length,
-                      itemBuilder: (context, i) => _buildPhraseItem(context, model, i),
-                      separatorBuilder: (context, i) => const Divider(indent: 16, endIndent: 16))
-                  : Empty()));
+  Widget build(BuildContext context) =>
+      BlocBuilder<PhraseListViewModel, PhraseListModel>(
+          bloc: _vm,
+          builder: (context, model) => Scaffold(
+              appBar: model.isLoading
+                  ? null
+                  : AppBar(
+                      title: Text(model.phraseGroupName,
+                          style: VATheme.of(context).textHeadline5),
+                      actions: _buildAppBarActions(context, model),
+                    ),
+              body: model.isLoading
+                  ? CircularProgressIndicator()
+                  : model.phrases.isNotEmpty
+                      ? ListView.separated(
+                          itemCount: model.phrases.length,
+                          itemBuilder: (context, i) =>
+                              _buildPhraseItem(context, model, i),
+                          separatorBuilder: (context, i) =>
+                              const Divider(indent: 16, endIndent: 16))
+                      : Empty()));
 
-  Widget _buildPhraseItem(BuildContext context, PhraseListModel model, int index) => ListTileTheme(
+  Widget _buildPhraseItem(
+          BuildContext context, PhraseListModel model, int index) =>
+      ListTileTheme(
         selectedColor: VATheme.of(context).colorForegroundIconSelected,
         child: ListTile(
             selected: model.isSelected(index),
-            onTap: () => model.isSelected(index) ? _vm.unselect() : _vm.select(index),
-            title: Text(model.phrases[index].phrase, style: VATheme.of(context).textBodyText1),
+            onTap: () =>
+                model.isSelected(index) ? _vm.unselect() : _vm.select(index),
+            title: Text(model.phrases[index].phrase,
+                style: VATheme.of(context).textBodyText1),
             dense: false,
             leading: model.isSelected(index)
                 ? CircleAvatar(
-                    backgroundColor: VATheme.of(context).colorBackgroundIconSelected,
+                    backgroundColor:
+                        VATheme.of(context).colorBackgroundIconSelected,
                     radius: 12,
                     child: Icon(Icons.check,
-                        size: 12, color: VATheme.of(context).colorForegroundIconSelected))
+                        size: 12,
+                        color: VATheme.of(context).colorForegroundIconSelected))
                 : CircleAvatar(
-                    backgroundColor: VATheme.of(context).colorBackgroundIconUnselected,
+                    backgroundColor:
+                        VATheme.of(context).colorBackgroundIconUnselected,
                     radius: 12,
                     child: Icon(Icons.check,
-                        size: 12, color: VATheme.of(context).colorForegroundIconUnselected)),
+                        size: 12,
+                        color:
+                            VATheme.of(context).colorForegroundIconUnselected)),
             trailing: SizedBox(
               width: 48,
-              child: Center(child: StatTarget(model.phrases[index].targetUtc.differenceNowUtc())),
+              child: Center(
+                  child: StatTarget(
+                      model.phrases[index].targetUtc.differenceNowUtc())),
             )),
       );
 
-  List<Widget> _buildAppBarActions(BuildContext context, PhraseListModel model) => [
+  List<Widget> _buildAppBarActions(
+          BuildContext context, PhraseListModel model) =>
+      [
         if (model.anySelected)
           IconButton(
-              icon: Icon(Icons.edit, color: VATheme.of(context).colorTextAccent),
+              icon:
+                  Icon(Icons.edit, color: VATheme.of(context).colorTextAccent),
               tooltip: Translations.of(context).labels.Edit,
               onPressed: () => _vm.navigateToEditPhrase()),
         IconButton(

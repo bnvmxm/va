@@ -13,7 +13,8 @@ class StatTarget extends StatelessWidget {
       ? Icon(Icons.assignment_turned_in,
           color: VATheme.of(context).colorBackgroundIconSelected, size: size)
       : diff.isTargetClose()
-          ? Icon(Icons.assignment_late, color: VATheme.of(context).colorAttention, size: size)
+          ? Icon(Icons.assignment_late,
+              color: VATheme.of(context).colorAttention, size: size)
           : Icon(Icons.assignment, size: size);
 
   @override

@@ -59,15 +59,16 @@ class _VAAppState extends State<VAApp> {
   Brightness _getBrightness(VAThemeId themeId) =>
       themeId == VAThemeId.darkCold ? Brightness.dark : Brightness.light;
 
-  ColorScheme _getMaterialColorScheme(VAThemeId themeId) => _getColorScheme(themeId).copyWith(
-      brightness: _getBrightness(themeId),
-      background: _themes[themeId]!.colorBackgroundMain,
-      error: _themes[themeId]!.colorAttention,
-      primary: _themes[themeId]!.colorPrimary500,
-      primaryVariant: _themes[themeId]!.colorPrimary700,
-      secondary: _themes[themeId]!.colorSecondary,
-      secondaryVariant: _themes[themeId]!.colorSecondaryVariant,
-      surface: _themes[themeId]!.colorBackgroundMain);
+  ColorScheme _getMaterialColorScheme(VAThemeId themeId) =>
+      _getColorScheme(themeId).copyWith(
+          brightness: _getBrightness(themeId),
+          background: _themes[themeId]!.colorBackgroundMain,
+          error: _themes[themeId]!.colorAttention,
+          primary: _themes[themeId]!.colorPrimary500,
+          primaryVariant: _themes[themeId]!.colorPrimary700,
+          secondary: _themes[themeId]!.colorSecondary,
+          secondaryVariant: _themes[themeId]!.colorSecondaryVariant,
+          surface: _themes[themeId]!.colorBackgroundMain);
 
   MaterialColor _getMaterialColorSwatch(VAThemeId themeId) =>
       MaterialColor(_themes[themeId]!.colorPrimary500.value, <int, Color>{
@@ -130,11 +131,14 @@ class _VAAppState extends State<VAApp> {
         selectedRowColor: th.colorBackgroundIconSelected,
         inputDecorationTheme: InputDecorationTheme(
             focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(color: th.colorBackgroundIconSelected, width: 1.0))),
+                borderSide: BorderSide(
+                    color: th.colorBackgroundIconSelected, width: 1.0))),
         textSelectionTheme: TextSelectionThemeData(
-            cursorColor: th.colorTextCursor, selectionHandleColor: th.colorTextCursor),
+            cursorColor: th.colorTextCursor,
+            selectionHandleColor: th.colorTextCursor),
         accentIconTheme: IconThemeData(color: th.colorBackgroundIconSelected),
-        primaryIconTheme: IconThemeData(color: th.colorBackgroundIconUnselected),
+        primaryIconTheme:
+            IconThemeData(color: th.colorBackgroundIconUnselected),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
             foregroundColor: th.colorForegroundIconSelected,
             backgroundColor: th.colorBackgroundIconSelected),

@@ -11,6 +11,8 @@ class VAAppViewModel extends Cubit<VAAppModel> {
   VAAppViewModel() : super(VAAppModel(VAThemeId.darkCold));
 
   void switchTheme() {
-    emit(VAAppModel(state.themeId == VAThemeId.darkCold ? VAThemeId.light : VAThemeId.darkCold));
+    emit(VAAppModel(state.themeId == VAThemeId.darkCold
+        ? VAThemeId.light
+        : VAThemeId.darkCold));
   }
 }

@@ -7,7 +7,8 @@ class PhraseGroupsGrid extends StatelessWidget {
   final PhraseGroupGridModel _model;
   final void Function(PhraseGroup) onPhraseGroupTap;
 
-  PhraseGroupsGrid(this._model, this.onPhraseGroupTap, {Key? key}) : super(key: key);
+  PhraseGroupsGrid(this._model, this.onPhraseGroupTap, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) => OrientationBuilder(

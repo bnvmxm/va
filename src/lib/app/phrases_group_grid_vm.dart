@@ -1,7 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/navigation/va_route_info.dart';
 import 'package:vocabulary_advancer/app/navigation/va_router.dart';
-import 'package:vocabulary_advancer/app/services/navigation.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
@@ -14,7 +13,8 @@ class PhraseGroupGridModel {
       phraseGroupSelected != null && phraseGroupSelected!.phraseCount > 0;
   bool get isNotEmpty => phraseGroups.isNotEmpty;
 
-  bool isSelected(PhraseGroup item) => item.groupId == phraseGroupSelected?.groupId;
+  bool isSelected(PhraseGroup item) =>
+      item.groupId == phraseGroupSelected?.groupId;
 
   PhraseGroupGridModel();
   PhraseGroupGridModel.from(
@@ -76,8 +76,9 @@ class PhraseGroupGridViewModel extends Cubit<PhraseGroupGridModel> {
   void navigateToAbout() => VARoute.i.push(VARouteAbout());
 
   void _reset() {
-    emit(PhraseGroupGridModel.from(state, phraseGroups: svc.repPhraseGroup.findMany().toList()));
+    emit(PhraseGroupGridModel.from(state,
+        phraseGroups: svc.repPhraseGroup.findMany().toList()));
   }
 
-  Future<void> switchLanguage() => svc.localizationService.switchLocale();
+  Future<void> switchLanguage() => svc.localization.switchLocale();
 }

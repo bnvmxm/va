@@ -17,11 +17,13 @@ abstract class VARouteInfo {
   const factory VARouteInfo.root() = VARouteRoot;
   const factory VARouteInfo.about() = VARouteAbout;
   const factory VARouteInfo.addPhraseGroup() = VARouteAddPhraseGroup;
-  const factory VARouteInfo.editPhraseGroup(int groupId) = VARouteEditPhraseGroup;
+  const factory VARouteInfo.editPhraseGroup(int groupId) =
+      VARouteEditPhraseGroup;
   const factory VARouteInfo.exercise(int groupId) = VARouteExercise;
   const factory VARouteInfo.phraseGroup(int groupId) = VARoutePhraseGroup;
   const factory VARouteInfo.addPhrase(int groupId) = VARouteAddPhrase;
-  const factory VARouteInfo.editPhrase(int groupId, String phraseUid) = VARouteEditPhrase;
+  const factory VARouteInfo.editPhrase(int groupId, String phraseUid) =
+      VARouteEditPhrase;
 
   @override
   String toString() => '/$path';

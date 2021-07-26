@@ -107,9 +107,9 @@ class MockPhraseGroupRepository extends _i1.Mock
   }
 
   @override
-  Iterable<String> findKnownNames() => (super
-          .noSuchMethod(Invocation.method(#findKnownNames, []), returnValue: [])
-      as Iterable<String>);
+  Map<int, String> findKnownNames() =>
+      (super.noSuchMethod(Invocation.method(#findKnownNames, []),
+          returnValue: <int, String>{}) as Map<int, String>);
   @override
   Iterable<_i2.PhraseGroup> findMany() =>
       (super.noSuchMethod(Invocation.method(#findMany, []), returnValue: [])
@@ -119,13 +119,12 @@ class MockPhraseGroupRepository extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#create, [name]),
           returnValue: _FakePhraseGroup()) as _i2.PhraseGroup);
   @override
-  _i2.PhraseGroup? rename(String? fromName, String? toName) =>
-      (super.noSuchMethod(Invocation.method(#rename, [fromName, toName]))
+  _i2.PhraseGroup? rename(int? id, String? toName) =>
+      (super.noSuchMethod(Invocation.method(#rename, [id, toName]))
           as _i2.PhraseGroup?);
   @override
-  void delete(String? name) =>
-      super.noSuchMethod(Invocation.method(#delete, [name]),
-          returnValueForMissingStub: null);
+  void delete(int? id) => super.noSuchMethod(Invocation.method(#delete, [id]),
+      returnValueForMissingStub: null);
 }
 
 /// A class which mocks [PhraseRepository].
@@ -137,35 +136,39 @@ class MockPhraseRepository extends _i1.Mock implements _i8.PhraseRepository {
   }
 
   @override
-  Iterable<_i2.Phrase> findMany(String? groupName) =>
-      (super.noSuchMethod(Invocation.method(#findMany, [groupName]),
+  Iterable<_i2.Phrase> findManyByGroup(int? groupId) =>
+      (super.noSuchMethod(Invocation.method(#findManyByGroup, [groupId]),
           returnValue: []) as Iterable<_i2.Phrase>);
   @override
-  _i2.Phrase? create(String? groupName, String? phrase, String? pronunciation,
-          String? definition, List<String>? examples) =>
-      (super.noSuchMethod(Invocation.method(#create, [
-        groupName,
-        phrase,
-        pronunciation,
-        definition,
-        examples
-      ])) as _i2.Phrase?);
+  _i2.Phrase? getExerciseByGroup(int? groupId, {String? exceptPhraseId}) =>
+      (super.noSuchMethod(Invocation.method(#getExerciseByGroup, [groupId],
+          {#exceptPhraseId: exceptPhraseId})) as _i2.Phrase?);
   @override
-  void delete(String? groupName, String? phraseId) =>
-      super.noSuchMethod(Invocation.method(#delete, [groupName, phraseId]),
+  _i2.Phrase? find(int? groupId, String? phraseId) =>
+      (super.noSuchMethod(Invocation.method(#find, [groupId, phraseId]))
+          as _i2.Phrase?);
+  @override
+  _i2.Phrase? create(int? groupId, String? phrase, String? pronunciation,
+          String? definition, List<String>? examples) =>
+      (super.noSuchMethod(Invocation.method(
+              #create, [groupId, phrase, pronunciation, definition, examples]))
+          as _i2.Phrase?);
+  @override
+  void delete(int? groupId, String? phraseId) =>
+      super.noSuchMethod(Invocation.method(#delete, [groupId, phraseId]),
           returnValueForMissingStub: null);
   @override
   _i2.Phrase? update(
-          String? oldGroupName,
-          String? newGroupName,
+          int? oldGroupId,
+          int? groupId,
           String? phraseId,
           String? phrase,
           String? pronunciation,
           String? definition,
           List<String>? examples) =>
       (super.noSuchMethod(Invocation.method(#update, [
-        oldGroupName,
-        newGroupName,
+        oldGroupId,
+        groupId,
         phraseId,
         phrase,
         pronunciation,
@@ -173,9 +176,9 @@ class MockPhraseRepository extends _i1.Mock implements _i8.PhraseRepository {
         examples
       ])) as _i2.Phrase?);
   @override
-  _i2.Phrase? updateStat(String? groupName, String? phraseId, int? newRate,
+  _i2.Phrase? updateStat(int? groupId, String? phraseId, int? newRate,
           Duration? cooldownRange) =>
       (super.noSuchMethod(Invocation.method(
-              #updateStat, [groupName, phraseId, newRate, cooldownRange]))
+              #updateStat, [groupId, phraseId, newRate, cooldownRange]))
           as _i2.Phrase?);
 }

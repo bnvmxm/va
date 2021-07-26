@@ -5,7 +5,11 @@ import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/core/extensions.dart';
 
 class PhraseGroupGridCard extends StatelessWidget {
-  PhraseGroupGridCard({bool? isSelected, String? name, int? phraseCount, DateTime? closeTargetUtc})
+  PhraseGroupGridCard(
+      {bool? isSelected,
+      String? name,
+      int? phraseCount,
+      DateTime? closeTargetUtc})
       : isSelected = isSelected ?? false,
         name = name ?? '',
         phraseCount = phraseCount ?? 0,
@@ -26,7 +30,8 @@ class PhraseGroupGridCard extends StatelessWidget {
         CircleAvatar(
             backgroundColor: VATheme.of(context).colorBackgroundIconSelected,
             radius: 16,
-            child: Icon(Icons.check, color: VATheme.of(context).colorForegroundIconSelected)),
+            child: Icon(Icons.check,
+                color: VATheme.of(context).colorForegroundIconSelected)),
       ]);
 
   Widget _buildCardView(BuildContext context) => Padding(
@@ -52,7 +57,8 @@ class PhraseGroupGridCard extends StatelessWidget {
                         maxLines: 2,
                         style: VATheme.of(context).textAccentSubtitle1))),
             Container(
-                padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 12.0),
+                padding: const EdgeInsets.only(
+                    left: 16.0, right: 16.0, bottom: 12.0),
                 alignment: Alignment.topLeft,
                 decoration: BoxDecoration(
                     gradient: LinearGradient(
@@ -62,18 +68,23 @@ class PhraseGroupGridCard extends StatelessWidget {
                       VATheme.of(context).colorBackgroundCard,
                       VATheme.of(context).colorPrimary600
                     ])),
-                child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  const Divider(),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Row(children: [
-                      Expanded(
-                          child: Text(
-                              Translations.of(context).labels.StatPhrases(count: phraseCount),
-                              style: VATheme.of(context).textCaption)),
-                      if (phraseCount > 0) StatTarget(closeTargetUtc.differenceNowUtc()),
-                    ]),
-                  ),
-                ])),
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      const Divider(),
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8.0),
+                        child: Row(children: [
+                          Expanded(
+                              child: Text(
+                                  Translations.of(context)
+                                      .labels
+                                      .StatPhrases(count: phraseCount),
+                                  style: VATheme.of(context).textCaption)),
+                          if (phraseCount > 0)
+                            StatTarget(closeTargetUtc.differenceNowUtc()),
+                        ]),
+                      ),
+                    ])),
           ])));
 }

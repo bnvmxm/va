@@ -21,7 +21,9 @@ Widget _raisedButton(
         child: SizedBox(
             width: width ?? 80,
             height: height ?? 40,
-            child: Center(child: Text(text, key: key, style: VATheme.of(context).textButton))));
+            child: Center(
+                child: Text(text,
+                    key: key, style: VATheme.of(context).textButton))));
 
 Widget raisedButtonDefault(
         {required BuildContext context,

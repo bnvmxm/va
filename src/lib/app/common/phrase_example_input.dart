@@ -22,20 +22,25 @@ class PhraseExampleTextFormField extends StatefulWidget {
   final String? Function(String? value) onValidate;
 
   @override
-  State<PhraseExampleTextFormField> createState() => _PhraseExampleTextFormFieldState();
+  State<PhraseExampleTextFormField> createState() =>
+      _PhraseExampleTextFormFieldState();
 }
 
-class _PhraseExampleTextFormFieldState extends State<PhraseExampleTextFormField> {
+class _PhraseExampleTextFormFieldState
+    extends State<PhraseExampleTextFormField> {
   final _exampleController = TextEditingController();
 
   @override
-  Widget build(BuildContext context) => Stack(alignment: Alignment.topRight, children: [
+  Widget build(BuildContext context) =>
+      Stack(alignment: Alignment.topRight, children: [
         Padding(
-            padding: EdgeInsets.only(right: _exampleController.text.isEmpty ? 0 : 64.0),
+            padding: EdgeInsets.only(
+                right: _exampleController.text.isEmpty ? 0 : 64.0),
             child: TextFormField(
                 controller: _exampleController,
                 decoration: InputDecoration(
-                    labelText: widget.labelText ?? Translations.of(context).labels.AddExample),
+                    labelText: widget.labelText ??
+                        Translations.of(context).labels.AddExample),
                 minLines: 1,
                 maxLines: widget.maxLines,
                 validator: widget.onValidate,
