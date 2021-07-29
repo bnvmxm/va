@@ -2,7 +2,6 @@
 
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/common/form_validation.dart';
-import 'package:vocabulary_advancer/app/navigation/va_router.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
@@ -45,9 +44,8 @@ class PhraseEditorModel {
 
   String get phraseGroupName => phraseGroupsKnown[phraseGroupId] ?? '';
 
-  List<int> get phraseGroupsExceptSelected => phraseGroupsKnown.keys
-      .where((groupId) => groupId != phraseGroupId)
-      .toList();
+  List<int> get phraseGroupsExceptSelected =>
+      phraseGroupsKnown.keys.where((groupId) => groupId != phraseGroupId).toList();
 
   bool get isNewPhrase => phraseUid == null;
 }
@@ -62,8 +60,7 @@ class PhraseEditorPageResult {
   final Phrase? phrase;
 }
 
-class PhraseEditorViewModel extends Cubit<PhraseEditorModel>
-    with FormValidation {
+class PhraseEditorViewModel extends Cubit<PhraseEditorModel> with FormValidation {
   PhraseEditorViewModel(int groupId, [String? phraseUid])
       : super(PhraseEditorModel(groupId, phraseUid));
 
@@ -92,9 +89,7 @@ class PhraseEditorViewModel extends Cubit<PhraseEditorModel>
   }
 
   void updateGroup(String value) {
-    final groupId = state.phraseGroupsKnown.entries
-        .singleWhere((x) => x.value == value)
-        .key;
+    final groupId = state.phraseGroupsKnown.entries.singleWhere((x) => x.value == value).key;
     emit(PhraseEditorModel.from(state, phraseGroupId: groupId));
   }
 
@@ -114,25 +109,21 @@ class PhraseEditorViewModel extends Cubit<PhraseEditorModel>
 
   void addExample(String? value) {
     if (value?.isNotEmpty ?? false) {
-      emit(
-          PhraseEditorModel.from(state, examples: state.examples..add(value!)));
+      emit(PhraseEditorModel.from(state, examples: state.examples..add(value!)));
       validateInlineIfNeeded();
     }
   }
 
   void removeExample(int index) {
     state.examples.removeAt(index);
-    emit(PhraseEditorModel.from(state,
-        examples: state.examples..removeAt(index)));
+    emit(PhraseEditorModel.from(state, examples: state.examples..removeAt(index)));
   }
 
   String? validatorForPhrase(String? value, String validationMessage) =>
-      validationMessageWhenEmpty(
-          value: value, messageWhenEmpty: () => validationMessage);
+      validationMessageWhenEmpty(value: value, messageWhenEmpty: () => validationMessage);
 
   String? validatorForDefinition(String? value, String validationMessage) =>
-      validationMessageWhenEmpty(
-          value: value, messageWhenEmpty: () => validationMessage);
+      validationMessageWhenEmpty(value: value, messageWhenEmpty: () => validationMessage);
 
   String? validatorForExamples(String validationMessage) =>
       state.examples.isEmpty ? validationMessage : null;
@@ -142,7 +133,7 @@ class PhraseEditorViewModel extends Cubit<PhraseEditorModel>
       svc.repPhrase.delete(state.phraseGroupId, state.phraseUid!);
     }
 
-    VARoute.i.popWithResult(PhraseEditorPageResult.deleted());
+    svc.route.popWithResult(PhraseEditorPageResult.deleted());
   }
 
   void tryApplyAndClose() {
@@ -165,7 +156,7 @@ class PhraseEditorViewModel extends Cubit<PhraseEditorModel>
               state.examples,
             );
 
-      VARoute.i.popWithResult(PhraseEditorPageResult.completed(result));
+      svc.route.popWithResult(PhraseEditorPageResult.completed(result));
     }
   }
 }

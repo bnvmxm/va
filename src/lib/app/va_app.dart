@@ -2,10 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:vocabulary_advancer/app/i18n/strings.g.dart';
-import 'package:vocabulary_advancer/app/navigation/va_route_parser.dart';
 import 'package:vocabulary_advancer/app/navigation/va_router.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/app/va_app_vm.dart';
+import 'package:vocabulary_advancer/shared/svc.dart';
 
 class VAApp extends StatefulWidget {
   @override
@@ -18,20 +18,6 @@ class _VAAppState extends State<VAApp> {
     VAThemeId.light: VALightThemeSpecification()
   };
 
-  final VARouteParser _routeParser = VARouteParser();
-  final VARouter _router = VARouter();
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-  @override
-  void dispose() {
-    _router.dispose();
-    super.dispose();
-  }
-
   @override
   Widget build(BuildContext context) => TranslationProvider(
         child: BlocProvider<VAAppViewModel>(
@@ -39,8 +25,8 @@ class _VAAppState extends State<VAApp> {
             child: BlocBuilder<VAAppViewModel, VAAppModel>(
               builder: (context, model) => VATheme(model.themeId,
                   child: MaterialApp.router(
-                    routeInformationParser: _routeParser,
-                    routerDelegate: _router,
+                    routeInformationParser: svc.routeParser,
+                    routerDelegate: VARouter(svc.route),
                     debugShowCheckedModeBanner: false,
                     theme: _getMaterialThemeData(model.themeId),
                     localizationsDelegates: const [
@@ -59,16 +45,15 @@ class _VAAppState extends State<VAApp> {
   Brightness _getBrightness(VAThemeId themeId) =>
       themeId == VAThemeId.darkCold ? Brightness.dark : Brightness.light;
 
-  ColorScheme _getMaterialColorScheme(VAThemeId themeId) =>
-      _getColorScheme(themeId).copyWith(
-          brightness: _getBrightness(themeId),
-          background: _themes[themeId]!.colorBackgroundMain,
-          error: _themes[themeId]!.colorAttention,
-          primary: _themes[themeId]!.colorPrimary500,
-          primaryVariant: _themes[themeId]!.colorPrimary700,
-          secondary: _themes[themeId]!.colorSecondary,
-          secondaryVariant: _themes[themeId]!.colorSecondaryVariant,
-          surface: _themes[themeId]!.colorBackgroundMain);
+  ColorScheme _getMaterialColorScheme(VAThemeId themeId) => _getColorScheme(themeId).copyWith(
+      brightness: _getBrightness(themeId),
+      background: _themes[themeId]!.colorBackgroundMain,
+      error: _themes[themeId]!.colorAttention,
+      primary: _themes[themeId]!.colorPrimary500,
+      primaryVariant: _themes[themeId]!.colorPrimary700,
+      secondary: _themes[themeId]!.colorSecondary,
+      secondaryVariant: _themes[themeId]!.colorSecondaryVariant,
+      surface: _themes[themeId]!.colorBackgroundMain);
 
   MaterialColor _getMaterialColorSwatch(VAThemeId themeId) =>
       MaterialColor(_themes[themeId]!.colorPrimary500.value, <int, Color>{
@@ -131,14 +116,11 @@ class _VAAppState extends State<VAApp> {
         selectedRowColor: th.colorBackgroundIconSelected,
         inputDecorationTheme: InputDecorationTheme(
             focusedBorder: UnderlineInputBorder(
-                borderSide: BorderSide(
-                    color: th.colorBackgroundIconSelected, width: 1.0))),
+                borderSide: BorderSide(color: th.colorBackgroundIconSelected, width: 1.0))),
         textSelectionTheme: TextSelectionThemeData(
-            cursorColor: th.colorTextCursor,
-            selectionHandleColor: th.colorTextCursor),
+            cursorColor: th.colorTextCursor, selectionHandleColor: th.colorTextCursor),
         accentIconTheme: IconThemeData(color: th.colorBackgroundIconSelected),
-        primaryIconTheme:
-            IconThemeData(color: th.colorBackgroundIconUnselected),
+        primaryIconTheme: IconThemeData(color: th.colorBackgroundIconUnselected),
         floatingActionButtonTheme: FloatingActionButtonThemeData(
             foregroundColor: th.colorForegroundIconSelected,
             backgroundColor: th.colorBackgroundIconSelected),

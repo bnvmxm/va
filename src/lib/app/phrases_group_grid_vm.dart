@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/navigation/va_route_info.dart';
-import 'package:vocabulary_advancer/app/navigation/va_router.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
@@ -13,8 +12,7 @@ class PhraseGroupGridModel {
       phraseGroupSelected != null && phraseGroupSelected!.phraseCount > 0;
   bool get isNotEmpty => phraseGroups.isNotEmpty;
 
-  bool isSelected(PhraseGroup item) =>
-      item.groupId == phraseGroupSelected?.groupId;
+  bool isSelected(PhraseGroup item) => item.groupId == phraseGroupSelected?.groupId;
 
   PhraseGroupGridModel();
   PhraseGroupGridModel.from(
@@ -58,26 +56,25 @@ class PhraseGroupGridViewModel extends Cubit<PhraseGroupGridModel> {
     emit(PhraseGroupGridModel.from(state..unselect()));
   }
 
-  void navigateToEditor() => VARoute.i.push(state.phraseGroupSelected == null
+  void navigateToEditor() => svc.route.push(state.phraseGroupSelected == null
       ? VARouteAddPhraseGroup()
       : VARouteEditPhraseGroup(state.phraseGroupSelected!.groupId));
 
   void navigateToGroup() {
     assert(state.phraseGroupSelected != null);
-    VARoute.i.push(VARoutePhraseGroup(state.phraseGroupSelected!.groupId));
+    svc.route.push(VARoutePhraseGroup(state.phraseGroupSelected!.groupId));
   }
 
   void navigateToExercise() {
     if (state.anySelectedAndNotEmpty) {
-      VARoute.i.push(VARouteExercise(state.phraseGroupSelected!.groupId));
+      svc.route.push(VARouteExercise(state.phraseGroupSelected!.groupId));
     }
   }
 
-  void navigateToAbout() => VARoute.i.push(VARouteAbout());
+  void navigateToAbout() => svc.route.push(VARouteAbout());
 
   void _reset() {
-    emit(PhraseGroupGridModel.from(state,
-        phraseGroups: svc.repPhraseGroup.findMany().toList()));
+    emit(PhraseGroupGridModel.from(state, phraseGroups: svc.repPhraseGroup.findMany().toList()));
   }
 
   Future<void> switchLanguage() => svc.localization.switchLocale();

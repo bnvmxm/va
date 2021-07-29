@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/navigation/va_route_info.dart';
-import 'package:vocabulary_advancer/app/navigation/va_router.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
@@ -53,13 +52,13 @@ class PhraseListViewModel extends Cubit<PhraseListModel> {
   }
 
   void navigateToAddPhrase() {
-    VARoute.i.push(VARouteAddPhrase(state.groupId));
+    svc.route.push(VARouteAddPhrase(state.groupId));
   }
 
   Future navigateToEditPhrase() async {
     assert(state.selectedIndex != null);
     final selectedPhrase = state.phrases[state.selectedIndex!];
 
-    VARoute.i.push(VARouteEditPhrase(state.groupId, selectedPhrase.id));
+    svc.route.push(VARouteEditPhrase(state.groupId, selectedPhrase.id));
   }
 }

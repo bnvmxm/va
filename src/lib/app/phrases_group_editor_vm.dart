@@ -1,6 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/common/form_validation.dart';
-import 'package:vocabulary_advancer/app/navigation/va_router.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
@@ -33,20 +32,16 @@ class PhraseGroupEditorPageResult {
   final PhraseGroup? group;
 }
 
-class PhraseGroupEditorViewModel extends Cubit<PhraseGroupEditorModel>
-    with FormValidation {
-  PhraseGroupEditorViewModel(int? groupId)
-      : super(PhraseGroupEditorModel(groupId));
+class PhraseGroupEditorViewModel extends Cubit<PhraseGroupEditorModel> with FormValidation {
+  PhraseGroupEditorViewModel(int? groupId) : super(PhraseGroupEditorModel(groupId));
 
   void init() {
     final item = svc.repPhraseGroup.findSingle(state.groupId);
     emit(PhraseGroupEditorModel.from(state, initialGroupName: item?.name));
   }
 
-  String? validatorForName(
-      String? name, String messageWhenEmpty, String messageWhenAlreadyExists) {
-    final empty = validationMessageWhenEmpty(
-        value: name, messageWhenEmpty: () => messageWhenEmpty);
+  String? validatorForName(String? name, String messageWhenEmpty, String messageWhenAlreadyExists) {
+    final empty = validationMessageWhenEmpty(value: name, messageWhenEmpty: () => messageWhenEmpty);
 
     if (empty != null) return empty;
     if (svc.repPhraseGroup.findSingleBy(name) != null) {
@@ -64,7 +59,7 @@ class PhraseGroupEditorViewModel extends Cubit<PhraseGroupEditorModel>
   void deleteAndClose() {
     if (state.isNewGroup) return;
     svc.repPhraseGroup.delete(state.groupId!);
-    VARoute.i.popWithResult(PhraseGroupEditorPageResult.deleted());
+    svc.route.popWithResult(PhraseGroupEditorPageResult.deleted());
   }
 
   void tryApplyAndClose() {
@@ -73,7 +68,7 @@ class PhraseGroupEditorViewModel extends Cubit<PhraseGroupEditorModel>
           ? svc.repPhraseGroup.create(state.currentGroupName)
           : svc.repPhraseGroup.rename(state.groupId!, state.currentGroupName);
 
-      VARoute.i.popWithResult(PhraseGroupEditorPageResult.completed(group));
+      svc.route.popWithResult(PhraseGroupEditorPageResult.completed(group));
     }
   }
 }

@@ -8,14 +8,11 @@ import 'package:vocabulary_advancer/app/phrase_exercise_page.dart';
 import 'package:vocabulary_advancer/app/phrase_list_page.dart';
 import 'package:vocabulary_advancer/app/phrases_group_editor_page.dart';
 import 'package:vocabulary_advancer/app/phrases_group_grid_page.dart';
+import 'package:vocabulary_advancer/shared/svc.dart';
 
 class VARoute extends ChangeNotifier {
-  static VARoute i = VARoute._();
-  VARoute._();
-
-  final List<VARouteInfo> _stack = [];
-  UnmodifiableListView<VARouteInfo> get stack =>
-      UnmodifiableListView<VARouteInfo>(_stack);
+  final List<VARouteInfo> _stack = [VARouteRoot()];
+  UnmodifiableListView<VARouteInfo> get stack => UnmodifiableListView<VARouteInfo>(_stack);
   VARouteInfo? get current => _stack.lastOrNull;
 
   dynamic _popResult;
@@ -48,31 +45,47 @@ class VARoute extends ChangeNotifier {
 
     return false;
   }
+
+  @override
+  String toString() => _stack.join(" -> ");
 }
 
 class VARouter extends RouterDelegate<VARouteInfo>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<VARouteInfo> {
-  VARouter() {
-    _route.addListener(notifyListeners);
+  VARouter(this.routeState) : navigatorKey = GlobalObjectKey<NavigatorState>(routeState) {
+    routeState.addListener(notifyListeners);
   }
 
-  final _nav = GlobalKey<NavigatorState>();
-  final _route = VARoute.i;
+  final VARoute routeState;
 
   @override
-  VARouteInfo? get currentConfiguration => _route.current;
+  VARouteInfo? get currentConfiguration => routeState.current;
 
   @override
-  GlobalKey<NavigatorState>? get navigatorKey => _nav;
+  GlobalObjectKey<NavigatorState> navigatorKey;
 
   @override
-  Widget build(BuildContext context) => Navigator(
-        key: _nav,
-        pages: _route.stack.map(_map).toList(),
-        onPopPage: (route, dynamic result) => route.didPop(result),
-      );
+  Widget build(BuildContext context) {
+    svc.log.d(() => 'VARouter BUILD. Stack: $routeState', 'NAV');
+    return Navigator(
+      key: navigatorKey,
+      pages: routeState.stack.map(_map).toList(),
+      onPopPage: (route, dynamic result) {
+        if (!route.didPop(result)) {
+          svc.log.d(() => 'VARouter onPopPage. Rejected', 'NAV POP');
+          return false;
+        }
+
+        final r = routeState.pop();
+        svc.log.d(() => 'VARouter onPopPage. POP = $r', 'NAV POP');
+        return r;
+      },
+    );
+  }
 
   VAPage _map(VARouteInfo info) {
+    svc.log.d(() => info.toString(), 'NAV PAGES');
+
     if (info is VARouteAbout) {
       return VAPage(info.toString(), child: AboutPage());
     }
@@ -80,8 +93,7 @@ class VARouter extends RouterDelegate<VARouteInfo>
       return VAPage(info.toString(), child: PhraseGroupEditorPage());
     }
     if (info is VARouteEditPhraseGroup) {
-      return VAPage(info.toString(),
-          child: PhraseGroupEditorPage(info.groupId));
+      return VAPage(info.toString(), child: PhraseGroupEditorPage(info.groupId));
     }
     if (info is VARoutePhraseGroup) {
       return VAPage(info.toString(), child: PhraseListPage(info.groupId));
@@ -93,19 +105,21 @@ class VARouter extends RouterDelegate<VARouteInfo>
       return VAPage(info.toString(), child: PhraseEditorPage(info.groupId));
     }
     if (info is VARouteEditPhrase) {
-      return VAPage(info.toString(),
-          child: PhraseEditorPage(info.groupId, info.phraseUid));
+      return VAPage(info.toString(), child: PhraseEditorPage(info.groupId, info.phraseUid));
     }
 
     return VAPage(info.toString(), child: PhraseGroupGridPage());
   }
 
   @override
-  Future<void> setNewRoutePath(VARouteInfo info) async => _route.push(info);
+  Future<void> setNewRoutePath(VARouteInfo info) async {
+    svc.log.d(() => info.toString(), 'NAV PUSH');
+    // routeState.push(info);
+  }
 
   @override
   void dispose() {
-    _route.removeListener(notifyListeners);
+    routeState.removeListener(notifyListeners);
     super.dispose();
   }
 }

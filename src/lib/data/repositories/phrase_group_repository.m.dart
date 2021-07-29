@@ -3,13 +3,13 @@ part of 'phrase_group_repository.dart';
 class _Stat {
   int phraseCount = 0;
   int minRate = 0;
-  DateTime closeTargetUtc = settings.minDateTimeUtc;
+  DateTime closeTargetUtc = svc.values.minDateTimeUtc;
 }
 
 extension on DataGroup {
   PhraseGroup toModel() {
     final stat = phrases.fold(_Stat(), reduce);
-    if (stat.closeTargetUtc == settings.minDateTimeUtc) {
+    if (stat.closeTargetUtc == svc.values.minDateTimeUtc) {
       stat.closeTargetUtc = DateTime.now().toUtc();
     }
     return PhraseGroup(
@@ -28,7 +28,7 @@ extension on DataGroup {
       current.minRate = item.rate;
     }
 
-    if (current.closeTargetUtc == settings.minDateTimeUtc ||
+    if (current.closeTargetUtc == svc.values.minDateTimeUtc ||
         current.closeTargetUtc.isAfter(item.targetUtc)) {
       current.closeTargetUtc = item.targetUtc;
     }

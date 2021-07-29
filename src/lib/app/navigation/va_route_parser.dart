@@ -5,17 +5,18 @@ import 'package:vocabulary_advancer/shared/svc.dart';
 
 class VARouteParser extends RouteInformationParser<VARouteInfo> {
   @override
-  Future<VARouteInfo> parseRouteInformation(
-      RouteInformation routeInformation) async {
+  Future<VARouteInfo> parseRouteInformation(RouteInformation routeInformation) async {
+    svc.log.d(() => 'Parse: ${routeInformation.location}', 'NAV');
     final path = Uri.tryParse(routeInformation.location ?? '');
     if (path == null) {
       return VARouteInfo.root();
     }
 
-    var routeSegment =
-        path.pathSegments.isNotEmpty ? path.pathSegments.first : '';
+    var routeSegment = path.pathSegments.isNotEmpty ? path.pathSegments.first : '';
     var groupId = _extractGroupId(path);
     var phraseUid = _extractPhraseUid(path);
+
+    svc.log.d(() => 'Parsed segment: $routeSegment', 'NAV');
 
     switch (routeSegment) {
       case VARouteAbout.key:
@@ -23,9 +24,7 @@ class VARouteParser extends RouteInformationParser<VARouteInfo> {
       case VARouteAddPhraseGroup.key:
         return VARouteAddPhraseGroup();
       case VARouteEditPhraseGroup.key:
-        return groupId > 0
-            ? VARouteEditPhraseGroup(groupId)
-            : VARouteInfo.root();
+        return groupId > 0 ? VARouteEditPhraseGroup(groupId) : VARouteInfo.root();
       case VARouteExercise.key:
         return groupId > 0 ? VARouteExercise(groupId) : VARouteInfo.root();
       case VARoutePhraseGroup.key:
@@ -43,7 +42,7 @@ class VARouteParser extends RouteInformationParser<VARouteInfo> {
 
   @override
   RouteInformation restoreRouteInformation(VARouteInfo path) {
-    svc.log.d(() => 'restoreRouteInformation: $path');
+    svc.log.d(() => 'restoreRouteInformation: $path', 'NAV');
 
     return RouteInformation(location: path.toString());
   }

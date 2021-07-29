@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
-import 'package:vocabulary_advancer/app/va_app.dart';
+import 'package:vocabulary_advancer/app/navigation/va_route_parser.dart';
+import 'package:vocabulary_advancer/app/navigation/va_router.dart';
 import 'package:vocabulary_advancer/app/services/localization.dart';
+import 'package:vocabulary_advancer/app/va_app.dart';
 import 'package:vocabulary_advancer/data/repositories/locale_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_group_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_repository.dart';
@@ -14,16 +16,18 @@ Future<Widget> bootstrapApp() async {
   svc = ServiceProvider(GetIt.I);
 
   GetIt.I
-    ..registerLazySingleton<AppLogger>(() => AppLogger.init())
+    ..registerLazySingleton<AppLogger>(() => AppLogger(LogSettings()))
     // Data Sources
     ..registerLazySingleton<SampleDataProvider>(() => SampleDataProvider())
     // Data Repositories
     ..registerLazySingleton<LocaleRepository>(() => LocaleRepository())
-    ..registerLazySingleton<PhraseGroupRepository>(
-        () => PhraseGroupRepository())
+    ..registerLazySingleton<PhraseGroupRepository>(() => PhraseGroupRepository())
     ..registerLazySingleton<PhraseRepository>(() => PhraseRepository())
     // App Services
-    ..registerLazySingleton<LocalizationService>(() => LocalizationService());
+    ..registerLazySingleton<LocalizationService>(() => LocalizationService())
+    // Presentation Dependencies
+    ..registerLazySingleton<VARouteParser>(() => VARouteParser())
+    ..registerLazySingleton<VARoute>(() => VARoute());
 
   await GetIt.I.get<LocalizationService>().initialize();
   await GetIt.I.allReady();
