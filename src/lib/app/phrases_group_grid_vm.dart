@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/navigation/va_route_info.dart';
+import 'package:vocabulary_advancer/app/phrases_group_editor_vm.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
@@ -32,7 +33,13 @@ class PhraseGroupGridModel {
     }
   }
 
-  void updateSelected(PhraseGroup item) {
+  void add(PhraseGroup? item) {
+    if (item == null) return;
+    phraseGroups.add(item);
+  }
+
+  void updateSelected(PhraseGroup? item) {
+    if (item == null) return;
     for (var i = 0; i < phraseGroups.length; i++) {
       if (phraseGroups[i] == phraseGroupSelected) {
         phraseGroups[i] = item;
@@ -56,9 +63,22 @@ class PhraseGroupGridViewModel extends Cubit<PhraseGroupGridModel> {
     emit(PhraseGroupGridModel.from(state..unselect()));
   }
 
-  void navigateToEditor() => svc.route.push(state.phraseGroupSelected == null
-      ? VARouteAddPhraseGroup()
-      : VARouteEditPhraseGroup(state.phraseGroupSelected!.groupId));
+  void navigateToEditor() => svc.route.pushForResult<PhraseGroupEditorPageResult>(
+        state.phraseGroupSelected == null
+            ? VARouteAddPhraseGroup()
+            : VARouteEditPhraseGroup(state.phraseGroupSelected!.groupId),
+        (result) {
+          if (result.isDeleted) {
+            emit(PhraseGroupGridModel.from(state..removeSelected()));
+          } else if (result.isUpdated) {
+            emit(PhraseGroupGridModel.from(state..updateSelected(result.group)));
+          } else if (result.isAdded) {
+            emit(PhraseGroupGridModel.from(state
+              ..add(result.group)
+              ..unselect()));
+          }
+        },
+      );
 
   void navigateToGroup() {
     assert(state.phraseGroupSelected != null);

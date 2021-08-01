@@ -39,8 +39,13 @@ class PhraseGroupRepository {
     return dto.toModel();
   }
 
-  void delete(int id) {
-    svc.dataProvider.dataGroups.removeWhere((gr) => gr.groupId == id);
+  PhraseGroup? delete(int id) {
+    final dto = svc.dataProvider.dataGroups.firstWhereOrNull((x) => x.groupId == id);
+    if (dto != null) {
+      svc.dataProvider.dataGroups.remove(dto);
+    }
+
+    return dto?.toModel();
   }
 
   int _findMaxGroupId() => svc.dataProvider.dataGroups

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/navigation/va_route_info.dart';
+import 'package:vocabulary_advancer/app/phrase_editor_vm.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
@@ -13,6 +14,23 @@ class PhraseListModel {
   bool get isNotEmpty => phrases.isNotEmpty;
   bool get anySelected => selectedIndex != null;
   bool isSelected(int index) => selectedIndex == index;
+  String? get selectedPhraseUid => anySelected ? phrases[selectedIndex!].id : null;
+
+  void unselect() => selectedIndex = null;
+  void add(Phrase phrase) => phrases.add(phrase);
+  void deleteSelected() {
+    if (anySelected) {
+      phrases.removeAt(selectedIndex!);
+      selectedIndex = null;
+    }
+  }
+
+  void updateSelected(Phrase phrase) {
+    if (anySelected) {
+      phrases[selectedIndex!] = phrase;
+      selectedIndex = null;
+    }
+  }
 
   PhraseListModel(this.groupId);
 
@@ -27,7 +45,7 @@ class PhraseListModel {
     this.isLoading = isLoading ?? model.isLoading;
     this.groupId = groupId ?? model.groupId;
     this.phraseGroupName = phraseGroupName ?? model.phraseGroupName;
-    this.phrases = phrases ?? model.phrases;
+    this.phrases = [...phrases ?? model.phrases];
     this.selectedIndex = selectedIndex ?? model.selectedIndex;
   }
 }
@@ -47,18 +65,19 @@ class PhraseListViewModel extends Cubit<PhraseListModel> {
   }
 
   void unselect() {
-    state.selectedIndex = null;
-    emit(PhraseListModel.from(state));
+    emit(PhraseListModel.from(state..unselect()));
   }
 
-  void navigateToAddPhrase() {
-    svc.route.push(VARouteAddPhrase(state.groupId));
-  }
-
-  Future navigateToEditPhrase() async {
-    assert(state.selectedIndex != null);
-    final selectedPhrase = state.phrases[state.selectedIndex!];
-
-    svc.route.push(VARouteEditPhrase(state.groupId, selectedPhrase.id));
+  void navigateToPhraseEditor() {
+    svc.route.pushForResult<PhraseEditorPageResult>(
+        state.selectedPhraseUid == null
+            ? VARouteAddPhrase(state.groupId)
+            : VARouteEditPhrase(state.groupId, state.selectedPhraseUid!), (result) {
+      if (result.isDeleted) {
+        emit(PhraseListModel.from(state..deleteSelected()));
+      } else if (result.phrase != null) {
+        emit(PhraseListModel.from(state..updateSelected()));
+      }
+    });
   }
 }

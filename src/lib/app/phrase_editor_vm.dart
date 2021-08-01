@@ -57,6 +57,8 @@ class PhraseEditorPageResult {
   PhraseEditorPageResult.completed(this.phrase) : isDeleted = false;
 
   final bool isDeleted;
+  final bool isDeleted;
+  final bool isDeleted;
   final Phrase? phrase;
 }
 

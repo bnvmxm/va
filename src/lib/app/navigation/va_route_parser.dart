@@ -6,7 +6,7 @@ import 'package:vocabulary_advancer/shared/svc.dart';
 class VARouteParser extends RouteInformationParser<VARouteInfo> {
   @override
   Future<VARouteInfo> parseRouteInformation(RouteInformation routeInformation) async {
-    svc.log.d(() => 'Parse: ${routeInformation.location}', 'NAV');
+    svc.log.d(() => 'Parse: ${routeInformation.location}', 'VARouteParser');
     final path = Uri.tryParse(routeInformation.location ?? '');
     if (path == null) {
       return VARouteInfo.root();
@@ -16,8 +16,13 @@ class VARouteParser extends RouteInformationParser<VARouteInfo> {
     var groupId = _extractGroupId(path);
     var phraseUid = _extractPhraseUid(path);
 
-    svc.log.d(() => 'Parsed segment: $routeSegment', 'NAV');
+    svc.log.d(() => 'Parsed segment: $routeSegment', 'VARouteParser');
+    final result = _buildRoute(routeSegment, groupId, phraseUid);
+    svc.log.d(() => 'result: $result, ${result.hashCode}', 'VARouteParser');
+    return result;
+  }
 
+  VARouteInfo _buildRoute(String routeSegment, int groupId, String? phraseUid) {
     switch (routeSegment) {
       case VARouteAbout.key:
         return VARouteAbout();
@@ -42,7 +47,7 @@ class VARouteParser extends RouteInformationParser<VARouteInfo> {
 
   @override
   RouteInformation restoreRouteInformation(VARouteInfo path) {
-    svc.log.d(() => 'restoreRouteInformation: $path', 'NAV');
+    svc.log.d(() => 'restoreRouteInformation: $path', 'VARouteParser');
 
     return RouteInformation(location: path.toString());
   }

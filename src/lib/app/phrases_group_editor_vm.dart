@@ -17,18 +17,29 @@ class PhraseGroupEditorModel {
     String? initialGroupName,
     String? currentGroupName,
   }) {
+    groupId = model.groupId;
     this.initialGroupName = initialGroupName ?? model.initialGroupName;
     this.currentGroupName = currentGroupName ?? model.currentGroupName;
   }
 }
 
 class PhraseGroupEditorPageResult {
-  PhraseGroupEditorPageResult.deleted()
+  PhraseGroupEditorPageResult.deleted(this.group)
       : isDeleted = true,
-        group = null;
-  PhraseGroupEditorPageResult.completed(this.group) : isDeleted = false;
+        isAdded = false,
+        isUpdated = false;
+  PhraseGroupEditorPageResult.added(this.group)
+      : isDeleted = false,
+        isAdded = true,
+        isUpdated = false;
+  PhraseGroupEditorPageResult.updated(this.group)
+      : isDeleted = false,
+        isAdded = false,
+        isUpdated = true;
 
   final bool isDeleted;
+  final bool isAdded;
+  final bool isUpdated;
   final PhraseGroup? group;
 }
 
@@ -58,8 +69,8 @@ class PhraseGroupEditorViewModel extends Cubit<PhraseGroupEditorModel> with Form
 
   void deleteAndClose() {
     if (state.isNewGroup) return;
-    svc.repPhraseGroup.delete(state.groupId!);
-    svc.route.popWithResult(PhraseGroupEditorPageResult.deleted());
+    final group = svc.repPhraseGroup.delete(state.groupId!);
+    svc.route.popWithResult(PhraseGroupEditorPageResult.deleted(group));
   }
 
   void tryApplyAndClose() {
@@ -68,7 +79,9 @@ class PhraseGroupEditorViewModel extends Cubit<PhraseGroupEditorModel> with Form
           ? svc.repPhraseGroup.create(state.currentGroupName)
           : svc.repPhraseGroup.rename(state.groupId!, state.currentGroupName);
 
-      svc.route.popWithResult(PhraseGroupEditorPageResult.completed(group));
+      svc.route.popWithResult(state.isNewGroup
+          ? PhraseGroupEditorPageResult.added(group)
+          : PhraseGroupEditorPageResult.updated(group));
     }
   }
 }
