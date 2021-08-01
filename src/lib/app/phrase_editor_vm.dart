@@ -51,14 +51,22 @@ class PhraseEditorModel {
 }
 
 class PhraseEditorPageResult {
-  PhraseEditorPageResult.deleted()
+  PhraseEditorPageResult.deleted(this.phrase)
       : isDeleted = true,
-        phrase = null;
-  PhraseEditorPageResult.completed(this.phrase) : isDeleted = false;
+        isAdded = false,
+        isUpdated = false;
+  PhraseEditorPageResult.added(this.phrase)
+      : isDeleted = false,
+        isAdded = true,
+        isUpdated = false;
+  PhraseEditorPageResult.updated(this.phrase)
+      : isDeleted = false,
+        isAdded = false,
+        isUpdated = true;
 
   final bool isDeleted;
-  final bool isDeleted;
-  final bool isDeleted;
+  final bool isAdded;
+  final bool isUpdated;
   final Phrase? phrase;
 }
 
@@ -117,7 +125,6 @@ class PhraseEditorViewModel extends Cubit<PhraseEditorModel> with FormValidation
   }
 
   void removeExample(int index) {
-    state.examples.removeAt(index);
     emit(PhraseEditorModel.from(state, examples: state.examples..removeAt(index)));
   }
 
@@ -131,11 +138,10 @@ class PhraseEditorViewModel extends Cubit<PhraseEditorModel> with FormValidation
       state.examples.isEmpty ? validationMessage : null;
 
   void deletePhraseAndClose() {
-    if (!state.isNewPhrase) {
-      svc.repPhrase.delete(state.phraseGroupId, state.phraseUid!);
-    }
+    if (state.isNewPhrase) return;
 
-    svc.route.popWithResult(PhraseEditorPageResult.deleted());
+    final phrase = svc.repPhrase.delete(state.phraseGroupId, state.phraseUid!);
+    svc.route.popWithResult(PhraseEditorPageResult.deleted(phrase));
   }
 
   void tryApplyAndClose() {
@@ -158,7 +164,9 @@ class PhraseEditorViewModel extends Cubit<PhraseEditorModel> with FormValidation
               state.examples,
             );
 
-      svc.route.popWithResult(PhraseEditorPageResult.completed(result));
+      svc.route.popWithResult(state.isNewPhrase
+          ? PhraseEditorPageResult.added(result)
+          : PhraseEditorPageResult.updated(result));
     }
   }
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/i18n/strings.g.dart';
@@ -37,6 +38,7 @@ class _PhraseGroupEditorPageState extends State<PhraseGroupEditorPage> {
           bloc: _vm,
           builder: (context, model) => Scaffold(
               appBar: AppBar(
+                automaticallyImplyLeading: !kIsWeb,
                 title: Text(
                     model.isNewGroup
                         ? Translations.of(context).titles.AddGroup

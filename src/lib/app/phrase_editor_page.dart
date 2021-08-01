@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_typeahead/flutter_typeahead.dart';
@@ -50,6 +51,7 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
           appBar: model.isLoading
               ? null
               : AppBar(
+                  automaticallyImplyLeading: !kIsWeb,
                   title: Text(
                       model.isNewPhrase
                           ? Translations.of(context).titles.AddPhrase
@@ -232,8 +234,34 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
                                                               icon: Icon(Icons.delete_outline),
                                                               color: VATheme.of(context)
                                                                   .colorForegroundIconSelected,
-                                                              onPressed: () {
-                                                                _vm.removeExample(i);
+                                                              onPressed: () async {
+                                                                final dialog = ConfirmDialog();
+                                                                final confirmed =
+                                                                    await dialog.showModal(
+                                                                        context: context,
+                                                                        title:
+                                                                            Translations.of(context)
+                                                                                .titles
+                                                                                .Confirm,
+                                                                        messages: [
+                                                                          Translations.of(context)
+                                                                              .text
+                                                                              .Confirmation
+                                                                              .DeleteExample
+                                                                        ],
+                                                                        confirmText:
+                                                                            Translations.of(context)
+                                                                                .labels
+                                                                                .Yes,
+                                                                        declineText:
+                                                                            Translations.of(context)
+                                                                                .labels
+                                                                                .No,
+                                                                        isDestructive: true);
+
+                                                                if (confirmed) {
+                                                                  _vm.removeExample(i);
+                                                                }
                                                               }),
                                                         ))
                                                   ])))

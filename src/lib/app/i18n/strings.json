@@ -58,6 +58,7 @@
         "NoData": "Nothing to show here...",
         "NoPhrase": "Done! No Phrases to exercise now from this Collection.",
         "Confirmation": {
+            "DeleteExample": "Delete the Example?",
             "DeleteGroup": "Delete the Phrase group?",
             "DeletePhrase": "Delete the Phrase?"
         }

@@ -6,14 +6,14 @@ import 'dart:async' as _i5;
 
 import 'package:mockito/mockito.dart' as _i1;
 import 'package:vocabulary_advancer/app/services/localization.dart' as _i4;
-import 'package:vocabulary_advancer/core/model.dart' as _i2;
+import 'package:vocabulary_advancer/core/model.dart' as _i3;
 import 'package:vocabulary_advancer/data/repositories/locale_repository.dart'
     as _i6;
 import 'package:vocabulary_advancer/data/repositories/phrase_group_repository.dart'
     as _i7;
 import 'package:vocabulary_advancer/data/repositories/phrase_repository.dart'
     as _i8;
-import 'package:vocabulary_advancer/shared/app_logger.dart' as _i3;
+import 'package:vocabulary_advancer/shared/app_logger.dart' as _i2;
 
 // ignore_for_file: comment_references
 // ignore_for_file: unnecessary_parenthesis
@@ -22,23 +22,29 @@ import 'package:vocabulary_advancer/shared/app_logger.dart' as _i3;
 
 // ignore_for_file: avoid_redundant_argument_values
 
-class _FakePhraseGroup extends _i1.Fake implements _i2.PhraseGroup {}
+class _FakeLogSettings extends _i1.Fake implements _i2.LogSettings {}
+
+class _FakePhraseGroup extends _i1.Fake implements _i3.PhraseGroup {}
 
 /// A class which mocks [AppLogger].
 ///
 /// See the documentation for Mockito's code generation for more information.
-class MockAppLogger extends _i1.Mock implements _i3.AppLogger {
+class MockAppLogger extends _i1.Mock implements _i2.AppLogger {
   MockAppLogger() {
     _i1.throwOnMissingStub(this);
   }
 
   @override
-  void v(String Function()? message, [String? logName]) =>
-      super.noSuchMethod(Invocation.method(#v, [message, logName]),
-          returnValueForMissingStub: null);
+  _i2.LogSettings get settings =>
+      (super.noSuchMethod(Invocation.getter(#settings),
+          returnValue: _FakeLogSettings()) as _i2.LogSettings);
   @override
   void t(String Function()? message, [String? logName]) =>
       super.noSuchMethod(Invocation.method(#t, [message, logName]),
+          returnValueForMissingStub: null);
+  @override
+  void v(String Function()? message, [String? logName]) =>
+      super.noSuchMethod(Invocation.method(#v, [message, logName]),
           returnValueForMissingStub: null);
   @override
   void d(String Function()? message, [String? logName]) =>
@@ -53,8 +59,18 @@ class MockAppLogger extends _i1.Mock implements _i3.AppLogger {
       super.noSuchMethod(Invocation.method(#w, [message, logName]),
           returnValueForMissingStub: null);
   @override
-  void e(String Function()? message, {String? logName}) =>
-      super.noSuchMethod(Invocation.method(#e, [message], {#logName: logName}),
+  void e(String Function()? message,
+          {String? logName, Object? error, StackTrace? stackTrace}) =>
+      super.noSuchMethod(
+          Invocation.method(#e, [message],
+              {#logName: logName, #error: error, #stackTrace: stackTrace}),
+          returnValueForMissingStub: null);
+  @override
+  void c(String Function()? message,
+          {String? logName, Object? error, StackTrace? stackTrace}) =>
+      super.noSuchMethod(
+          Invocation.method(#c, [message],
+              {#logName: logName, #error: error, #stackTrace: stackTrace}),
           returnValueForMissingStub: null);
 }
 
@@ -111,20 +127,21 @@ class MockPhraseGroupRepository extends _i1.Mock
       (super.noSuchMethod(Invocation.method(#findKnownNames, []),
           returnValue: <int, String>{}) as Map<int, String>);
   @override
-  Iterable<_i2.PhraseGroup> findMany() =>
+  Iterable<_i3.PhraseGroup> findMany() =>
       (super.noSuchMethod(Invocation.method(#findMany, []), returnValue: [])
-          as Iterable<_i2.PhraseGroup>);
+          as Iterable<_i3.PhraseGroup>);
   @override
-  _i2.PhraseGroup create(String? name) =>
+  _i3.PhraseGroup create(String? name) =>
       (super.noSuchMethod(Invocation.method(#create, [name]),
-          returnValue: _FakePhraseGroup()) as _i2.PhraseGroup);
+          returnValue: _FakePhraseGroup()) as _i3.PhraseGroup);
   @override
-  _i2.PhraseGroup? rename(int? id, String? toName) =>
+  _i3.PhraseGroup? rename(int? id, String? toName) =>
       (super.noSuchMethod(Invocation.method(#rename, [id, toName]))
-          as _i2.PhraseGroup?);
+          as _i3.PhraseGroup?);
   @override
-  void delete(int? id) => super.noSuchMethod(Invocation.method(#delete, [id]),
-      returnValueForMissingStub: null);
+  _i3.PhraseGroup? delete(int? id) =>
+      (super.noSuchMethod(Invocation.method(#delete, [id]))
+          as _i3.PhraseGroup?);
 }
 
 /// A class which mocks [PhraseRepository].
@@ -136,29 +153,29 @@ class MockPhraseRepository extends _i1.Mock implements _i8.PhraseRepository {
   }
 
   @override
-  Iterable<_i2.Phrase> findManyByGroup(int? groupId) =>
+  Iterable<_i3.Phrase> findManyByGroup(int? groupId) =>
       (super.noSuchMethod(Invocation.method(#findManyByGroup, [groupId]),
-          returnValue: []) as Iterable<_i2.Phrase>);
+          returnValue: []) as Iterable<_i3.Phrase>);
   @override
-  _i2.Phrase? getExerciseByGroup(int? groupId, {String? exceptPhraseId}) =>
+  _i3.Phrase? getExerciseByGroup(int? groupId, {String? exceptPhraseId}) =>
       (super.noSuchMethod(Invocation.method(#getExerciseByGroup, [groupId],
-          {#exceptPhraseId: exceptPhraseId})) as _i2.Phrase?);
+          {#exceptPhraseId: exceptPhraseId})) as _i3.Phrase?);
   @override
-  _i2.Phrase? find(int? groupId, String? phraseId) =>
+  _i3.Phrase? find(int? groupId, String? phraseId) =>
       (super.noSuchMethod(Invocation.method(#find, [groupId, phraseId]))
-          as _i2.Phrase?);
+          as _i3.Phrase?);
   @override
-  _i2.Phrase? create(int? groupId, String? phrase, String? pronunciation,
+  _i3.Phrase? create(int? groupId, String? phrase, String? pronunciation,
           String? definition, List<String>? examples) =>
       (super.noSuchMethod(Invocation.method(
               #create, [groupId, phrase, pronunciation, definition, examples]))
-          as _i2.Phrase?);
+          as _i3.Phrase?);
   @override
-  void delete(int? groupId, String? phraseId) =>
-      super.noSuchMethod(Invocation.method(#delete, [groupId, phraseId]),
-          returnValueForMissingStub: null);
+  _i3.Phrase? delete(int? groupId, String? phraseId) =>
+      (super.noSuchMethod(Invocation.method(#delete, [groupId, phraseId]))
+          as _i3.Phrase?);
   @override
-  _i2.Phrase? update(
+  _i3.Phrase? update(
           int? oldGroupId,
           int? groupId,
           String? phraseId,
@@ -174,11 +191,11 @@ class MockPhraseRepository extends _i1.Mock implements _i8.PhraseRepository {
         pronunciation,
         definition,
         examples
-      ])) as _i2.Phrase?);
+      ])) as _i3.Phrase?);
   @override
-  _i2.Phrase? updateStat(int? groupId, String? phraseId, int? newRate,
+  _i3.Phrase? updateStat(int? groupId, String? phraseId, int? newRate,
           Duration? cooldownRange) =>
       (super.noSuchMethod(Invocation.method(
               #updateStat, [groupId, phraseId, newRate, cooldownRange]))
-          as _i2.Phrase?);
+          as _i3.Phrase?);
 }

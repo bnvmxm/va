@@ -17,7 +17,6 @@ class PhraseListModel {
   String? get selectedPhraseUid => anySelected ? phrases[selectedIndex!].id : null;
 
   void unselect() => selectedIndex = null;
-  void add(Phrase phrase) => phrases.add(phrase);
   void deleteSelected() {
     if (anySelected) {
       phrases.removeAt(selectedIndex!);
@@ -25,10 +24,16 @@ class PhraseListModel {
     }
   }
 
-  void updateSelected(Phrase phrase) {
-    if (anySelected) {
+  void updateSelected(Phrase? phrase) {
+    if (anySelected && phrase != null) {
       phrases[selectedIndex!] = phrase;
       selectedIndex = null;
+    }
+  }
+
+  void add(Phrase? phrase) {
+    if (phrase != null) {
+      phrases.add(phrase);
     }
   }
 
@@ -75,8 +80,12 @@ class PhraseListViewModel extends Cubit<PhraseListModel> {
             : VARouteEditPhrase(state.groupId, state.selectedPhraseUid!), (result) {
       if (result.isDeleted) {
         emit(PhraseListModel.from(state..deleteSelected()));
-      } else if (result.phrase != null) {
-        emit(PhraseListModel.from(state..updateSelected()));
+      } else if (result.isUpdated) {
+        emit(PhraseListModel.from(state..updateSelected(result.phrase)));
+      } else if (result.isAdded) {
+        emit(PhraseListModel.from(state
+          ..unselect()
+          ..add(result.phrase)));
       }
     });
   }
