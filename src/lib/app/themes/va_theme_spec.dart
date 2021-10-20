@@ -2,6 +2,12 @@ part of 'va_theme.dart';
 
 // Color Swatch Definition
 
+const int _colorPrimaryLighter11 = 0xffFAFAFA;
+const int _colorPrimaryLighter10 = 0xffF2F2F2;
+const int _colorPrimaryLighter9 = 0xffEAEAEA;
+const int _colorPrimaryLighter8 = 0xffE0E0E0;
+const int _colorPrimaryLighter7 = 0xffC6C6C6;
+const int _colorPrimaryLighter6 = 0xffB1B1B1;
 const int _colorPrimaryLighter5 = 0xff9d9d9f;
 const int _colorPrimaryLighter4 = 0xff89898c;
 const int _colorPrimaryLighter3 = 0xff757579;
@@ -42,7 +48,7 @@ class VAThemeSpecification {
   Color get colorSecondaryVariant => const Color(_colorSecondaryVariant);
   Color get colorAttention => const Color(_colorAttention);
   Color get colorBarrier => const Color(_colorBarrier);
-  Color get colorTextHeader => const Color(_colorPrimaryLighter5);
+  Color get colorTextHeader => colorPrimary050;
   Color get colorTextAccent => const Color(_colorAccent);
   Color get colorTextCursor => const Color(_colorAccentVariant);
   Color get colorTextMain => colorPrimary500;
