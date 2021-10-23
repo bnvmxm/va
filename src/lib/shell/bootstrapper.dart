@@ -1,9 +1,11 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
 import 'package:vocabulary_advancer/app/navigation/va_route_parser.dart';
 import 'package:vocabulary_advancer/app/navigation/va_router.dart';
 import 'package:vocabulary_advancer/app/services/localization.dart';
 import 'package:vocabulary_advancer/app/va_app.dart';
+import 'package:vocabulary_advancer/core/services/user_service.dart';
 import 'package:vocabulary_advancer/data/repositories/locale_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_group_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_repository.dart';
@@ -13,10 +15,14 @@ import 'package:vocabulary_advancer/shared/svc.dart';
 
 Future<Widget> bootstrapApp() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+
+
   svc = ServiceProvider(GetIt.I);
 
   GetIt.I
     ..registerLazySingleton<AppLogger>(() => AppLogger(LogSettings()))
+    ..registerSingleton<VAUserService>(VAUserService()..init())
     // Data Sources
     ..registerLazySingleton<SampleDataProvider>(() => SampleDataProvider())
     // Data Repositories
@@ -30,6 +36,7 @@ Future<Widget> bootstrapApp() async {
     ..registerLazySingleton<VARoute>(() => VARoute());
 
   await GetIt.I.get<LocalizationService>().initialize();
+  await GetIt.I.get<VAUserService>().initialized;
   await GetIt.I.allReady();
 
   return VAApp();
