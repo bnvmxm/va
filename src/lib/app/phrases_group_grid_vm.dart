@@ -1,13 +1,18 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/navigation/va_route_info.dart';
 import 'package:vocabulary_advancer/app/phrases_group_editor_vm.dart';
 import 'package:vocabulary_advancer/core/model.dart';
+import 'package:vocabulary_advancer/core/services/user_service.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
 class PhraseGroupGridModel {
   PhraseGroup? phraseGroupSelected;
   List<PhraseGroup> phraseGroups = [];
+  VAAuth auth = VAAuth.unknown;
 
+  bool get authenticated => auth == VAAuth.anonymous || auth == VAAuth.signedIn;
   bool get anySelected => phraseGroupSelected != null;
   bool get anySelectedAndNotEmpty =>
       phraseGroupSelected != null && phraseGroupSelected!.phraseCount > 0;
@@ -15,12 +20,14 @@ class PhraseGroupGridModel {
 
   bool isSelected(PhraseGroup item) => item.groupId == phraseGroupSelected?.groupId;
 
-  PhraseGroupGridModel();
+  PhraseGroupGridModel.init(this.auth);
   PhraseGroupGridModel.from(
     PhraseGroupGridModel model, {
+    VAAuth? auth,
     PhraseGroup? phraseGroupSelected,
     List<PhraseGroup>? phraseGroups,
   }) {
+    this.auth = auth ?? model.auth;
     this.phraseGroupSelected = phraseGroupSelected ?? model.phraseGroupSelected;
     this.phraseGroups = phraseGroups ?? model.phraseGroups;
   }
@@ -51,9 +58,19 @@ class PhraseGroupGridModel {
 }
 
 class PhraseGroupGridViewModel extends Cubit<PhraseGroupGridModel> {
-  PhraseGroupGridViewModel() : super(PhraseGroupGridModel());
+  late StreamSubscription<VAAuth> _authStateSubscription;
+
+  PhraseGroupGridViewModel() : super(PhraseGroupGridModel.init(VAAuth.unknown)) {
+    _authStateSubscription = svc.userService.authState
+        .listen((value) => emit(PhraseGroupGridModel.from(state, auth: value)));
+  }
 
   void init() => _reset();
+
+  Future<void> signAnonymously() => svc.userService.signAnonymously();
+  Future<void> signIn(String email, String passw) => svc.userService.signIn(email, passw);
+  Future<void> signUn(String email, String passw) => svc.userService.signUp(email, passw);
+  Future<void> signOut() => svc.userService.signOut();
 
   void select(PhraseGroup item) {
     emit(PhraseGroupGridModel.from(state, phraseGroupSelected: item));
@@ -94,8 +111,18 @@ class PhraseGroupGridViewModel extends Cubit<PhraseGroupGridModel> {
   void navigateToAbout() => svc.route.push(VARouteAbout());
 
   void _reset() {
-    emit(PhraseGroupGridModel.from(state, phraseGroups: svc.repPhraseGroup.findMany().toList()));
+    if (svc.userService.user != null) {
+      emit(PhraseGroupGridModel.from(state, phraseGroups: svc.repPhraseGroup.findMany().toList()));
+    } else {
+      emit(PhraseGroupGridModel.init(VAAuth.unknown));
+    }
   }
 
   Future<void> switchLanguage() => svc.localization.switchLocale();
+
+  @override
+  Future<void> close() async {
+    await _authStateSubscription.cancel();
+    await super.close();
+  }
 }

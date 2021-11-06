@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-part 'va_theme_spec.dart';
-part 'va_theme_spec_darkcold.dart';
-part 'va_theme_spec_light.dart';
+part 'spec/va_theme_spec.dart';
+part 'spec/va_theme_spec_darkcold.dart';
+part 'spec/va_theme_spec_light.dart';
 
 enum VAThemeId {
   darkCold,
@@ -10,8 +10,7 @@ enum VAThemeId {
 }
 
 class VATheme extends InheritedWidget {
-  const VATheme(this.themeId, {Key? key, required Widget child})
-      : super(key: key, child: child);
+  const VATheme(this.themeId, {Key? key, required Widget child}) : super(key: key, child: child);
 
   final VAThemeId? themeId;
 

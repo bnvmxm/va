@@ -129,7 +129,7 @@ class VARouter extends RouterDelegate<VARouteInfo>
   }
 
   Iterable<VARouteInfo> _rebuildStackFor(VARouteInfo info) {
-    if (info is VARouteRoot) {
+    if (info is VARouteRoot || svc.userService.user == null) {
       return [VARouteRoot()];
     }
 

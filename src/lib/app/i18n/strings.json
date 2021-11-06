@@ -1,5 +1,6 @@
 {
     "titles": {
+        "Auth": "Login",
         "About": "About",
         "Collections": "Collections",
         "AddPhrase": "New Phrase",
@@ -36,10 +37,18 @@
         "DarkTheme": "Dark Theme",
         "LightTheme": "Light Theme",
         "About": "About",
+        "SignOut": "Sign Out",
+        "SignIn": "Sign In",
+        "SignUp": "Sign Up",
+        "Email": "Email",
+        "Password": "Password",
+        "PasswordAgain": "Once again",
+        "ContinueAnonymously": "Anonym",
         "Yes": "Yes",
         "No": "No",
         "Cancel": "Cancel",
-        "Close": "Close"
+        "Close": "Close",
+        "Ok": "OK"
     },
     "validationMessages": {
         "PhraseRequired": "Phrase is required",
@@ -57,6 +66,11 @@
         },
         "NoData": "Nothing to show here...",
         "NoPhrase": "Done! No Phrases to exercise now from this Collection.",
+        "Auth": {
+            "UserNotFound": "User is not found",
+            "EmailInUse": "Email is in use",
+            "PasswordWeak": "Password is weak"
+        },
         "Confirmation": {
             "DeleteExample": "Delete the Example?",
             "DeleteGroup": "Delete the Phrase group?",

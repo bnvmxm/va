@@ -1,4 +1,4 @@
-part of 'va_theme.dart';
+part of '../va_theme.dart';
 
 // Color Swatch Definition
 
@@ -134,7 +134,7 @@ class VAThemeSpecification {
         fontWeight: FontWeight.w500,
         fontSize: 16.0,
         letterSpacing: 0.75,
-        color: colorTextHeader,
+        color: colorPrimary700,
       );
   TextStyle get textCaption => TextStyle(
         fontFamily: _fontFamilyMain,
@@ -161,14 +161,14 @@ class VAThemeSpecification {
   TextStyle get textAccentCaption => TextStyle(
         fontFamily: _fontFamilyMain,
         fontWeight: FontWeight.normal,
-        fontSize: 12.0,
+        fontSize: 16.0,
         letterSpacing: 0.2,
         color: colorTextAccent,
       );
   TextStyle get textAttentionCaption => TextStyle(
         fontFamily: _fontFamilyMain,
         fontWeight: FontWeight.normal,
-        fontSize: 12.0,
+        fontSize: 16.0,
         letterSpacing: 0.2,
         color: colorAttention,
       );

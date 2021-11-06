@@ -1,5 +1,6 @@
 {
     "titles": {
+        "Auth": "Вход",
         "About": "Информация",
         "Collections": "Коллекции",
         "AddPhrase": "Новая Фраза",
@@ -36,10 +37,18 @@
         "DarkTheme": "Темная тема",
         "LightTheme": "Светлая тема",
         "About": "Информация",
+        "SignOut": "Выйти",
+        "SignIn": "Войти",
+        "SignUp": "Регистрация",
+        "Email": "Email",
+        "Password": "Пароль",
+        "PasswordAgain": "Еще раз",
+        "ContinueAnonymously": "Aноним",
         "Yes": "Да",
         "No": "Нет",
         "Cancel": "Отмена",
-        "Close": "Закрыть"
+        "Close": "Закрыть",
+        "Ok": "OK"
     },
     "validationMessages": {
         "PhraseRequired": "Нужно указать Фразу",
@@ -57,6 +66,11 @@
         },
         "NoData": "Здесь пока нет данных...",
         "NoPhrase": "Выполнено! Пока больше нет Фраз на повторение в этой Коллекции.",
+        "Auth": {
+            "UserNotFound": "Пользователь не найден",
+            "EmailInUse": "Email уже используется",
+            "PasswordWeak": "Пароль слабый"
+        },
         "Confirmation": {
             "DeleteExample": "Удаляем пример?",
             "DeleteGroup": "Удаляем Коллекцию?",

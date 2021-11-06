@@ -2,6 +2,7 @@ import 'package:get_it/get_it.dart';
 import 'package:vocabulary_advancer/app/navigation/va_route_parser.dart';
 import 'package:vocabulary_advancer/app/navigation/va_router.dart';
 import 'package:vocabulary_advancer/app/services/localization.dart';
+import 'package:vocabulary_advancer/core/services/user_service.dart';
 import 'package:vocabulary_advancer/data/repositories/locale_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_group_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_repository.dart';
@@ -19,9 +20,12 @@ class ServiceProvider {
 
   VARouteParser get routeParser => _registry.get<VARouteParser>();
   VARoute get route => _registry.get<VARoute>();
+  VARouter get router => _registry.get<VARouter>();
 
   AppLogger get log => _registry.get<AppLogger>();
   LocalizationService get localization => _registry.get<LocalizationService>();
+
+  VAUserService get userService => _registry.get<VAUserService>();
 
   LocaleRepository get repLocale => _registry.get<LocaleRepository>();
   PhraseGroupRepository get repPhraseGroup => _registry.get<PhraseGroupRepository>();
