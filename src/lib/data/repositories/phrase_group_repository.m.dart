@@ -6,31 +6,30 @@ class _Stat {
   DateTime closeTargetUtc = svc.values.minDateTimeUtc;
 }
 
-extension on DataGroup {
-  PhraseGroup toModel() {
-    final stat = phrases.fold(_Stat(), reduce);
+extension on Bag<DataGroup> {
+  PhraseGroup? toModel() {
+    if (data == null) return null;
+    final stat = data!.phrases.fold(_Stat(), reduce);
     if (stat.closeTargetUtc == svc.values.minDateTimeUtc) {
       stat.closeTargetUtc = DateTime.now().toUtc();
     }
-    return PhraseGroup(
-      groupId,
-      name,
-      phraseCount: stat.phraseCount,
-      minRate: stat.minRate,
-      closeTargetUtc: stat.closeTargetUtc,
-    );
+    return PhraseGroup(id, data!.name,
+        phraseCount: stat.phraseCount,
+        minRate: stat.minRate,
+        closeTargetUtc: stat.closeTargetUtc,
+        createdUtc: data!.createdUtc);
   }
 
-  _Stat reduce(_Stat current, DataPhrase item) {
+  _Stat reduce(_Stat current, Bag<DataPhrase> item) {
     current.phraseCount++;
 
-    if (current.minRate > item.rate) {
-      current.minRate = item.rate;
+    if (current.minRate > item.data!.rate) {
+      current.minRate = item.data!.rate;
     }
 
     if (current.closeTargetUtc == svc.values.minDateTimeUtc ||
-        current.closeTargetUtc.isAfter(item.targetUtc)) {
-      current.closeTargetUtc = item.targetUtc;
+        current.closeTargetUtc.isAfter(item.data!.targetUtc)) {
+      current.closeTargetUtc = item.data!.targetUtc;
     }
 
     return current;

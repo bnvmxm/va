@@ -7,9 +7,9 @@ import 'package:vocabulary_advancer/app/services/dialogs.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 
 class PhraseGroupEditorPage extends StatefulWidget {
-  PhraseGroupEditorPage([int? groupId]) : groupId = groupId;
+  PhraseGroupEditorPage([String? groupId]) : groupId = groupId;
 
-  final int? groupId;
+  final String? groupId;
 
   @override
   _PhraseGroupEditorPageState createState() => _PhraseGroupEditorPageState();
@@ -59,7 +59,7 @@ class _PhraseGroupEditorPageState extends State<PhraseGroupEditorPage> {
                               declineText: Translations.of(context).labels.No,
                               isDestructive: true);
                           if (confirmed) {
-                            _vm.deleteAndClose();
+                            await _vm.deleteAndClose();
                           }
                         })
                 ],
@@ -81,9 +81,7 @@ class _PhraseGroupEditorPageState extends State<PhraseGroupEditorPage> {
                               InputDecoration(labelText: Translations.of(context).labels.GroupName),
                           initialValue: model.initialGroupName,
                           validator: (v) => _vm.validatorForName(
-                              v,
-                              Translations.of(context).validationMessages.GroupNameRequired,
-                              Translations.of(context).validationMessages.GroupExists),
+                              v, Translations.of(context).validationMessages.GroupNameRequired),
                           onChanged: _vm.updateName,
                           focusNode: _focusNode,
                           style: VATheme.of(context).textBodyText1)

@@ -8,9 +8,9 @@ class PhraseExerciseModel {
   bool isOpen = false;
   bool isAnimated = false;
   Phrase? current;
-  int groupId = 0;
   String groupName = '';
   bool isExerciseFirst = true;
+  final String groupId;
 
   bool get isAny => current != null;
 
@@ -22,22 +22,20 @@ class PhraseExerciseModel {
     bool? isOpen,
     bool? isOpening,
     Phrase? current,
-    int? groupId,
     String? groupName,
     bool? isExerciseFirst,
-  }) {
+  }) : groupId = model.groupId {
     isAnimated = isOpening ?? model.isAnimated;
     this.isOpen = isOpen ?? model.isOpen;
     this.isLoading = isLoading ?? model.isLoading;
     this.current = current ?? model.current;
-    this.groupId = groupId ?? model.groupId;
     this.groupName = groupName ?? model.groupName;
     this.isExerciseFirst = isExerciseFirst ?? model.isExerciseFirst;
   }
 }
 
 class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
-  PhraseExerciseViewModel(int groupId) : super(PhraseExerciseModel(groupId));
+  PhraseExerciseViewModel(String groupId) : super(PhraseExerciseModel(groupId));
 
   void init() => _setNextPhrase();
 
@@ -58,18 +56,26 @@ class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
     final newRate = state.current!.rate.asRate(feedback);
     final newDuration = newRate.asCooldown(feedback);
     final current = state.current!;
-    svc.log.d(
-        () => '${current.phrase}: ${current.rate} -> $newRate, $newDuration');
+    svc.log.d(() => '${current.phrase}: ${current.rate} -> $newRate, $newDuration');
 
-    svc.repPhrase
-        .updateStat(state.groupId, state.current!.id, newRate, newDuration);
+    await svc.repPhrase.update(
+        current.groupId,
+        current.id,
+        current.phrase,
+        current.pronunciation,
+        current.definition,
+        current.examples,
+        newRate,
+        current.rates..add(newRate),
+        DateTime.now().toUtc().add(newDuration),
+        current.createdUtc);
 
     await _setNextPhrase();
   }
 
-  Future _setNextPhrase() async {
-    state.current = svc.repPhrase
-        .getExerciseByGroup(state.groupId, exceptPhraseId: state.current?.id);
+  Future<void> _setNextPhrase() async {
+    state.current =
+        await svc.repPhrase.getExerciseByGroup(state.groupId, exceptPhraseId: state.current?.id);
 
     emit(PhraseExerciseModel.from(
       state,

@@ -11,7 +11,7 @@ import 'package:vocabulary_advancer/core/extensions.dart';
 class PhraseListPage extends StatefulWidget {
   PhraseListPage(this.groupId);
 
-  final int groupId;
+  final String groupId;
 
   @override
   _PhraseListPageState createState() => _PhraseListPageState();
@@ -40,7 +40,7 @@ class _PhraseListPageState extends State<PhraseListPage> {
               ? null
               : AppBar(
                   automaticallyImplyLeading: !kIsWeb,
-                  title: Text(model.phraseGroupName, style: VATheme.of(context).textHeadline5),
+                  title: Text(model.groupName, style: VATheme.of(context).textHeadline5),
                   actions: _buildAppBarActions(context, model),
                 ),
           body: model.isLoading

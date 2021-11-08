@@ -1,54 +1,42 @@
-import 'package:collection/collection.dart';
 import 'package:vocabulary_advancer/core/model.dart';
-import 'package:vocabulary_advancer/data/sample_data_provider.dart';
+import 'package:vocabulary_advancer/data/model.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
 part 'phrase_group_repository.m.dart';
 
 class PhraseGroupRepository {
-  Map<int, String> findKnownNames() => <int, String>{}
-    ..addEntries(svc.dataProvider.dataGroups.map((x) => MapEntry(x.groupId, x.name)));
+  Future<Map<String, String>> findKnownNames() => svc.dataProvider.getKnownDataGroupNames();
 
-  Iterable<PhraseGroup> findMany() => svc.dataProvider.dataGroups.map((x) => x.toModel());
-
-  PhraseGroup? findSingle(int? groupId) {
-    final dto = svc.dataProvider.dataGroups.firstWhereOrNull((x) => x.groupId == groupId);
-    return dto?.toModel();
+  Future<Iterable<PhraseGroup>> findMany() async {
+    final groups = await svc.dataProvider.getDataGroups();
+    return groups.map((x) => x.toModel()!);
   }
 
-  PhraseGroup? findSingleBy(String? name) {
-    final dto = svc.dataProvider.dataGroups.firstWhereOrNull((x) => x.name == name);
-
-    return dto?.toModel();
+  Future<PhraseGroup?> findSingle(String groupId) async {
+    final result = await svc.dataProvider.getDataGroup(groupId);
+    return result?.toModel();
   }
 
-  PhraseGroup create(String name) {
-    final dto = DataGroup(
-        groupId: _findMaxGroupId() + 1 /* Autoincrement in a real case of course */,
-        name: name,
-        phrases: {});
-    svc.dataProvider.dataGroups.add(dto);
-    return dto.toModel();
-  }
-
-  PhraseGroup? rename(int id, String toName) {
-    final dto = svc.dataProvider.dataGroups.firstWhereOrNull((x) => x.groupId == id);
-
-    if (dto == null) return null;
-    dto.name = toName;
-    return dto.toModel();
-  }
-
-  PhraseGroup? delete(int id) {
-    final dto = svc.dataProvider.dataGroups.firstWhereOrNull((x) => x.groupId == id);
-    if (dto != null) {
-      svc.dataProvider.dataGroups.remove(dto);
+  Future<PhraseGroup?> findSingleBy(String? name) async {
+    final result = await svc.dataProvider.getDataGroups(name);
+    if (result.isNotEmpty) {
+      return result.first.toModel();
     }
-
-    return dto?.toModel();
+    return null;
   }
 
-  int _findMaxGroupId() => svc.dataProvider.dataGroups
-      .reduce((prev, curr) => prev.groupId > curr.groupId ? prev : curr)
-      .groupId;
+  Future<PhraseGroup?> add(String name) async {
+    final result = await svc.dataProvider.addDataGroup(name);
+    return result?.toModel();
+  }
+
+  Future<PhraseGroup?> rename(String groupId, String toName) async {
+    final result = await svc.dataProvider.editDataGroup(groupId, toName);
+    return result?.toModel();
+  }
+
+  Future<PhraseGroup?> delete(String groupId) async {
+    final result = await svc.dataProvider.deleteDataGroup(groupId);
+    return result?.toModel();
+  }
 }

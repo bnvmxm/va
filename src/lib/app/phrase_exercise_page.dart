@@ -9,7 +9,7 @@ import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 
 class PhraseExercisePage extends StatefulWidget {
-  final int groupId;
+  final String groupId;
 
   PhraseExercisePage(this.groupId);
 

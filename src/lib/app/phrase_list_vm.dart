@@ -6,15 +6,15 @@ import 'package:vocabulary_advancer/shared/svc.dart';
 
 class PhraseListModel {
   bool isLoading = true;
-  int groupId = 0;
-  String phraseGroupName = '';
+  String groupName = '';
   List<Phrase> phrases = [];
   int? selectedIndex;
+  final String groupId;
 
   bool get isNotEmpty => phrases.isNotEmpty;
   bool get anySelected => selectedIndex != null;
   bool isSelected(int index) => selectedIndex == index;
-  String? get selectedPhraseUid => anySelected ? phrases[selectedIndex!].id : null;
+  String? get selectedPhraseId => anySelected ? phrases[selectedIndex!].id : null;
 
   void unselect() => selectedIndex = null;
   void deleteSelected() {
@@ -41,28 +41,28 @@ class PhraseListModel {
 
   PhraseListModel.from(
     PhraseListModel model, {
-    bool? isLoading,
-    int? groupId,
     String? phraseGroupName,
     List<Phrase>? phrases,
     int? selectedIndex,
-  }) {
-    this.isLoading = isLoading ?? model.isLoading;
-    this.groupId = groupId ?? model.groupId;
-    this.phraseGroupName = phraseGroupName ?? model.phraseGroupName;
+  })  : groupId = model.groupId,
+        isLoading = false {
+    groupName = phraseGroupName ?? model.groupName;
     this.phrases = [...phrases ?? model.phrases];
     this.selectedIndex = selectedIndex ?? model.selectedIndex;
   }
 }
 
 class PhraseListViewModel extends Cubit<PhraseListModel> {
-  PhraseListViewModel(int groupId) : super(PhraseListModel(groupId));
+  PhraseListViewModel(String groupId) : super(PhraseListModel(groupId));
 
   void init() {
-    emit(PhraseListModel.from(state,
-        isLoading: false,
-        phraseGroupName: svc.repPhraseGroup.findSingle(state.groupId)?.name,
-        phrases: svc.repPhrase.findManyByGroup(state.groupId).toList()));
+    svc.repPhraseGroup.findSingle(state.groupId).then((gr) {
+      if (gr != null) {
+        svc.repPhrase.findManyByGroup(state.groupId).then((items) {
+          emit(PhraseListModel.from(state, phraseGroupName: gr.name, phrases: items.toList()));
+        });
+      }
+    });
   }
 
   void select(int index) {
@@ -75,9 +75,9 @@ class PhraseListViewModel extends Cubit<PhraseListModel> {
 
   void navigateToPhraseEditor() {
     svc.route.pushForResult<PhraseEditorPageResult>(
-        state.selectedPhraseUid == null
+        state.selectedPhraseId == null
             ? VARouteAddPhrase(state.groupId)
-            : VARouteEditPhrase(state.groupId, state.selectedPhraseUid!), (result) {
+            : VARouteEditPhrase(state.groupId, state.selectedPhraseId!), (result) {
       if (result.isDeleted) {
         emit(PhraseListModel.from(state..deleteSelected()));
       } else if (result.isUpdated) {

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import 'package:vocabulary_advancer/app/navigation/va_route_info.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
@@ -22,23 +21,23 @@ class VARouteParser extends RouteInformationParser<VARouteInfo> {
     return result;
   }
 
-  VARouteInfo _buildRoute(String routeSegment, int groupId, String? phraseUid) {
+  VARouteInfo _buildRoute(String routeSegment, String? groupId, String? phraseId) {
     switch (routeSegment) {
       case VARouteAbout.key:
         return VARouteAbout();
       case VARouteAddPhraseGroup.key:
         return VARouteAddPhraseGroup();
       case VARouteEditPhraseGroup.key:
-        return groupId > 0 ? VARouteEditPhraseGroup(groupId) : VARouteInfo.root();
+        return groupId != null ? VARouteEditPhraseGroup(groupId) : VARouteInfo.root();
       case VARouteExercise.key:
-        return groupId > 0 ? VARouteExercise(groupId) : VARouteInfo.root();
+        return groupId != null ? VARouteExercise(groupId) : VARouteInfo.root();
       case VARoutePhraseGroup.key:
-        return groupId > 0 ? VARoutePhraseGroup(groupId) : VARouteInfo.root();
+        return groupId != null ? VARoutePhraseGroup(groupId) : VARouteInfo.root();
       case VARouteAddPhrase.key:
-        return groupId > 0 ? VARouteAddPhrase(groupId) : VARouteInfo.root();
+        return groupId != null ? VARouteAddPhrase(groupId) : VARouteInfo.root();
       case VARouteEditPhrase.key:
-        return groupId > 0 && phraseUid != null
-            ? VARouteEditPhrase(groupId, phraseUid)
+        return groupId != null && phraseId != null
+            ? VARouteEditPhrase(groupId, phraseId)
             : VARouteInfo.root();
       default:
         return VARouteInfo.root();
@@ -52,24 +51,17 @@ class VARouteParser extends RouteInformationParser<VARouteInfo> {
     return RouteInformation(location: path.toString());
   }
 
-  int _extractGroupId(Uri uri) {
+  String? _extractGroupId(Uri uri) {
     if (uri.pathSegments.length == 2) {
-      final groupId = int.tryParse(uri.pathSegments[1]);
-      if (groupId != null && groupId > 0) {
-        return groupId;
-      }
+      return uri.pathSegments[1];
     }
 
-    return 0;
+    return null;
   }
 
   String? _extractPhraseUid(Uri uri) {
     if (uri.pathSegments.length == 3) {
-      try {
-        return Uuid.unparse(Uuid.parse(uri.pathSegments[2]));
-      }
-      // ignore: avoid_catches_without_on_clauses
-      catch (_) {}
+      return uri.pathSegments[2];
     }
 
     return null;

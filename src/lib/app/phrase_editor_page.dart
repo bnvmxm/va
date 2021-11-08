@@ -10,10 +10,10 @@ import 'package:vocabulary_advancer/app/themes/card_decoration.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
 
 class PhraseEditorPage extends StatefulWidget {
-  final int groupId;
-  final String? phraseUid;
+  final String groupId;
+  final String? phraseId;
 
-  PhraseEditorPage(this.groupId, [this.phraseUid]);
+  PhraseEditorPage(this.groupId, [this.phraseId]);
 
   @override
   _PhraseEditorPageState createState() => _PhraseEditorPageState();
@@ -35,7 +35,7 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
   @override
   void initState() {
     super.initState();
-    _vm = PhraseEditorViewModel(widget.groupId, widget.phraseUid)..init();
+    _vm = PhraseEditorViewModel(widget.groupId, widget.phraseId)..init();
   }
 
   @override
@@ -61,7 +61,7 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
                     IconButton(
                         icon: Icon(Icons.save),
                         color: VATheme.of(context).colorTextAccent,
-                        onPressed: _vm.tryApplyAndClose),
+                        onPressed: () async => _vm.tryApplyAndClose),
                     if (!model.isNewPhrase)
                       IconButton(
                           icon: Icon(Icons.delete),
@@ -76,7 +76,7 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
                                 declineText: Translations.of(context).labels.No,
                                 isDestructive: true);
                             if (confirmed) {
-                              _vm.deletePhraseAndClose();
+                              await _vm.deletePhraseAndClose();
                             }
                           })
                   ],

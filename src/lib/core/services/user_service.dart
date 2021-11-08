@@ -28,14 +28,14 @@ class VAUserService {
   Stream<VAAuth> get authState => _authState.stream;
 
   Future<void> signAnonymously() async {
-    svc.log.d(() => 'Auth as anonym...');
+    svc.log.d(() => 'Auth as Anonym...');
     await FirebaseAuth.instance.signInAnonymously();
     _authState.add(VAAuth.anonymous);
   }
 
   Future<void> signIn(String email, String passw) async {
     try {
-      svc.log.d(() => 'Signing in...');
+      svc.log.d(() => 'Signing in as $email...');
       await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: passw);
       _authState.add(VAAuth.signedIn);
     } on FirebaseAuthException {
@@ -45,7 +45,7 @@ class VAUserService {
 
   Future<void> signUp(String email, String passw) async {
     try {
-      svc.log.d(() => 'Signing up...');
+      svc.log.d(() => 'Signing up as $email...');
       await FirebaseAuth.instance.createUserWithEmailAndPassword(email: email, password: passw);
       _authState.add(VAAuth.signedIn);
     } on FirebaseAuthException catch (e) {

@@ -4,7 +4,7 @@ import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
 class PhraseGroupEditorModel {
-  int? groupId;
+  String? groupId;
   String initialGroupName = '';
   String currentGroupName = '';
 
@@ -44,40 +44,37 @@ class PhraseGroupEditorPageResult {
 }
 
 class PhraseGroupEditorViewModel extends Cubit<PhraseGroupEditorModel> with FormValidation {
-  PhraseGroupEditorViewModel(int? groupId) : super(PhraseGroupEditorModel(groupId));
+  PhraseGroupEditorViewModel(String? groupId) : super(PhraseGroupEditorModel(groupId));
 
   void init() {
-    final item = svc.repPhraseGroup.findSingle(state.groupId);
-    emit(PhraseGroupEditorModel.from(state, initialGroupName: item?.name));
-  }
-
-  String? validatorForName(String? name, String messageWhenEmpty, String messageWhenAlreadyExists) {
-    final empty = validationMessageWhenEmpty(value: name, messageWhenEmpty: () => messageWhenEmpty);
-
-    if (empty != null) return empty;
-    if (svc.repPhraseGroup.findSingleBy(name) != null) {
-      return messageWhenAlreadyExists;
+    if (state.groupId != null) {
+      svc.repPhraseGroup.findSingle(state.groupId!).then((gr) {
+        if (gr != null) {
+          emit(PhraseGroupEditorModel.from(state, initialGroupName: gr.name));
+        }
+      });
     }
-
-    return null;
   }
+
+  String? validatorForName(String? name, String messageWhenEmpty) =>
+      validationMessageWhenEmpty(value: name, messageWhenEmpty: () => messageWhenEmpty);
 
   void updateName(String value) {
     state.currentGroupName = value;
     validateInlineIfNeeded();
   }
 
-  void deleteAndClose() {
+  Future<void> deleteAndClose() async {
     if (state.isNewGroup) return;
-    final group = svc.repPhraseGroup.delete(state.groupId!);
+    final group = await svc.repPhraseGroup.delete(state.groupId!);
     svc.route.popWithResult(PhraseGroupEditorPageResult.deleted(group));
   }
 
-  void tryApplyAndClose() {
+  Future<void> tryApplyAndClose() async {
     if (validate()) {
       final group = state.isNewGroup
-          ? svc.repPhraseGroup.create(state.currentGroupName)
-          : svc.repPhraseGroup.rename(state.groupId!, state.currentGroupName);
+          ? await svc.repPhraseGroup.add(state.currentGroupName)
+          : await svc.repPhraseGroup.rename(state.groupId!, state.currentGroupName);
 
       svc.route.popWithResult(state.isNewGroup
           ? PhraseGroupEditorPageResult.added(group)

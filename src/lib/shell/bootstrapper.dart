@@ -6,10 +6,10 @@ import 'package:vocabulary_advancer/app/navigation/va_route_parser.dart';
 import 'package:vocabulary_advancer/app/navigation/va_router.dart';
 import 'package:vocabulary_advancer/app/services/localization.dart';
 import 'package:vocabulary_advancer/core/services/user_service.dart';
+import 'package:vocabulary_advancer/data/firestore_data_provider.dart';
 import 'package:vocabulary_advancer/data/repositories/locale_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_group_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_repository.dart';
-import 'package:vocabulary_advancer/data/sample_data_provider.dart';
 import 'package:vocabulary_advancer/shared/app_logger.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
@@ -22,7 +22,7 @@ Future<void> initServices() async {
     ..registerLazySingleton<AppLogger>(() => AppLogger(LogSettings()))
     ..registerSingleton<VAUserService>(VAUserService()..init())
     // Data Sources
-    ..registerLazySingleton<SampleDataProvider>(() => SampleDataProvider())
+    ..registerLazySingleton<FirestoreDataProvider>(() => FirestoreDataProvider())
     // Data Repositories
     ..registerLazySingleton<LocaleRepository>(() => LocaleRepository())
     ..registerLazySingleton<PhraseGroupRepository>(() => PhraseGroupRepository())

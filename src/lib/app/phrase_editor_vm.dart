@@ -9,32 +9,32 @@ class PhraseEditorModel {
   bool isLoading = true;
   Phrase? initial;
 
-  int phraseGroupId = 0;
-  String? phraseUid;
+  String? phraseGroupId;
+  String? phraseId;
   String phrase = '';
   String definition = '';
   String pronunciation = '';
   List<String> examples = [];
-  Map<int, String> phraseGroupsKnown = {};
+  Map<String, String> phraseGroupsKnown = {};
 
-  PhraseEditorModel(this.phraseGroupId, this.phraseUid);
+  PhraseEditorModel(this.phraseGroupId, this.phraseId);
 
   PhraseEditorModel.from(
     PhraseEditorModel model, {
-    bool? isLoading,
+    bool isLoading = false,
     Phrase? initial,
-    int? phraseGroupId,
-    String? phraseUid,
+    String? phraseGroupId,
+    String? phraseId,
     String? phrase,
     String? definition,
     String? pronunciation,
     List<String>? examples,
-    Map<int, String>? phraseGroupsKnown,
+    Map<String, String>? phraseGroupsKnown,
   }) {
-    this.isLoading = isLoading ?? model.isLoading;
+    this.isLoading = isLoading;
     this.initial = initial ?? model.initial;
     this.phraseGroupId = phraseGroupId ?? model.phraseGroupId;
-    this.phraseUid = phraseUid ?? model.phraseUid;
+    this.phraseId = phraseId ?? model.phraseId;
     this.phrase = phrase ?? model.phrase;
     this.definition = definition ?? model.definition;
     this.pronunciation = pronunciation ?? model.pronunciation;
@@ -44,10 +44,10 @@ class PhraseEditorModel {
 
   String get phraseGroupName => phraseGroupsKnown[phraseGroupId] ?? '';
 
-  List<int> get phraseGroupsExceptSelected =>
+  List<String> get phraseGroupsExceptSelected =>
       phraseGroupsKnown.keys.where((groupId) => groupId != phraseGroupId).toList();
 
-  bool get isNewPhrase => phraseUid == null;
+  bool get isNewPhrase => phraseId == null;
 }
 
 class PhraseEditorPageResult {
@@ -71,32 +71,36 @@ class PhraseEditorPageResult {
 }
 
 class PhraseEditorViewModel extends Cubit<PhraseEditorModel> with FormValidation {
-  PhraseEditorViewModel(int groupId, [String? phraseUid])
-      : super(PhraseEditorModel(groupId, phraseUid));
+  PhraseEditorViewModel(String groupId, [String? phraseId])
+      : super(PhraseEditorModel(groupId, phraseId));
 
   void init() {
-    final groups = svc.repPhraseGroup.findKnownNames();
-    final initial = svc.repPhrase.find(state.phraseGroupId, state.phraseUid!);
-
-    if (initial != null) {
-      emit(PhraseEditorModel.from(
-        state,
-        isLoading: false,
-        initial: initial,
-        phraseGroupsKnown: groups,
-        phrase: initial.phrase,
-        definition: initial.definition,
-        examples: initial.examples,
-        pronunciation: initial.pronunciation,
-      ));
-    } else {
-      emit(PhraseEditorModel.from(
-        state,
-        isLoading: false,
-        phraseGroupsKnown: groups,
-      ));
-    }
+    svc.repPhraseGroup.findKnownNames().then((groupNames) {
+      _findInitialPhrase(state.phraseGroupId, state.phraseId).then((initial) {
+        if (initial != null) {
+          emit(PhraseEditorModel.from(
+            state,
+            initial: initial,
+            phraseGroupsKnown: groupNames,
+            phrase: initial.phrase,
+            definition: initial.definition,
+            examples: initial.examples,
+            pronunciation: initial.pronunciation,
+          ));
+        } else {
+          emit(PhraseEditorModel.from(
+            state,
+            phraseGroupsKnown: groupNames,
+          ));
+        }
+      });
+    });
   }
+
+  Future<Phrase?> _findInitialPhrase(String? groupId, String? phraseId) async =>
+      state.phraseGroupId == null || state.phraseId == null
+          ? null
+          : await svc.repPhrase.find(state.phraseGroupId!, state.phraseId!);
 
   void updateGroup(String value) {
     final groupId = state.phraseGroupsKnown.entries.singleWhere((x) => x.value == value).key;
@@ -137,36 +141,48 @@ class PhraseEditorViewModel extends Cubit<PhraseEditorModel> with FormValidation
   String? validatorForExamples(String validationMessage) =>
       state.examples.isEmpty ? validationMessage : null;
 
-  void deletePhraseAndClose() {
+  Future<void> deletePhraseAndClose() async {
     if (state.isNewPhrase) return;
 
-    final phrase = svc.repPhrase.delete(state.phraseGroupId, state.phraseUid!);
+    final phrase = await svc.repPhrase.delete(state.phraseGroupId!, state.phraseId!);
     svc.route.popWithResult(PhraseEditorPageResult.deleted(phrase));
   }
 
-  void tryApplyAndClose() {
-    if (validate()) {
-      final result = state.isNewPhrase
-          ? svc.repPhrase.create(
-              state.phraseGroupId,
-              state.phrase,
-              state.pronunciation,
-              state.definition,
-              state.examples,
-            )
-          : svc.repPhrase.update(
-              state.initial?.groupId,
-              state.phraseGroupId,
-              state.phraseUid!,
-              state.phrase,
-              state.pronunciation,
-              state.definition,
-              state.examples,
-            );
+  Future<void> tryApplyAndClose() async {
+    const defaultRate = 50;
+    const defaultCooldown = Duration(hours: 1);
 
-      svc.route.popWithResult(state.isNewPhrase
-          ? PhraseEditorPageResult.added(result)
-          : PhraseEditorPageResult.updated(result));
+    if (validate()) {
+      if (state.isNewPhrase) {
+        final result = await svc.repPhrase.create(
+            state.phraseGroupId!,
+            state.phrase,
+            state.pronunciation,
+            state.definition,
+            state.examples,
+            defaultRate,
+            <int>[],
+            DateTime.now().toUtc().add(defaultCooldown));
+        if (result != null) {
+          svc.route.popWithResult(PhraseEditorPageResult.added(result));
+        }
+      } else {
+        final result = await svc.repPhrase.update(
+            state.phraseGroupId!,
+            state.phraseId!,
+            state.phrase,
+            state.pronunciation,
+            state.definition,
+            state.examples,
+            state.initial!.rate,
+            state.initial!.rates,
+            state.initial!.targetUtc,
+            state.initial!.createdUtc,
+            previousGroupId: state.initial!.groupId);
+        if (result != null) {
+          svc.route.popWithResult(PhraseEditorPageResult.updated(result));
+        }
+      }
     }
   }
 }

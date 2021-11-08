@@ -2,23 +2,28 @@ import 'package:vocabulary_advancer/shared/svc.dart';
 
 class PhraseGroup {
   PhraseGroup(this.groupId, this.name,
-      {required this.phraseCount, required this.minRate, required this.closeTargetUtc});
+      {required this.phraseCount,
+      required this.minRate,
+      required this.closeTargetUtc,
+      required this.createdUtc});
 
-  final int groupId;
+  final String groupId;
   final String name;
   int phraseCount;
   int minRate;
+  DateTime createdUtc;
   DateTime closeTargetUtc;
 }
 
 class Phrase {
   Phrase(this.groupId, this.id, this.phrase, this.pronunciation, this.definition, this.examples,
       this.createdUtc,
-      {int? rate, DateTime? targetUtc, this.updatedUtc})
+      {int? rate, List<int>? rates, DateTime? targetUtc, this.updatedUtc})
       : rate = rate ?? 0,
+        rates = rates ?? [],
         targetUtc = targetUtc ?? svc.values.minDateTimeUtc;
 
-  final int groupId;
+  final String groupId;
   final String id;
   final String phrase;
   final String pronunciation;
@@ -27,6 +32,7 @@ class Phrase {
   final DateTime createdUtc;
 
   final int rate;
+  final List<int> rates;
   final DateTime targetUtc;
   final DateTime? updatedUtc;
 }

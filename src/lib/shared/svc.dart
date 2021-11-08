@@ -3,10 +3,10 @@ import 'package:vocabulary_advancer/app/navigation/va_route_parser.dart';
 import 'package:vocabulary_advancer/app/navigation/va_router.dart';
 import 'package:vocabulary_advancer/app/services/localization.dart';
 import 'package:vocabulary_advancer/core/services/user_service.dart';
+import 'package:vocabulary_advancer/data/firestore_data_provider.dart';
 import 'package:vocabulary_advancer/data/repositories/locale_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_group_repository.dart';
 import 'package:vocabulary_advancer/data/repositories/phrase_repository.dart';
-import 'package:vocabulary_advancer/data/sample_data_provider.dart';
 import 'package:vocabulary_advancer/shared/app_logger.dart';
 import 'package:vocabulary_advancer/shared/values.dart';
 
@@ -30,5 +30,5 @@ class ServiceProvider {
   LocaleRepository get repLocale => _registry.get<LocaleRepository>();
   PhraseGroupRepository get repPhraseGroup => _registry.get<PhraseGroupRepository>();
   PhraseRepository get repPhrase => _registry.get<PhraseRepository>();
-  SampleDataProvider get dataProvider => _registry.get<SampleDataProvider>();
+  FirestoreDataProvider get dataProvider => _registry.get<FirestoreDataProvider>();
 }

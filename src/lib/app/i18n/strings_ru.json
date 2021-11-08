@@ -54,8 +54,7 @@
         "PhraseRequired": "Нужно указать Фразу",
         "DefinitionRequired": "Нужно указать Определение",
         "ExampleRequired": "Нужно указать хотя бы один пример",
-        "GroupNameRequired": "Имя обязательно",
-        "GroupExists": "Такая Коллекция уже есть"
+        "GroupNameRequired": "Имя обязательно"
     },
     "text": {
         "About": "Vocabulary Advancer",

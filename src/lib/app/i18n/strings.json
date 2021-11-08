@@ -54,8 +54,7 @@
         "PhraseRequired": "Phrase is required",
         "DefinitionRequired": "Definition is required",
         "ExampleRequired": "At least one example is required",
-        "GroupNameRequired": "Name is required",
-        "GroupExists": "Such group already exists"
+        "GroupNameRequired": "Name is required"
     },
     "text": {
         "About": "Vocabulary Advancer",

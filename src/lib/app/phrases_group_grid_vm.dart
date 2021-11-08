@@ -60,12 +60,22 @@ class PhraseGroupGridModel {
 class PhraseGroupGridViewModel extends Cubit<PhraseGroupGridModel> {
   late StreamSubscription<VAAuth> _authStateSubscription;
 
-  PhraseGroupGridViewModel() : super(PhraseGroupGridModel.init(VAAuth.unknown)) {
-    _authStateSubscription = svc.userService.authState
-        .listen((value) => emit(PhraseGroupGridModel.from(state, auth: value)));
-  }
+  PhraseGroupGridViewModel() : super(PhraseGroupGridModel.init(VAAuth.unknown));
 
-  void init() => _reset();
+  void init() {
+    _authStateSubscription = svc.userService.authState.listen((value) {
+      svc.log.d(() => value.toString(), "AUTH");
+      if (state.auth != value) {
+        if (value == VAAuth.anonymous || value == VAAuth.signedIn) {
+          svc.repPhraseGroup.findMany().then((items) {
+            emit(PhraseGroupGridModel.from(state, auth: value, phraseGroups: items.toList()));
+          });
+        } else {
+          emit(PhraseGroupGridModel.from(state, auth: value));
+        }
+      }
+    });
+  }
 
   Future<void> signAnonymously() => svc.userService.signAnonymously();
   Future<void> signIn(String email, String passw) => svc.userService.signIn(email, passw);
@@ -109,14 +119,6 @@ class PhraseGroupGridViewModel extends Cubit<PhraseGroupGridModel> {
   }
 
   void navigateToAbout() => svc.route.push(VARouteAbout());
-
-  void _reset() {
-    if (svc.userService.user != null) {
-      emit(PhraseGroupGridModel.from(state, phraseGroups: svc.repPhraseGroup.findMany().toList()));
-    } else {
-      emit(PhraseGroupGridModel.init(VAAuth.unknown));
-    }
-  }
 
   Future<void> switchLanguage() => svc.localization.switchLocale();
 
