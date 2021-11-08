@@ -58,6 +58,11 @@ class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
     final current = state.current!;
     svc.log.d(() => '${current.phrase}: ${current.rate} -> $newRate, $newDuration');
 
+    final arr = current.rates;
+    while (arr.length > 10) {
+      arr.removeAt(0);
+    }
+
     await svc.repPhrase.update(
         current.groupId,
         current.id,
@@ -66,7 +71,7 @@ class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
         current.definition,
         current.examples,
         newRate,
-        current.rates..add(newRate),
+        arr..add(newRate),
         DateTime.now().toUtc().add(newDuration),
         current.createdUtc);
 

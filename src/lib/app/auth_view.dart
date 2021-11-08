@@ -131,6 +131,7 @@ class _AuthViewState extends State<AuthView> {
                               .hasMatch(_login);
                         });
                       },
+                      keyboardType: TextInputType.emailAddress,
                       decoration: InputDecoration(
                           border: OutlineInputBorder(),
                           focusedBorder: OutlineInputBorder(

@@ -61,7 +61,9 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
                     IconButton(
                         icon: Icon(Icons.save),
                         color: VATheme.of(context).colorTextAccent,
-                        onPressed: () async => _vm.tryApplyAndClose),
+                        onPressed: () async {
+                          await _vm.tryApplyAndClose();
+                        }),
                     if (!model.isNewPhrase)
                       IconButton(
                           icon: Icon(Icons.delete),

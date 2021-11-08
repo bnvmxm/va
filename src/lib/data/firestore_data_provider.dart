@@ -166,10 +166,13 @@ class FirestoreDataProvider {
 
     svc.log.d(() => 'Fetching groups. Is cache: ${ref.metadata.isFromCache}');
 
-    final groups = ref.docs.map((x) => Bag<DataGroup>(x.id, x.data()));
+    final groups = ref.docs.map((x) => Bag<DataGroup>(x.id, x.data())).toList();
     for (var gr in groups) {
-      gr.data!.phrases.addAll(await getDataPhrases(gr.id));
+      final phrases = await getDataPhrases(gr.id);
+      gr.data!.phrases.addAll(phrases);
+      svc.log.d(() => '#${gr.id} -> ${gr.data!.phrases.length}');
     }
+
     return groups;
   }
 

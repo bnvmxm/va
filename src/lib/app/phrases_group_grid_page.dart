@@ -65,17 +65,25 @@ class _PhraseGroupGridPageState extends State<PhraseGroupGridPage> {
             ),
             body: model.authenticated
                 ? model.isNotEmpty
-                    ? PhraseGroupsGrid(model, (item) {
-                        _vm.state.isSelected(item) ? _vm.unselect() : _vm.select(item);
-                      })
+                    ? PhraseGroupsGrid(
+                        model,
+                        () async {
+                          _vm.load(model.auth);
+                        },
+                        (item) {
+                          _vm.state.isSelected(item) ? _vm.unselect() : _vm.select(item);
+                        },
+                      )
                     : Empty()
-                : AuthView(
-                    onSignIn: (email, passw) async => await _vm.signIn(email, passw),
-                    onSignUp: (email, passw) async => await _vm.signUn(email, passw),
-                    onSignInAnonymously: () async => await _vm.signAnonymously(),
-                    issueUserNotFound: model.auth == VAAuth.failedNotFound,
-                    issueEmailInUse: model.auth == VAAuth.failedEmailInUse,
-                    issuePasswordWeak: model.auth == VAAuth.failedPasswordWeak),
+                : model.auth == VAAuth.unknown
+                    ? Empty()
+                    : AuthView(
+                        onSignIn: (email, passw) async => await _vm.signIn(email, passw),
+                        onSignUp: (email, passw) async => await _vm.signUn(email, passw),
+                        onSignInAnonymously: () async => await _vm.signAnonymously(),
+                        issueUserNotFound: model.auth == VAAuth.signedOffNotFound,
+                        issueEmailInUse: model.auth == VAAuth.signedOffEmailInUse,
+                        issuePasswordWeak: model.auth == VAAuth.signedOffPasswordWeak),
             floatingActionButton: model.authenticated && model.anySelected
                 ? FloatingActionButton(
                     tooltip: Translations.of(context).labels.Exercise,
@@ -159,9 +167,11 @@ class HomeMenu extends StatelessWidget {
 
 class PhraseGroupsGrid extends StatelessWidget {
   final PhraseGroupGridModel _model;
+  final Future<void> Function() onRefresh;
   final void Function(PhraseGroup) onPhraseGroupTap;
 
-  PhraseGroupsGrid(this._model, this.onPhraseGroupTap, {Key? key}) : super(key: key);
+  PhraseGroupsGrid(this._model, this.onRefresh, this.onPhraseGroupTap, {Key? key})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) => OrientationBuilder(
@@ -169,13 +179,16 @@ class PhraseGroupsGrid extends StatelessWidget {
           ? _buildGridView(isPortrait: true)
           : SafeArea(child: _buildGridView(isPortrait: false)));
 
-  Widget _buildGridView({required bool isPortrait}) => GridView.count(
-      crossAxisCount: isPortrait ? 1 : 2,
-      crossAxisSpacing: 8.0,
-      mainAxisSpacing: 8.0,
-      childAspectRatio: isPortrait ? 2 : 1.8,
-      padding: const EdgeInsets.all(8.0),
-      children: _model.phraseGroups.map(_buildGridViewTile).toList());
+  Widget _buildGridView({required bool isPortrait}) => RefreshIndicator(
+        onRefresh: onRefresh,
+        child: GridView.count(
+            crossAxisCount: isPortrait ? 2 : 3,
+            crossAxisSpacing: 2.0,
+            mainAxisSpacing: 2.0,
+            childAspectRatio: isPortrait ? 1 : 1.8,
+            padding: const EdgeInsets.all(4.0),
+            children: _model.phraseGroups.map(_buildGridViewTile).toList()),
+      );
 
   Widget _buildGridViewTile(PhraseGroup item) => GestureDetector(
       onTap: () {

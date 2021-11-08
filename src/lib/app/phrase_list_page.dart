@@ -57,7 +57,11 @@ class _PhraseListPageState extends State<PhraseListPage> {
         child: ListTile(
             selected: model.isSelected(index),
             onTap: () => model.isSelected(index) ? _vm.unselect() : _vm.select(index),
-            title: Text(model.phrases[index].phrase, style: VATheme.of(context).textBodyText1),
+            title: Text(
+              model.phrases[index].phrase,
+              style: VATheme.of(context).textBodyText2,
+              maxLines: 6,
+            ),
             dense: false,
             leading: model.isSelected(index)
                 ? CircleAvatar(
@@ -72,7 +76,15 @@ class _PhraseListPageState extends State<PhraseListPage> {
                         size: 12, color: VATheme.of(context).colorForegroundIconUnselected)),
             trailing: SizedBox(
               width: 48,
-              child: Center(child: StatTarget(model.phrases[index].targetUtc.differenceNowUtc())),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  StatTarget(model.phrases[index].targetUtc.differenceNowUtc()),
+                  SizedBox(height: 12),
+                  Text("(R${model.phrases[index].rate.toString()})",
+                      style: VATheme.of(context).textCaption)
+                ],
+              ),
             )),
       );
 

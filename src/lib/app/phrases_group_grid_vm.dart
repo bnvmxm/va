@@ -64,16 +64,19 @@ class PhraseGroupGridViewModel extends Cubit<PhraseGroupGridModel> {
 
   void init() {
     _authStateSubscription = svc.userService.authState.listen((value) {
-      svc.log.d(() => value.toString(), "AUTH");
       if (state.auth != value) {
         if (value == VAAuth.anonymous || value == VAAuth.signedIn) {
-          svc.repPhraseGroup.findMany().then((items) {
-            emit(PhraseGroupGridModel.from(state, auth: value, phraseGroups: items.toList()));
-          });
+          load(value);
         } else {
           emit(PhraseGroupGridModel.from(state, auth: value));
         }
       }
+    });
+  }
+
+  void load(VAAuth auth) {
+    svc.repPhraseGroup.findMany().then((items) {
+      emit(PhraseGroupGridModel.from(state, auth: auth, phraseGroups: items.toList()));
     });
   }
 

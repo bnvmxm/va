@@ -18,12 +18,14 @@ class PhraseGroupEditorPage extends StatefulWidget {
 class _PhraseGroupEditorPageState extends State<PhraseGroupEditorPage> {
   late PhraseGroupEditorViewModel _vm;
   late FocusNode _focusNode;
+  late TextEditingController _controller;
 
   @override
   void initState() {
     super.initState();
     _vm = PhraseGroupEditorViewModel(widget.groupId)..init();
     _focusNode = FocusNode(debugLabel: 'Group Name')..requestFocus();
+    _controller = TextEditingController();
   }
 
   @override
@@ -36,57 +38,68 @@ class _PhraseGroupEditorPageState extends State<PhraseGroupEditorPage> {
   Widget build(BuildContext context) =>
       BlocBuilder<PhraseGroupEditorViewModel, PhraseGroupEditorModel>(
           bloc: _vm,
-          builder: (context, model) => Scaffold(
-              appBar: AppBar(
-                automaticallyImplyLeading: !kIsWeb,
-                title: Text(
-                    model.isNewGroup
-                        ? Translations.of(context).titles.AddGroup
-                        : Translations.of(context).titles.EditGroup,
-                    style: VATheme.of(context).textHeadline5),
-                actions: [
-                  if (!model.isNewGroup)
-                    IconButton(
-                        icon: Icon(Icons.delete),
-                        color: VATheme.of(context).colorAttention,
-                        onPressed: () async {
-                          final dialog = ConfirmDialog();
-                          final confirmed = await dialog.showModal(
-                              context: context,
-                              title: Translations.of(context).titles.Confirm,
-                              messages: [Translations.of(context).text.Confirmation.DeleteGroup],
-                              confirmText: Translations.of(context).labels.Yes,
-                              declineText: Translations.of(context).labels.No,
-                              isDestructive: true);
-                          if (confirmed) {
-                            await _vm.deleteAndClose();
-                          }
-                        })
-                ],
-              ),
-              floatingActionButton: FloatingActionButton(
-                  tooltip: Translations.of(context).labels.SaveAndClose,
-                  onPressed: _vm.tryApplyAndClose,
-                  child: Icon(Icons.save)),
-              body: SingleChildScrollView(
-                  child: Form(
-                key: _vm.formKey,
-                child: Container(
-                  alignment: Alignment.topCenter,
-                  padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    children: [
-                      TextFormField(
-                          decoration:
-                              InputDecoration(labelText: Translations.of(context).labels.GroupName),
-                          initialValue: model.initialGroupName,
-                          validator: (v) => _vm.validatorForName(
-                              v, Translations.of(context).validationMessages.GroupNameRequired),
-                          onChanged: _vm.updateName,
-                          focusNode: _focusNode,
-                          style: VATheme.of(context).textBodyText1)
-                    ],
-                  ),
+          builder: (context, model) {
+            _controller.text = model.initialGroupName;
+
+            return Scaffold(
+                appBar: AppBar(
+                  automaticallyImplyLeading: !kIsWeb,
+                  title: Text(
+                      model.isNewGroup
+                          ? Translations.of(context).titles.AddGroup
+                          : Translations.of(context).titles.EditGroup,
+                      style: VATheme.of(context).textHeadline5),
+                  actions: [
+                    if (!model.isNewGroup)
+                      IconButton(
+                          icon: Icon(Icons.delete),
+                          color: VATheme.of(context).colorAttention,
+                          onPressed: () async {
+                            final dialog = ConfirmDialog();
+                            final confirmed = await dialog.showModal(
+                                context: context,
+                                title: Translations.of(context).titles.Confirm,
+                                messages: [Translations.of(context).text.Confirmation.DeleteGroup],
+                                confirmText: Translations.of(context).labels.Yes,
+                                declineText: Translations.of(context).labels.No,
+                                isDestructive: true);
+                            if (confirmed) {
+                              await _vm.deleteAndClose();
+                            }
+                          })
+                  ],
                 ),
-              ))));
+                floatingActionButton: FloatingActionButton(
+                    tooltip: Translations.of(context).labels.SaveAndClose,
+                    onPressed: _vm.tryApplyAndClose,
+                    child: Icon(Icons.save)),
+                body: SingleChildScrollView(
+                    child: Form(
+                  key: _vm.formKey,
+                  child: Container(
+                    alignment: Alignment.topCenter,
+                    padding: const EdgeInsets.all(8.0),
+                    child: Column(
+                      children: [
+                        TextFormField(
+                            decoration: InputDecoration(
+                                labelText: Translations.of(context).labels.GroupName,
+                                labelStyle: VATheme.of(context).textBodyText2,
+                                suffix: IconButton(
+                                  icon: Icon(Icons.clear),
+                                  onPressed: () {
+                                    _controller.clear();
+                                  },
+                                )),
+                            controller: _controller,
+                            validator: (v) => _vm.validatorForName(
+                                v, Translations.of(context).validationMessages.GroupNameRequired),
+                            onChanged: _vm.updateName,
+                            focusNode: _focusNode,
+                            style: VATheme.of(context).textBodyText1)
+                      ],
+                    ),
+                  ),
+                )));
+          });
 }

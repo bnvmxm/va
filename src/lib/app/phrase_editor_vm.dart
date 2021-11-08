@@ -149,8 +149,8 @@ class PhraseEditorViewModel extends Cubit<PhraseEditorModel> with FormValidation
   }
 
   Future<void> tryApplyAndClose() async {
-    const defaultRate = 50;
-    const defaultCooldown = Duration(hours: 1);
+    const defaultRate = 11;
+    const defaultCooldown = Duration(minutes: 2);
 
     if (validate()) {
       if (state.isNewPhrase) {

@@ -9,7 +9,8 @@ class PhraseGroupRepository {
 
   Future<Iterable<PhraseGroup>> findMany() async {
     final groups = await svc.dataProvider.getDataGroups();
-    return groups.map((x) => x.toModel()!);
+    return groups.map((x) => x.toModel()!).toList()
+      ..sort((a, b) => a.createdUtc.compareTo(b.createdUtc));
   }
 
   Future<PhraseGroup?> findSingle(String groupId) async {

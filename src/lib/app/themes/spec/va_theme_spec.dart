@@ -118,14 +118,14 @@ class VAThemeSpecification {
   TextStyle get textBodyText1 => TextStyle(
         fontFamily: _fontFamilyMain,
         fontWeight: FontWeight.w300,
-        fontSize: 16.0,
+        fontSize: 18.0,
         letterSpacing: 0.1,
         color: colorTextHeader,
       );
   TextStyle get textBodyText2 => TextStyle(
         fontFamily: _fontFamilyMain,
         fontWeight: FontWeight.w300,
-        fontSize: 14.0,
+        fontSize: 16.0,
         letterSpacing: 0.1,
         color: colorTextHeader,
       );
@@ -154,7 +154,7 @@ class VAThemeSpecification {
   TextStyle get textAccentSubtitle1 => TextStyle(
         fontFamily: _fontFamilyHeader,
         fontWeight: FontWeight.w300,
-        fontSize: 18.0,
+        fontSize: 16.0,
         letterSpacing: 0.25,
         color: colorTextAccent,
       );

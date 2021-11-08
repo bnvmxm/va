@@ -1,5 +1,3 @@
-import 'package:vocabulary_advancer/shared/svc.dart';
-
 class PhraseGroup {
   PhraseGroup(this.groupId, this.name,
       {required this.phraseCount,
@@ -21,7 +19,7 @@ class Phrase {
       {int? rate, List<int>? rates, DateTime? targetUtc, this.updatedUtc})
       : rate = rate ?? 0,
         rates = rates ?? [],
-        targetUtc = targetUtc ?? svc.values.minDateTimeUtc;
+        targetUtc = targetUtc ?? DateTime.now().toUtc();
 
   final String groupId;
   final String id;

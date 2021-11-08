@@ -5,9 +5,10 @@ import 'package:vocabulary_advancer/shared/svc.dart';
 
 enum VAAuth {
   unknown,
-  failedEmailInUse,
-  failedPasswordWeak,
-  failedNotFound,
+  signedOff,
+  signedOffEmailInUse,
+  signedOffPasswordWeak,
+  signedOffNotFound,
   anonymous,
   signedIn,
 }
@@ -39,7 +40,7 @@ class VAUserService {
       await FirebaseAuth.instance.signInWithEmailAndPassword(email: email, password: passw);
       _authState.add(VAAuth.signedIn);
     } on FirebaseAuthException {
-      _authState.add(VAAuth.failedNotFound);
+      _authState.add(VAAuth.signedOffNotFound);
     }
   }
 
@@ -50,9 +51,9 @@ class VAUserService {
       _authState.add(VAAuth.signedIn);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
-        _authState.add(VAAuth.failedPasswordWeak);
+        _authState.add(VAAuth.signedOffPasswordWeak);
       } else if (e.code == 'email-already-in-use') {
-        _authState.add(VAAuth.failedEmailInUse);
+        _authState.add(VAAuth.signedOffEmailInUse);
       }
     }
   }
@@ -75,7 +76,7 @@ class VAUserService {
   void _onUserStateChanged(User? u) {
     if (u == null) {
       user = null;
-      _authState.add(auth = VAAuth.unknown);
+      _authState.add(auth = VAAuth.signedOff);
 
       // clean up the user storage
     } else {

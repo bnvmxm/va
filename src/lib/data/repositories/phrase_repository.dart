@@ -11,12 +11,14 @@ class PhraseRepository {
     return items.map((x) => x.toModel(groupId));
   }
 
-  Future<Phrase?> getExerciseByGroup(String groupId, {String? exceptPhraseId}) async {
+  Future<Phrase?> getExerciseByGroup(String groupId,
+      {String? exceptPhraseId, int triggerMinutes = 60}) async {
     final items = await svc.dataProvider.getDataPhrases(groupId);
 
     final targeted = items
-        .where(
-            (p) => p.id != exceptPhraseId && p.data!.targetUtc.differenceNowUtc().isTargetClose())
+        .where((p) =>
+            p.id != exceptPhraseId &&
+            p.data!.targetUtc.differenceNowUtc().inMinutes <= triggerMinutes)
         .toList();
     if (targeted.isEmpty) return null;
 
