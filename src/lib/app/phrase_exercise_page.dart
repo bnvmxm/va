@@ -1,3 +1,4 @@
+import 'package:charts_flutter/flutter.dart' as charts;
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -52,6 +53,10 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
                                   child: _buildExamplesCard(context, model),
                                 ),
                                 SizedBox(
+                                  height: 120,
+                                  child: _buildStatsCard(context, model),
+                                ),
+                                SizedBox(
                                     height: 100,
                                     child: Row(
                                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -96,8 +101,8 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
                   visible: !isAnimated,
                   child: Icon(Icons.mode_comment,
                       color: isOpen
-                          ? VATheme.of(context).colorForegroundIconSelected
-                          : VATheme.of(context).colorForegroundIconUnselected)),
+                          ? VATheme.of(context).colorAttention
+                          : VATheme.of(context).colorPrimary100)),
               Expanded(
                   child: Padding(
                       padding: const EdgeInsets.only(left: 16.0),
@@ -105,25 +110,50 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
                         visible: !isAnimated,
                         child: Text(value,
                             style: isOpen
-                                ? VATheme.of(context).textAccentHeadline5
+                                ? VATheme.of(context).textBodyText1
                                 : VATheme.of(context).textSubtitle2),
                       )))
             ])),
       );
 
   Widget _buildExamplesCard(BuildContext context, PhraseExerciseModel model) => Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
         child: Container(
             padding: const EdgeInsets.all(16.0),
             decoration: cardDecoration(context),
             child: ListView.separated(
                 itemCount: model.current!.examples.length,
-                separatorBuilder: (context, i) => const Divider(indent: 8.0, endIndent: 8.0),
+                separatorBuilder: (context, i) => Divider(
+                    indent: 8.0, endIndent: 8.0, color: VATheme.of(context).colorPrimary050),
                 itemBuilder: (context, i) => Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: Text(model.current!.examples[i],
                           maxLines: 3, style: VATheme.of(context).textBodyText2),
                     ))),
+      );
+  //VATheme.of(context).colorPrimary050.value.toString()
+
+  charts.Color _chartColor(Color c) => charts.Color(a: c.alpha, r: c.red, g: c.green, b: c.blue);
+
+  Widget _buildStatsCard(BuildContext context, PhraseExerciseModel model) => Padding(
+        padding: const EdgeInsets.only(left: 24.0, top: 16.0, right: 16.0, bottom: 16),
+        child: charts.BarChart(
+          [
+            charts.Series<int, String>(
+                id: 'Progress',
+                domainFn: (x, n) => n?.toString() ?? "",
+                measureFn: (x, n) => x,
+                data: model.current?.rates ?? [],
+                fillColorFn: (n, i) => _chartColor(VATheme.of(context).colorPrimary500))
+          ],
+          primaryMeasureAxis: charts.NumericAxisSpec(renderSpec: charts.NoneRenderSpec()),
+          domainAxis: charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
+          layoutConfig: charts.LayoutConfig(
+              leftMarginSpec: charts.MarginSpec.fixedPixel(0),
+              topMarginSpec: charts.MarginSpec.fixedPixel(0),
+              rightMarginSpec: charts.MarginSpec.fixedPixel(0),
+              bottomMarginSpec: charts.MarginSpec.fixedPixel(0)),
+        ),
       );
 
   List<Widget> _buildActionButtons(
@@ -159,7 +189,7 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
         IconButton(
             iconSize: 48,
             tooltip: Translations.of(context).labels.ExerciseResult.High,
-            icon: Icon(Icons.arrow_upward, color: VATheme.of(context).colorForegroundIconSelected),
+            icon: Icon(Icons.arrow_upward, color: VATheme.of(context).colorTextAccent),
             onPressed: () => _vm.next(RateFeedback.highThershold)),
         if (withDivider) SizedBox(width: 8.0),
       ];

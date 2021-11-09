@@ -49,7 +49,8 @@ class _PhraseListPageState extends State<PhraseListPage> {
                   ? ListView.separated(
                       itemCount: model.phrases.length,
                       itemBuilder: (context, i) => _buildPhraseItem(context, model, i),
-                      separatorBuilder: (context, i) => const Divider(indent: 16, endIndent: 16))
+                      separatorBuilder: (context, i) => Divider(
+                          indent: 16, endIndent: 16, color: VATheme.of(context).colorPrimary500))
                   : Empty()));
 
   Widget _buildPhraseItem(BuildContext context, PhraseListModel model, int index) => ListTileTheme(
@@ -76,14 +77,16 @@ class _PhraseListPageState extends State<PhraseListPage> {
                         size: 12, color: VATheme.of(context).colorForegroundIconUnselected)),
             trailing: SizedBox(
               width: 48,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  StatTarget(model.phrases[index].targetUtc.differenceNowUtc()),
-                  SizedBox(height: 12),
-                  Text("(R${model.phrases[index].rate.toString()})",
-                      style: VATheme.of(context).textCaption)
-                ],
+              child: Padding(
+                padding: const EdgeInsets.only(top: 12.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    StatTarget(model.phrases[index].targetUtc.differenceNowUtc()),
+                    Text("(R${model.phrases[index].rate.toString()})",
+                        style: VATheme.of(context).textCaption)
+                  ],
+                ),
               ),
             )),
       );

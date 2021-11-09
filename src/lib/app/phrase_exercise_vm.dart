@@ -82,6 +82,8 @@ class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
     state.current =
         await svc.repPhrase.getExerciseByGroup(state.groupId, exceptPhraseId: state.current?.id);
 
+    svc.log.d(() => state.current?.rates.join(",") ?? "");
+
     emit(PhraseExerciseModel.from(
       state,
       isLoading: false,
