@@ -19,6 +19,7 @@ class _PhraseGroupEditorPageState extends State<PhraseGroupEditorPage> {
   late PhraseGroupEditorViewModel _vm;
   late FocusNode _focusNode;
   late TextEditingController _controller;
+  late TextEditingController _controllerBulkImport;
 
   @override
   void initState() {
@@ -26,11 +27,15 @@ class _PhraseGroupEditorPageState extends State<PhraseGroupEditorPage> {
     _vm = PhraseGroupEditorViewModel(widget.groupId)..init();
     _focusNode = FocusNode(debugLabel: 'Group Name')..requestFocus();
     _controller = TextEditingController();
+    _controllerBulkImport = TextEditingController();
   }
 
   @override
   void dispose() {
     _vm.close();
+    _controller.dispose();
+    _controllerBulkImport.dispose();
+    _focusNode.dispose();
     super.dispose();
   }
 
@@ -40,7 +45,6 @@ class _PhraseGroupEditorPageState extends State<PhraseGroupEditorPage> {
           bloc: _vm,
           builder: (context, model) {
             _controller.text = model.initialGroupName;
-
             return Scaffold(
                 appBar: AppBar(
                   automaticallyImplyLeading: !kIsWeb,
@@ -80,6 +84,7 @@ class _PhraseGroupEditorPageState extends State<PhraseGroupEditorPage> {
                     alignment: Alignment.topCenter,
                     padding: const EdgeInsets.all(8.0),
                     child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         TextFormField(
                             decoration: InputDecoration(
@@ -96,7 +101,35 @@ class _PhraseGroupEditorPageState extends State<PhraseGroupEditorPage> {
                                 v, Translations.of(context).validationMessages.GroupNameRequired),
                             onChanged: _vm.updateName,
                             focusNode: _focusNode,
-                            style: VATheme.of(context).textBodyText1)
+                            style: VATheme.of(context).textBodyText1),
+                        if (kIsWeb)
+                          Padding(
+                            padding: const EdgeInsets.only(top: 16.0),
+                            child: Stack(children: [
+                              TextField(
+                                  keyboardType: TextInputType.multiline,
+                                  minLines: 32,
+                                  maxLines: null,
+                                  decoration: InputDecoration(
+                                      focusedBorder: OutlineInputBorder(
+                                    borderSide: BorderSide(
+                                        color: VATheme.of(context).colorTextAccent, width: 1.0),
+                                  )),
+                                  controller: _controllerBulkImport,
+                                  style: VATheme.of(context).textBodyText2),
+                              Positioned(
+                                bottom: 4,
+                                right: 4,
+                                child: IconButton(
+                                  icon: Icon(Icons.upload_outlined),
+                                  onPressed: () async {
+                                    await _vm.bulkImport(_controllerBulkImport.value.text);
+                                    _controllerBulkImport.clear();
+                                  },
+                                ),
+                              )
+                            ]),
+                          ),
                       ],
                     ),
                   ),

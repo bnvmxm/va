@@ -3,10 +3,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/common/rotatable.dart';
+import 'package:vocabulary_advancer/app/common/stat_target.dart';
 import 'package:vocabulary_advancer/app/i18n/strings.g.dart';
 import 'package:vocabulary_advancer/app/phrase_exercise_vm.dart';
 import 'package:vocabulary_advancer/app/themes/card_decoration.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
+import 'package:vocabulary_advancer/core/extensions.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 
 class PhraseExercisePage extends StatefulWidget {
@@ -137,22 +139,31 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
 
   Widget _buildStatsCard(BuildContext context, PhraseExerciseModel model) => Padding(
         padding: const EdgeInsets.only(left: 24.0, top: 16.0, right: 16.0, bottom: 16),
-        child: charts.BarChart(
-          [
-            charts.Series<int, String>(
-                id: 'Progress',
-                domainFn: (x, n) => n?.toString() ?? "",
-                measureFn: (x, n) => x,
-                data: model.current?.rates ?? [],
-                fillColorFn: (n, i) => _chartColor(VATheme.of(context).colorPrimary500))
+        child: Stack(
+          children: [
+            charts.BarChart(
+              [
+                charts.Series<int, String>(
+                    id: 'Progress',
+                    domainFn: (x, n) => n?.toString() ?? "",
+                    measureFn: (x, n) => x,
+                    data: model.current?.rates ?? [],
+                    fillColorFn: (n, i) => _chartColor(VATheme.of(context).colorPrimary500))
+              ],
+              primaryMeasureAxis: charts.NumericAxisSpec(renderSpec: charts.NoneRenderSpec()),
+              domainAxis: charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
+              layoutConfig: charts.LayoutConfig(
+                  leftMarginSpec: charts.MarginSpec.fixedPixel(0),
+                  topMarginSpec: charts.MarginSpec.fixedPixel(0),
+                  rightMarginSpec: charts.MarginSpec.fixedPixel(0),
+                  bottomMarginSpec: charts.MarginSpec.fixedPixel(0)),
+            ),
+            Chip(label: Text("Max rate: ${model.current?.rates.max() ?? '?'}")),
+            Positioned(
+                top: 6, right: 130, child: StatTarget(model.current?.targetUtc.differenceNowUtc())),
+            Positioned(
+                top: 0, right: 0, child: Chip(label: Text("Rate: ${model.current?.rate ?? '?'}")))
           ],
-          primaryMeasureAxis: charts.NumericAxisSpec(renderSpec: charts.NoneRenderSpec()),
-          domainAxis: charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
-          layoutConfig: charts.LayoutConfig(
-              leftMarginSpec: charts.MarginSpec.fixedPixel(0),
-              topMarginSpec: charts.MarginSpec.fixedPixel(0),
-              rightMarginSpec: charts.MarginSpec.fixedPixel(0),
-              bottomMarginSpec: charts.MarginSpec.fixedPixel(0)),
         ),
       );
 
@@ -165,27 +176,31 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
             tooltip: Translations.of(context).labels.ExerciseResult.Low,
             icon: Icon(Icons.arrow_downward, color: VATheme.of(context).colorAttention),
             onPressed: () => _vm.next(RateFeedback.lowTheshold)),
-        if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
+        if (withDivider)
+          VerticalDivider(indent: 12, endIndent: 24, color: VATheme.of(context).colorPrimary400),
         IconButton(
             iconSize: 48,
             tooltip: Translations.of(context).labels.ExerciseResult.Negative,
             icon:
                 Icon(Icons.trending_down, color: VATheme.of(context).colorForegroundIconUnselected),
             onPressed: () => _vm.next(RateFeedback.negative)),
-        if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
+        if (withDivider)
+          VerticalDivider(indent: 12, endIndent: 24, color: VATheme.of(context).colorPrimary400),
         IconButton(
             iconSize: 48,
             tooltip: Translations.of(context).labels.ExerciseResult.Uncertain,
             icon:
                 Icon(Icons.trending_flat, color: VATheme.of(context).colorForegroundIconUnselected),
             onPressed: () => _vm.next(RateFeedback.uncertain)),
-        if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
+        if (withDivider)
+          VerticalDivider(indent: 12, endIndent: 24, color: VATheme.of(context).colorPrimary400),
         IconButton(
             iconSize: 48,
             tooltip: Translations.of(context).labels.ExerciseResult.Positive,
             icon: Icon(Icons.trending_up, color: VATheme.of(context).colorForegroundIconUnselected),
             onPressed: () => _vm.next(RateFeedback.positive)),
-        if (withDivider) const VerticalDivider(indent: 12, endIndent: 24),
+        if (withDivider)
+          VerticalDivider(indent: 12, endIndent: 24, color: VATheme.of(context).colorPrimary400),
         IconButton(
             iconSize: 48,
             tooltip: Translations.of(context).labels.ExerciseResult.High,

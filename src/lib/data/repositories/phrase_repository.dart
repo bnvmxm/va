@@ -87,4 +87,21 @@ class PhraseRepository {
         targetUtc: targetUtc);
     return item?.toModel(groupId);
   }
+
+  Future<void> createBulky(String groupId, List<dynamic> input) async {
+    for (var item in input) {
+      svc.log.d(() => "Creating: \n${item.toString()}");
+      await svc.dataProvider.addDataPhrase(
+          groupId: groupId,
+          phrase: item["phrase"] as String,
+          pronunciation: item["pronunciation"] as String,
+          definition: item["definition"] as String,
+          examples: (item["examples"] as List<dynamic>).map((dynamic s) => s.toString()),
+          rate: 11,
+          rates: [],
+          targetUtc: DateTime.now().toUtc().add(const Duration(minutes: 2)),
+          createdUtc: DateTime.now().toUtc());
+      svc.log.d(() => "+");
+    }
+  }
 }

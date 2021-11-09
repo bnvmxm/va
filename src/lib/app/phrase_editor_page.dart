@@ -41,6 +41,10 @@ class _PhraseEditorPageState extends State<PhraseEditorPage> {
   @override
   void dispose() {
     _vm.close();
+    _typeAheadController.dispose();
+    for (var n in _focusNodes) {
+      n.dispose();
+    }
     super.dispose();
   }
 

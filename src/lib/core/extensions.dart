@@ -2,6 +2,12 @@ import 'package:vocabulary_advancer/core/model.dart';
 import 'package:vocabulary_advancer/core/services/rate_calculator.dart';
 import 'package:vocabulary_advancer/shared/svc.dart';
 
+const ext = 0;
+
+extension ListIntExt on List<int> {
+  int max() => fold(0, (prev, curr) => prev > curr ? prev : curr);
+}
+
 extension DurationExt on Duration {
   bool isTargetClose() => isNegative || inMinutes < svc.values.targetMinutesLowThreshold;
   bool isTargetFar() => !isNegative && inHours > svc.values.targetHoursHighThreshold;

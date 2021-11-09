@@ -33,7 +33,6 @@ extension on Bag<DataGroup> {
       current.closeTargetUtc = item.data!.targetUtc;
     }
 
-    svc.log.d(() => 'Reducer. ${current.closeTargetUtc}. Item target = ${item.data!.targetUtc}');
     return current;
   }
 }

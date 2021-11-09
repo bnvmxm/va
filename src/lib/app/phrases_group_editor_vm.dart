@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/common/form_validation.dart';
 import 'package:vocabulary_advancer/core/model.dart';
@@ -68,6 +70,18 @@ class PhraseGroupEditorViewModel extends Cubit<PhraseGroupEditorModel> with Form
     if (state.isNewGroup) return;
     final group = await svc.repPhraseGroup.delete(state.groupId!);
     svc.route.popWithResult(PhraseGroupEditorPageResult.deleted(group));
+  }
+
+  Future<void> bulkImport(String value) async {
+    final dynamic obj = jsonDecode(value);
+    svc.log.d(obj.toString);
+    if (obj is Map<String, dynamic>) {
+      await svc.repPhrase.createBulky(state.groupId!, <Map<String, dynamic>>[obj]);
+    } else if (obj is List<dynamic>) {
+      await svc.repPhrase.createBulky(state.groupId!, obj);
+    } else {
+      svc.log.d(() => obj.runtimeType.toString());
+    }
   }
 
   Future<void> tryApplyAndClose() async {
