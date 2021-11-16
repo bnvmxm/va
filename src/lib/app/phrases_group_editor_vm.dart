@@ -79,8 +79,6 @@ class PhraseGroupEditorViewModel extends Cubit<PhraseGroupEditorModel> with Form
       await svc.repPhrase.createBulky(state.groupId!, <Map<String, dynamic>>[obj]);
     } else if (obj is List<dynamic>) {
       await svc.repPhrase.createBulky(state.groupId!, obj);
-    } else {
-      svc.log.d(() => obj.runtimeType.toString());
     }
   }
 

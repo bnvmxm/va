@@ -8,6 +8,7 @@ class PhraseExerciseModel {
   bool isOpen = false;
   bool isAnimated = false;
   Phrase? current;
+  int countTargeted = 0;
   String groupName = '';
   bool isExerciseFirst = true;
   final String groupId;
@@ -22,6 +23,7 @@ class PhraseExerciseModel {
     bool? isOpen,
     bool? isOpening,
     Phrase? current,
+    int? countTargeted,
     String? groupName,
     bool? isExerciseFirst,
   }) : groupId = model.groupId {
@@ -29,6 +31,7 @@ class PhraseExerciseModel {
     this.isOpen = isOpen ?? model.isOpen;
     this.isLoading = isLoading ?? model.isLoading;
     this.current = current ?? model.current;
+    this.countTargeted = countTargeted ?? model.countTargeted;
     this.groupName = groupName ?? model.groupName;
     this.isExerciseFirst = isExerciseFirst ?? model.isExerciseFirst;
   }
@@ -79,13 +82,13 @@ class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
   }
 
   Future<void> _setNextPhrase() async {
-    state.current =
+    final exercise =
         await svc.repPhrase.getExerciseByGroup(state.groupId, exceptPhraseId: state.current?.id);
-
-    svc.log.d(() => state.current?.rates.join(",") ?? "");
 
     emit(PhraseExerciseModel.from(
       state,
+      current: exercise.phrase,
+      countTargeted: exercise.countTargeted,
       isLoading: false,
       isOpen: false,
       isOpening: false,

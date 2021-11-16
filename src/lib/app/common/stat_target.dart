@@ -28,7 +28,8 @@ class StatTarget extends StatelessWidget {
                 ? VATheme.of(context).textAccentCaption
                 : diff!.isTargetClose()
                     ? VATheme.of(context).textAttentionCaption
-                    : VATheme.of(context).textCaption)
+                    : VATheme.of(context).textCaption),
+      if (target == null) Text("now", style: VATheme.of(context).textAttentionCaption)
     ]);
   }
 }

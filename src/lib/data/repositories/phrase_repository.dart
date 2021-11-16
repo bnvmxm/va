@@ -11,20 +11,25 @@ class PhraseRepository {
     return items.map((x) => x.toModel(groupId));
   }
 
-  Future<Phrase?> getExerciseByGroup(String groupId,
-      {String? exceptPhraseId, int triggerMinutes = 60}) async {
+  Future<Exercise> getExerciseByGroup(String groupId,
+      {String? exceptPhraseId, int triggerMinutes = 10}) async {
     final items = await svc.dataProvider.getDataPhrases(groupId);
 
     final targeted = items
         .where((p) =>
             p.id != exceptPhraseId &&
             p.data!.targetUtc.differenceNowUtc().inMinutes <= triggerMinutes)
-        .toList();
-    if (targeted.isEmpty) return null;
+        .toList()
+      ..sort((a, b) =>
+          a.data == null || b.data == null ? 0 : a.data!.updatedUtc.compareTo(b.data!.updatedUtc));
 
-    return targeted.length == 1
+    if (targeted.isEmpty) return Exercise.empty();
+
+    final phrase = targeted.length == 1
         ? targeted[0].toModel(groupId)
-        : targeted[DateTime.now().millisecondsSinceEpoch % targeted.length].toModel(groupId);
+        : targeted.take(3).toList()[DateTime.now().millisecondsSinceEpoch % 3].toModel(groupId);
+
+    return Exercise(phrase, countTargeted: targeted.length);
   }
 
   Future<Phrase?> find(String groupId, String? phraseId) async {

@@ -118,7 +118,7 @@ class VAThemeSpecification {
   TextStyle get textBodyText1 => TextStyle(
         fontFamily: _fontFamilyMain,
         fontWeight: FontWeight.w300,
-        fontSize: 18.0,
+        fontSize: 17.0,
         letterSpacing: 0.1,
         color: colorTextHeader,
       );
@@ -141,6 +141,11 @@ class VAThemeSpecification {
         fontWeight: FontWeight.normal,
         fontSize: 12.0,
         letterSpacing: 0.2,
+        color: colorTextHeader,
+      );
+  TextStyle get textPronounciation => TextStyle(
+        fontFamily: _fontFamilyMain,
+        fontSize: 13.0,
         color: colorTextHeader,
       );
 

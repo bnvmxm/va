@@ -190,7 +190,7 @@ class _AuthViewState extends State<AuthView> {
                   ),
               ])),
               Padding(
-                padding: const EdgeInsets.only(right: 16.0),
+                padding: const EdgeInsets.only(right: 16.0, bottom: 4.0),
                 child: raisedButtonDefault(
                     width: 40,
                     context: context,

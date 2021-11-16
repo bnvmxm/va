@@ -13,16 +13,18 @@ extension DurationExt on Duration {
   bool isTargetFar() => !isNegative && inHours > svc.values.targetHoursHighThreshold;
 
   String toStringAsTarget() {
-    if (isNegative || inSeconds < 60) return '';
+    if (isNegative || inSeconds < 60) return "now";
 
     final sb = StringBuffer();
 
-    if (inDays > 1) {
+    if (inDays >= 1) {
       sb.write('${inDays}d');
-    } else if (inHours > 1) {
+    } else if (inHours >= 1) {
       sb.write('${inHours}h');
-    } else {
+    } else if (inMinutes >= 1) {
       sb.write('${inMinutes}m');
+    } else {
+      sb.write("now");
     }
 
     return sb.toString();

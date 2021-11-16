@@ -183,10 +183,14 @@ class MockPhraseRepository extends _i1.Mock implements _i8.PhraseRepository {
           as _i4.Future<Iterable<_i7.Phrase>>);
   @override
   _i4.Future<_i7.Phrase?> getExerciseByGroup(String? groupId,
-          {String? exceptPhraseId}) =>
+          {String? exceptPhraseId, int? triggerMinutes = 60}) =>
       (super.noSuchMethod(
-          Invocation.method(#getExerciseByGroup, [groupId],
-              {#exceptPhraseId: exceptPhraseId}),
+          Invocation.method(#getExerciseByGroup, [
+            groupId
+          ], {
+            #exceptPhraseId: exceptPhraseId,
+            #triggerMinutes: triggerMinutes
+          }),
           returnValue: Future<_i7.Phrase?>.value()) as _i4.Future<_i7.Phrase?>);
   @override
   _i4.Future<_i7.Phrase?> find(String? groupId, String? phraseId) =>
@@ -249,6 +253,11 @@ class MockPhraseRepository extends _i1.Mock implements _i8.PhraseRepository {
             #previousGroupId: previousGroupId
           }),
           returnValue: Future<_i7.Phrase?>.value()) as _i4.Future<_i7.Phrase?>);
+  @override
+  _i4.Future<void> createBulky(String? groupId, List<dynamic>? input) =>
+      (super.noSuchMethod(Invocation.method(#createBulky, [groupId, input]),
+          returnValue: Future<void>.value(),
+          returnValueForMissingStub: Future<void>.value()) as _i4.Future<void>);
   @override
   String toString() => super.toString();
 }

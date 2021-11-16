@@ -3,12 +3,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vocabulary_advancer/app/common/rotatable.dart';
-import 'package:vocabulary_advancer/app/common/stat_target.dart';
 import 'package:vocabulary_advancer/app/i18n/strings.g.dart';
 import 'package:vocabulary_advancer/app/phrase_exercise_vm.dart';
 import 'package:vocabulary_advancer/app/themes/card_decoration.dart';
 import 'package:vocabulary_advancer/app/themes/va_theme.dart';
-import 'package:vocabulary_advancer/core/extensions.dart';
 import 'package:vocabulary_advancer/core/model.dart';
 
 class PhraseExercisePage extends StatefulWidget {
@@ -43,14 +41,18 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
                 ? null
                 : AppBar(
                     automaticallyImplyLeading: !kIsWeb,
-                    title: Text(model.groupName, style: VATheme.of(context).textHeadline5)),
+                    title: Text(
+                        model.countTargeted > 0
+                            ? "${Translations.of(context).titles.Exercising}: ${model.countTargeted}"
+                            : Translations.of(context).titles.Exercising,
+                        style: VATheme.of(context).textHeadline6)),
             body: model.isLoading
                 ? CircularProgressIndicator()
                 : model.isAny
                     ? OrientationBuilder(
                         builder: (context, orientation) => orientation == Orientation.portrait
                             ? Column(children: [
-                                SizedBox(height: 150, child: _buildAnimatedCard(context, model)),
+                                SizedBox(height: 180, child: _buildAnimatedCard(context, model)),
                                 Expanded(
                                   child: _buildExamplesCard(context, model),
                                 ),
@@ -89,10 +91,14 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
           onTap: () => _vm.animateCard(),
           child: _buildCard(context,
               value: model.isOpen ? model.current!.phrase : model.current!.definition,
+              pronounce: model.isOpen ? model.current!.pronunciation : '',
               isOpen: model.isOpen));
 
   Widget _buildCard(BuildContext context,
-          {String value = '', bool isAnimated = false, bool isOpen = false}) =>
+          {String value = '',
+          String pronounce = '',
+          bool isAnimated = false,
+          bool isOpen = false}) =>
       Padding(
         padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
         child: Container(
@@ -110,10 +116,24 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
                       padding: const EdgeInsets.only(left: 16.0),
                       child: Visibility(
                         visible: !isAnimated,
-                        child: Text(value,
-                            style: isOpen
-                                ? VATheme.of(context).textBodyText1
-                                : VATheme.of(context).textSubtitle2),
+                        child: SingleChildScrollView(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(value,
+                                  style: isOpen
+                                      ? VATheme.of(context).textSubtitle2
+                                      : VATheme.of(context).textBodyText1),
+                              Padding(
+                                padding: const EdgeInsets.only(top: 8.0),
+                                child: Text(
+                                  pronounce,
+                                  style: VATheme.of(context).textPronounciation,
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
                       )))
             ])),
       );
@@ -133,37 +153,32 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
                           maxLines: 3, style: VATheme.of(context).textBodyText2),
                     ))),
       );
-  //VATheme.of(context).colorPrimary050.value.toString()
 
   charts.Color _chartColor(Color c) => charts.Color(a: c.alpha, r: c.red, g: c.green, b: c.blue);
 
   Widget _buildStatsCard(BuildContext context, PhraseExerciseModel model) => Padding(
-        padding: const EdgeInsets.only(left: 24.0, top: 16.0, right: 16.0, bottom: 16),
-        child: Stack(
-          children: [
-            charts.BarChart(
-              [
-                charts.Series<int, String>(
-                    id: 'Progress',
-                    domainFn: (x, n) => n?.toString() ?? "",
-                    measureFn: (x, n) => x,
-                    data: model.current?.rates ?? [],
-                    fillColorFn: (n, i) => _chartColor(VATheme.of(context).colorPrimary500))
-              ],
-              primaryMeasureAxis: charts.NumericAxisSpec(renderSpec: charts.NoneRenderSpec()),
-              domainAxis: charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
-              layoutConfig: charts.LayoutConfig(
-                  leftMarginSpec: charts.MarginSpec.fixedPixel(0),
-                  topMarginSpec: charts.MarginSpec.fixedPixel(0),
-                  rightMarginSpec: charts.MarginSpec.fixedPixel(0),
-                  bottomMarginSpec: charts.MarginSpec.fixedPixel(0)),
-            ),
-            Chip(label: Text("Max rate: ${model.current?.rates.max() ?? '?'}")),
-            Positioned(
-                top: 6, right: 130, child: StatTarget(model.current?.targetUtc.differenceNowUtc())),
-            Positioned(
-                top: 0, right: 0, child: Chip(label: Text("Rate: ${model.current?.rate ?? '?'}")))
+        padding: const EdgeInsets.only(left: 24.0, top: 12.0, right: 16.0, bottom: 16),
+        child: charts.BarChart(
+          [
+            charts.Series<int, String>(
+                id: 'Progress',
+                domainFn: (x, n) => n?.toString() ?? "",
+                measureFn: (x, n) => x,
+                data: (model.current?.rates.length ?? 0) > 2 ? model.current!.rates.toList() : [],
+                labelAccessorFn: (x, n) => x.toString(),
+                fillColorFn: (n, i) => _chartColor(VATheme.of(context).colorPrimary500))
           ],
+          //vertical: false,
+          barRendererDecorator: charts.BarLabelDecorator<String>(
+              insideLabelStyleSpec:
+                  charts.TextStyleSpec(color: VATheme.of(context).colorPrimary050.toChartsColor())),
+          domainAxis: charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),
+          primaryMeasureAxis: charts.NumericAxisSpec(renderSpec: charts.NoneRenderSpec()),
+          layoutConfig: charts.LayoutConfig(
+              leftMarginSpec: charts.MarginSpec.fixedPixel(0),
+              topMarginSpec: charts.MarginSpec.fixedPixel(0),
+              rightMarginSpec: charts.MarginSpec.fixedPixel(0),
+              bottomMarginSpec: charts.MarginSpec.fixedPixel(0)),
         ),
       );
 
@@ -220,4 +235,8 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
             const SizedBox(height: 16.0),
             Text(Translations.of(context).text.NoPhrase),
           ]));
+}
+
+extension on Color {
+  charts.Color toChartsColor() => charts.Color(a: alpha, r: red, g: green, b: blue);
 }

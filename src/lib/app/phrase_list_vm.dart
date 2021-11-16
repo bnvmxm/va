@@ -73,6 +73,20 @@ class PhraseListViewModel extends Cubit<PhraseListModel> {
     emit(PhraseListModel.from(state..unselect()));
   }
 
+  void resetSelected() {
+    if (state.selectedIndex != null) {
+      final p = state.phrases[state.selectedIndex!];
+      p.resetRates();
+
+      svc.repPhrase
+          .update(state.groupId, p.id, p.phrase, p.pronunciation, p.definition, p.examples, p.rate,
+              p.rates, p.targetUtc, p.createdUtc)
+          .then((_) {
+        emit(PhraseListModel.from(state..unselect()));
+      });
+    }
+  }
+
   void navigateToPhraseEditor() {
     svc.route.pushForResult<PhraseEditorPageResult>(
         state.selectedPhraseId == null

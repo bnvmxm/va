@@ -42,40 +42,43 @@ class PhraseGroupGridCard extends StatelessWidget {
                 width: isSelected ? 1.0 : 0.0),
             borderRadius: BorderRadius.circular(16.0),
           ),
-          child: Column(children: [
-            Expanded(
-              child: Container(
-                  padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
+          child: SizedBox(
+            height: 120,
+            child: Column(children: [
+              Expanded(
+                child: Container(
+                    padding: const EdgeInsets.only(left: 16.0, top: 16.0, right: 16.0),
+                    alignment: Alignment.topLeft,
+                    child: Text(name,
+                        overflow: TextOverflow.ellipsis,
+                        maxLines: 2,
+                        style: VATheme.of(context).textAccentSubtitle1)),
+              ),
+              Container(
+                  padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8.0),
                   alignment: Alignment.topLeft,
-                  child: Text(name,
-                      overflow: TextOverflow.ellipsis,
-                      maxLines: 4,
-                      style: VATheme.of(context).textAccentSubtitle1)),
-            ),
-            Container(
-                padding: const EdgeInsets.only(left: 16.0, right: 16.0, bottom: 8.0),
-                alignment: Alignment.topLeft,
-                decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                        begin: Alignment.topCenter,
-                        end: Alignment.bottomCenter,
-                        colors: [
-                      VATheme.of(context).colorBackgroundCard,
-                      VATheme.of(context).colorPrimary600
-                    ])),
-                child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
-                  Divider(color: VATheme.of(context).colorPrimary300),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 8.0),
-                    child: Row(children: [
-                      Expanded(
-                          child: Text(
-                              Translations.of(context).labels.StatPhrases(count: phraseCount),
-                              style: VATheme.of(context).textCaption)),
-                      if (phraseCount > 0) StatTarget(closeTargetUtc.differenceNowUtc()),
-                      if (phraseCount == 0) SizedBox(height: 16)
-                    ]),
-                  ),
-                ])),
-          ])));
+                  decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
+                          colors: [
+                        VATheme.of(context).colorBackgroundCard,
+                        VATheme.of(context).colorPrimary600
+                      ])),
+                  child: Column(mainAxisAlignment: MainAxisAlignment.start, children: [
+                    Divider(color: VATheme.of(context).colorPrimary300),
+                    Padding(
+                      padding: const EdgeInsets.only(right: 8.0),
+                      child: Row(children: [
+                        Expanded(
+                            child: Text(
+                                Translations.of(context).labels.StatPhrases(count: phraseCount),
+                                style: VATheme.of(context).textCaption)),
+                        if (phraseCount > 0) StatTarget(closeTargetUtc.differenceNowUtc()),
+                        if (phraseCount == 0) SizedBox(height: 16)
+                      ]),
+                    ),
+                  ])),
+            ]),
+          )));
 }

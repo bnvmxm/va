@@ -118,7 +118,7 @@ class _PhraseGroupEditorPageState extends State<PhraseGroupEditorPage> {
                                   controller: _controllerBulkImport,
                                   style: VATheme.of(context).textBodyText2),
                               Positioned(
-                                bottom: 4,
+                                top: 4,
                                 right: 4,
                                 child: IconButton(
                                   icon: Icon(Icons.upload_outlined),

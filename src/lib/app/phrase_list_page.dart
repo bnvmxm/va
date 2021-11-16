@@ -100,6 +100,19 @@ class _PhraseListPageState extends State<PhraseListPage> {
         IconButton(
             icon: Icon(Icons.plus_one),
             tooltip: Translations.of(context).labels.Add,
-            onPressed: () => _vm.navigateToPhraseEditor())
+            onPressed: () => _vm.navigateToPhraseEditor()),
+        if (model.anySelected)
+          PopupMenuButton<int>(
+              onSelected: (index) => _vm.resetSelected(),
+              itemBuilder: (context) => [
+                    PopupMenuItem<int>(
+                        value: 1,
+                        child: Row(children: [
+                          Icon(Icons.restore, color: VATheme.of(context).colorAttention),
+                          Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                              child: Text(Translations.of(context).labels.Reset))
+                        ])),
+                  ])
       ];
 }

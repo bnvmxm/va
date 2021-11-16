@@ -36,33 +36,35 @@ class _PhraseGroupGridPageState extends State<PhraseGroupGridPage> {
   Widget build(BuildContext context) => BlocBuilder<PhraseGroupGridViewModel, PhraseGroupGridModel>(
       bloc: _vm,
       builder: (context, model) => Scaffold(
-            appBar: AppBar(
-              automaticallyImplyLeading: !kIsWeb,
-              title: Text(
-                  model.authenticated
-                      ? Translations.of(context).titles.Collections
-                      : Translations.of(context).titles.Auth,
-                  style: VATheme.of(context).textHeadline5),
-              actions: [
-                if (model.authenticated && model.anySelected)
-                  IconButton(
-                      icon: Icon(Icons.view_list, color: VATheme.of(context).colorTextAccent),
-                      tooltip: Translations.of(context).labels.View,
-                      onPressed: () => _vm.navigateToGroup()),
-                if (model.authenticated && model.anySelected)
-                  IconButton(
-                      icon: Icon(Icons.edit, color: VATheme.of(context).colorTextAccent),
-                      tooltip: Translations.of(context).labels.Edit,
-                      onPressed: () => _vm.navigateToEditor()),
-                if (model.authenticated && !model.anySelected)
-                  IconButton(
-                      icon: Icon(Icons.plus_one,
-                          color: VATheme.of(context).colorForegroundIconUnselected),
-                      tooltip: Translations.of(context).labels.Add,
-                      onPressed: () => _vm.navigateToEditor()),
-                HomeMenu(_vm, authenticated: model.authenticated),
-              ],
-            ),
+            appBar: model.auth == VAAuth.unknown
+                ? null
+                : AppBar(
+                    automaticallyImplyLeading: !kIsWeb,
+                    title: Text(
+                        model.authenticated
+                            ? Translations.of(context).titles.Collections
+                            : Translations.of(context).titles.Auth,
+                        style: VATheme.of(context).textHeadline5),
+                    actions: [
+                      if (model.authenticated && model.anySelected)
+                        IconButton(
+                            icon: Icon(Icons.view_list, color: VATheme.of(context).colorTextAccent),
+                            tooltip: Translations.of(context).labels.View,
+                            onPressed: () => _vm.navigateToGroup()),
+                      if (model.authenticated && model.anySelected)
+                        IconButton(
+                            icon: Icon(Icons.edit, color: VATheme.of(context).colorTextAccent),
+                            tooltip: Translations.of(context).labels.Edit,
+                            onPressed: () => _vm.navigateToEditor()),
+                      if (model.authenticated && !model.anySelected)
+                        IconButton(
+                            icon: Icon(Icons.plus_one,
+                                color: VATheme.of(context).colorForegroundIconUnselected),
+                            tooltip: Translations.of(context).labels.Add,
+                            onPressed: () => _vm.navigateToEditor()),
+                      HomeMenu(_vm, authenticated: model.authenticated),
+                    ],
+                  ),
             body: model.authenticated
                 ? model.isNotEmpty
                     ? PhraseGroupsGrid(
@@ -76,7 +78,7 @@ class _PhraseGroupGridPageState extends State<PhraseGroupGridPage> {
                       )
                     : Empty()
                 : model.auth == VAAuth.unknown
-                    ? Empty()
+                    ? Center(child: CircularProgressIndicator())
                     : AuthView(
                         onSignIn: (email, passw) async => await _vm.signIn(email, passw),
                         onSignUp: (email, passw) async => await _vm.signUn(email, passw),
@@ -174,21 +176,13 @@ class PhraseGroupsGrid extends StatelessWidget {
       : super(key: key);
 
   @override
-  Widget build(BuildContext context) => OrientationBuilder(
-      builder: (context, orientation) => orientation == Orientation.portrait
-          ? _buildGridView(isPortrait: true)
-          : SafeArea(child: _buildGridView(isPortrait: false)));
+  Widget build(BuildContext context) => SafeArea(child: _buildGridView());
 
-  Widget _buildGridView({required bool isPortrait}) => RefreshIndicator(
-        onRefresh: onRefresh,
-        child: GridView.count(
-            crossAxisCount: isPortrait ? 2 : 3,
-            crossAxisSpacing: 2.0,
-            mainAxisSpacing: 2.0,
-            childAspectRatio: isPortrait ? 1 : 1.8,
-            padding: const EdgeInsets.all(4.0),
-            children: _model.phraseGroups.map(_buildGridViewTile).toList()),
-      );
+  Widget _buildGridView() => RefreshIndicator(
+      onRefresh: onRefresh,
+      child: ListView.builder(
+          itemCount: _model.phraseGroups.length,
+          itemBuilder: (context, i) => _buildGridViewTile(_model.phraseGroups[i])));
 
   Widget _buildGridViewTile(PhraseGroup item) => GestureDetector(
       onTap: () {

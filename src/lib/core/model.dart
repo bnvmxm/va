@@ -28,11 +28,25 @@ class Phrase {
   final String definition;
   final List<String> examples;
   final DateTime createdUtc;
+  DateTime? updatedUtc;
+  int rate;
+  List<int> rates;
+  DateTime targetUtc;
 
-  final int rate;
-  final List<int> rates;
-  final DateTime targetUtc;
-  final DateTime? updatedUtc;
+  void resetRates() {
+    rate = 11;
+    rates = [];
+    updatedUtc = DateTime.now().toUtc();
+    targetUtc = DateTime.now().toUtc();
+  }
+}
+
+class Exercise {
+  Phrase? phrase;
+  int countTargeted = 0;
+
+  Exercise.empty();
+  Exercise(this.phrase, {required this.countTargeted});
 }
 
 enum RateFeedback { lowTheshold, negative, uncertain, positive, highThershold }
