@@ -47,7 +47,7 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
                             : Translations.of(context).titles.Exercising,
                         style: VATheme.of(context).textHeadline6)),
             body: model.isLoading
-                ? CircularProgressIndicator()
+                ? Center(child: CircularProgressIndicator())
                 : model.isAny
                     ? OrientationBuilder(
                         builder: (context, orientation) => orientation == Orientation.portrait
@@ -168,8 +168,9 @@ class _PhraseExercisePageState extends State<PhraseExercisePage> {
                 labelAccessorFn: (x, n) => x.toString(),
                 fillColorFn: (n, i) => _chartColor(VATheme.of(context).colorPrimary500))
           ],
-          //vertical: false,
           barRendererDecorator: charts.BarLabelDecorator<String>(
+              outsideLabelStyleSpec:
+                  charts.TextStyleSpec(color: VATheme.of(context).colorPrimary050.toChartsColor()),
               insideLabelStyleSpec:
                   charts.TextStyleSpec(color: VATheme.of(context).colorPrimary050.toChartsColor())),
           domainAxis: charts.OrdinalAxisSpec(renderSpec: charts.NoneRenderSpec()),

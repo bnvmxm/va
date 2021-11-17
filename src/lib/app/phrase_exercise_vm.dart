@@ -9,7 +9,6 @@ class PhraseExerciseModel {
   bool isAnimated = false;
   Phrase? current;
   int countTargeted = 0;
-  String groupName = '';
   bool isExerciseFirst = true;
   final String groupId;
 
@@ -17,22 +16,29 @@ class PhraseExerciseModel {
 
   PhraseExerciseModel(this.groupId);
 
+  PhraseExerciseModel.empty(this.groupId)
+      : isAnimated = false,
+        isOpen = false,
+        isLoading = false,
+        current = null,
+        countTargeted = 0,
+        isExerciseFirst = true;
+
   PhraseExerciseModel.from(
     PhraseExerciseModel model, {
     bool? isLoading,
     bool? isOpen,
-    bool? isOpening,
+    bool? isAnimated,
     Phrase? current,
     int? countTargeted,
     String? groupName,
     bool? isExerciseFirst,
   }) : groupId = model.groupId {
-    isAnimated = isOpening ?? model.isAnimated;
     this.isOpen = isOpen ?? model.isOpen;
+    this.isAnimated = isAnimated ?? model.isAnimated;
     this.isLoading = isLoading ?? model.isLoading;
     this.current = current ?? model.current;
     this.countTargeted = countTargeted ?? model.countTargeted;
-    this.groupName = groupName ?? model.groupName;
     this.isExerciseFirst = isExerciseFirst ?? model.isExerciseFirst;
   }
 }
@@ -48,9 +54,8 @@ class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
   }
 
   void rotateCard() {
-    state.isOpen = !state.isOpen;
     state.isAnimated = false;
-    emit(PhraseExerciseModel.from(state));
+    emit(PhraseExerciseModel.from(state, isOpen: !state.isOpen));
   }
 
   Future next(RateFeedback feedback) async {
@@ -85,13 +90,15 @@ class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
     final exercise =
         await svc.repPhrase.getExerciseByGroup(state.groupId, exceptPhraseId: state.current?.id);
 
-    emit(PhraseExerciseModel.from(
-      state,
-      current: exercise.phrase,
-      countTargeted: exercise.countTargeted,
-      isLoading: false,
-      isOpen: false,
-      isOpening: false,
-    ));
+    emit(exercise.phrase == null
+        ? PhraseExerciseModel.empty(state.groupId)
+        : PhraseExerciseModel.from(
+            state,
+            current: exercise.phrase,
+            countTargeted: exercise.countTargeted,
+            isLoading: false,
+            isOpen: false,
+            isAnimated: false,
+          ));
   }
 }
