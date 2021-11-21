@@ -41,7 +41,7 @@ int calculateNextRate(int rate, RateFeedback feedback) {
 
 int _cooldownMinutesLowTheshold() => 1;
 int _cooldownMinutesNegative() => 3;
-int _cooldownMinutesUncertain(int x) => (x * 1.2).ceil();
+int _cooldownMinutesUncertain(int x) => (x * 2).ceil();
 int _cooldownMinutesPositive(int x) => x < 30 ? x * 5 : x * 50;
 int _cooldownMinutesHighThershold() => 60 * 24 * 10;
 

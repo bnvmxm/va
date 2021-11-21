@@ -11,11 +11,12 @@ class LocalizationService {
     }
   }
 
-  Future<void> switchLocale() async {
+  Future<String> switchLocale() async {
     final chosenTag = LocaleSettings.supportedLocalesRaw
         .firstWhere((raw) => raw != LocaleSettings.currentLocale.languageTag);
 
     await svc.repLocale.setLocale(chosenTag);
     LocaleSettings.setLocaleRaw(chosenTag);
+    return chosenTag;
   }
 }

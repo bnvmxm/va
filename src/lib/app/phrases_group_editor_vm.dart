@@ -49,6 +49,7 @@ class PhraseGroupEditorViewModel extends Cubit<PhraseGroupEditorModel> with Form
   PhraseGroupEditorViewModel(String? groupId) : super(PhraseGroupEditorModel(groupId));
 
   void init() {
+    svc.userService.trackScreen(runtimeType.toString());
     if (state.groupId != null) {
       svc.repPhraseGroup.findSingle(state.groupId!).then((gr) {
         if (gr != null) {

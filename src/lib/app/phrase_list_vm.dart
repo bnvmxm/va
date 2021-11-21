@@ -56,6 +56,7 @@ class PhraseListViewModel extends Cubit<PhraseListModel> {
   PhraseListViewModel(String groupId) : super(PhraseListModel(groupId));
 
   void init() {
+    svc.userService.trackScreen(runtimeType.toString());
     svc.repPhraseGroup.findSingle(state.groupId).then((gr) {
       if (gr != null) {
         svc.repPhrase.findManyByGroup(state.groupId).then((items) {

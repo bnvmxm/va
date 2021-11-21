@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:firebase_core/firebase_core.dart';
 import 'package:get_it/get_it.dart';
 import 'package:vocabulary_advancer/app/navigation/va_route_parser.dart';
 import 'package:vocabulary_advancer/app/navigation/va_router.dart';
@@ -15,8 +14,6 @@ import 'package:vocabulary_advancer/shared/svc.dart';
 
 Future<void> initServices() async {
   svc = ServiceProvider(GetIt.I);
-
-  await Firebase.initializeApp();
 
   GetIt.I
     ..registerLazySingleton<AppLogger>(() => AppLogger(LogSettings()))

@@ -63,6 +63,7 @@ class PhraseGroupGridViewModel extends Cubit<PhraseGroupGridModel> {
   PhraseGroupGridViewModel() : super(PhraseGroupGridModel.init(VAAuth.unknown));
 
   void init() {
+    svc.userService.trackScreen(runtimeType.toString());
     _authStateSubscription = svc.userService.authState.listen((value) {
       if (state.auth != value) {
         if (value == VAAuth.anonymous || value == VAAuth.signedIn) {
@@ -123,7 +124,10 @@ class PhraseGroupGridViewModel extends Cubit<PhraseGroupGridModel> {
 
   void navigateToAbout() => svc.route.push(VARouteAbout());
 
-  Future<void> switchLanguage() => svc.localization.switchLocale();
+  Future<void> switchLanguage() async {
+    final loc = await svc.localization.switchLocale();
+    svc.userService.trackEvent("locale", {"id": loc});
+  }
 
   @override
   Future<void> close() async {

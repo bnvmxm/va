@@ -75,6 +75,7 @@ class PhraseEditorViewModel extends Cubit<PhraseEditorModel> with FormValidation
       : super(PhraseEditorModel(groupId, phraseId));
 
   void init() {
+    svc.userService.trackScreen(runtimeType.toString());
     svc.repPhraseGroup.findKnownNames().then((groupNames) {
       _findInitialPhrase(state.phraseGroupId, state.phraseId).then((initial) {
         if (initial != null) {

@@ -46,7 +46,10 @@ class PhraseExerciseModel {
 class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
   PhraseExerciseViewModel(String groupId) : super(PhraseExerciseModel(groupId));
 
-  void init() => _setNextPhrase();
+  void init() {
+    svc.userService.trackScreen(runtimeType.toString());
+    _setNextPhrase();
+  }
 
   void animateCard() {
     state.isAnimated = true;
@@ -64,7 +67,11 @@ class PhraseExerciseViewModel extends Cubit<PhraseExerciseModel> {
     final newRate = state.current!.rate.asRate(feedback);
     final newDuration = newRate.asCooldown(feedback);
     final current = state.current!;
-    svc.log.d(() => '${current.phrase}: ${current.rate} -> $newRate, $newDuration');
+    svc.userService.trackEvent("stat", {
+      "phrase": current.phrase,
+      "rate": newRate,
+      "duration": newDuration,
+    });
 
     final arr = current.rates;
     while (arr.length > 10) {
